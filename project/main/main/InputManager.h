@@ -1,9 +1,14 @@
 ﻿#pragma once
 
-// 키 입력 및 처리 담당
+enum class Key { None, Left, Right, Up, Down, Space };
+
+class DisplayManager;
+
 class InputManager
 {
 public:
-	InputManager();
+    bool has_key() const;
+    void wait_for_key() const;
+    Key read_key() const;
+    int choose_start_level(const DisplayManager& display) const;
 };
-
