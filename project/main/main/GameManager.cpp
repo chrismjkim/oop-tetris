@@ -1,130 +1,182 @@
 ﻿#include "GameManager.h"
 
-#include <cstdlib>
-#include <ctime>
+#include "Block.h"
+#include "BlockManager.h"
+#include "DisplayManager.h"
+#include "InputManager.h"
+#include "StageManager.h"
 
-void GameManager::run()
+#include <conio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <Windows.h>
+
+namespace {
+
+int block_shape,block_angle,block_x,block_y;
+int next_block_shape;
+
+int init()
 {
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-    dm.initialize_console();
-    dm.show_logo();
-    for (int frame = 0; !im.has_key(); frame = (frame + 1) % 40) {
-        if (frame == 0) {
-            dm.animate_logo();
-        }
-        dm.wait(30);
-    }
-    im.wait_for_key();
-    dm.clear();
+	int i,j;
 
-    while (true) {
-        bm.reset();
-        sm.lines = 0;
-        sm.level = 0;
-        dm.show_controls();
-        const int start_level = im.choose_start_level(dm);
-        if (start_level < 0) {
-            return;
-        }
+	srand((unsigned)time(NULL));
 
-        sm.level = start_level;
-        dm.clear();
-        dm.show_total_block(bm, sm.level);
-        current = Block{};
-        current.shape = bm.make_new_block(sm.stick_rate());
-        next_shape = bm.make_new_block(sm.stick_rate());
-        dm.show_next_block(next_shape, sm.level);
-        dm.show_gamestat(sm);
 
-        for (unsigned frame = 1; ; ++frame) {
-            int result = 0;
-            Block candidate = current;
-            switch (im.read_key()) {
-            case Key::Up:
-                candidate.angle = (candidate.angle + 1) % Block::size;
-                try_move(candidate);
-                break;
-            case Key::Left:
-                --candidate.x;
-                try_move(candidate);
-                break;
-            case Key::Right:
-                ++candidate.x;
-                try_move(candidate);
-                break;
-            case Key::Down:
-                result = move_block();
-                break;
-            case Key::Space:
-                do {
-                    result = move_block();
-                } while (result == 0);
-                break;
-            case Key::None:
-                break;
-            }
+	for(i=0;i<20;i++)
+	{
+		for(j=0;j<14;j++)
+		{
+			if((j==0) || (j==13))
+			{
+				total_block[i][j]=1;
+			}else{
+				total_block[i][j]=0;
+			}
+		}
+	}
 
-            if (result == 0 && frame % static_cast<unsigned>(sm.speed()) == 0) {
-                result = move_block();
-            }
-            if (result == 1) {
-                dm.show_gameover();
-                im.wait_for_key();
-                dm.clear();
-                break;
-            }
+	for(j=0;j<14;j++)			//화면의 제일 밑의 줄은 1로 채운다.
+		total_block[20][j]=1;
 
-            const int previous_level = sm.level;
-            sm.advance_if_cleared();
-            if (sm.level != previous_level) {
-                dm.show_gamestat(sm);
-            }
+	//전역변수 초기화
+	level=0;
+	lines=0;
+	ab_x = 5;
+	ab_y = 1;
 
-            dm.park_cursor();
-            dm.wait(15);
-        }
-    }
+	stage_data[0].speed=40;
+	stage_data[0].stick_rate=20;
+	stage_data[0].clear_line=20;
+	stage_data[1].speed=38;
+	stage_data[1].stick_rate=18;
+	stage_data[1].clear_line=20;
+	stage_data[2].speed=35;
+	stage_data[2].stick_rate=18;
+	stage_data[2].clear_line=20;
+	stage_data[3].speed=30;
+	stage_data[3].stick_rate=17;
+	stage_data[3].clear_line=20;
+	stage_data[4].speed=25;
+	stage_data[4].stick_rate=16;
+	stage_data[4].clear_line=20;
+	stage_data[5].speed=20;
+	stage_data[5].stick_rate=14;
+	stage_data[5].clear_line=20;
+	stage_data[6].speed=15;
+	stage_data[6].stick_rate=14;
+	stage_data[6].clear_line=20;
+	stage_data[7].speed=10;
+	stage_data[7].stick_rate=13;
+	stage_data[7].clear_line=20;
+	stage_data[8].speed=6;
+	stage_data[8].stick_rate=12;
+	stage_data[8].clear_line=20;
+	stage_data[9].speed=4;
+	stage_data[9].stick_rate=11;
+	stage_data[9].clear_line=99999;
+	return 0;
 }
 
-bool GameManager::try_move(const Block& candidate)
+} // namespace
+
+int run_game()
 {
-    if (bm.strike_check(candidate)) {
-        return false;
-    }
-    dm.erase_cur_block(current);
-    current = candidate;
-    dm.show_cur_block(current);
-    return true;
-}
+	int i;
+	int is_gameover=0;
+	char keytemp;
+	init();
+	show_logo();
+	while(1)
+	{
 
-int GameManager::move_block()
-{
-    Block candidate = current;
-    ++candidate.y;
+		input_data();
+		show_total_block();
+		block_shape = make_new_block();
+		next_block_shape = make_new_block();
+		show_next_block(next_block_shape);
+		block_start(block_shape,&block_angle,&block_x,&block_y);
+		show_gamestat();
+		for(i=1;1;i++)
+		{
+			if(_kbhit())
+			{
+				keytemp = _getche();
+				if(keytemp == EXT_KEY)
+				{
+					keytemp = _getche();
+					switch(keytemp)
+					{
+					case KEY_UP:		//회전하기
 
-    // 원본 반환값 0은 낙하, 1은 게임 오버, 2는 고정 후 다음 블록 등장이다.
-    if (try_move(candidate)) {
-        return 0;
-    }
-    if (!bm.merge_block(current)) {
-        return 1;
-    }
+						if(strike_check(block_shape,(block_angle+1)%4,block_x,block_y) == 0)
+						{
+							erase_cur_block(block_shape,block_angle,block_x,block_y);
+							block_angle = (block_angle+1)%4;
+							show_cur_block(block_shape,block_angle,block_x,block_y);
+						}
+						break;
+					case KEY_LEFT:		//왼쪽으로 이동
+						if(block_x>1)
+						{
+							erase_cur_block(block_shape,block_angle,block_x,block_y);
+							block_x--;
+							if(strike_check(block_shape,block_angle,block_x,block_y) == 1)
+								block_x++;
 
-    for (int row = 0; row < BlockManager::rows - 1; ++row) {
-        if (bm.check_full_line(row)) {
-            dm.show_total_block(bm, sm.level);
-            dm.animate_clear_line(row);
-            bm.clear_line(row);
-            sm.add_line();
-            dm.show_gamestat(sm);
-        }
-    }
-    dm.show_total_block(bm, sm.level);
+							show_cur_block(block_shape,block_angle,block_x,block_y);
+						}
+						break;
+					case KEY_RIGHT:		//오른쪽으로 이동
 
-    current = Block{};
-    current.shape = next_shape;
-    next_shape = bm.make_new_block(sm.stick_rate());
-    dm.show_next_block(next_shape, sm.level);
-    dm.show_cur_block(current);
-    return 2;
+						if(block_x<14)
+						{
+							erase_cur_block(block_shape,block_angle,block_x,block_y);
+							block_x++;
+							if(strike_check(block_shape,block_angle,block_x,block_y) == 1)
+								block_x--;
+							show_cur_block(block_shape,block_angle,block_x,block_y);
+						}
+						break;
+					case KEY_DOWN:		//아래로 이동
+						is_gameover = move_block(&block_shape,&block_angle,&block_x,&block_y,&next_block_shape);
+						show_cur_block(block_shape,block_angle,block_x,block_y);
+						break;
+					}
+				}
+				if(keytemp == 32 )	//스페이스바를 눌렀을때
+				{
+					while(is_gameover == 0)
+					{
+						is_gameover = move_block(&block_shape,&block_angle,&block_x,&block_y,&next_block_shape);
+					}
+					show_cur_block(block_shape,block_angle,block_x,block_y);
+				}
+			}
+			if(i%stage_data[level].speed == 0)
+			{
+				is_gameover = move_block(&block_shape,&block_angle,&block_x,&block_y,&next_block_shape);
+
+				show_cur_block(block_shape,block_angle,block_x,block_y);
+			}
+
+			if(stage_data[level].clear_line == lines)	//클리어 스테이지
+			{
+				level++;
+				lines = 0;
+			}
+			if(is_gameover == 1)
+			{
+				show_gameover();
+				SetColor(GRAY);
+				break;
+			}
+
+			gotoxy(77,23);
+			Sleep(15);
+			gotoxy(77,23);
+		}
+		init();
+	}
+	return 0;
 }

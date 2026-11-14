@@ -1,9 +1,9 @@
 ﻿#include "GameManager.h"
 
-int main() {
+#include <Windows.h>
 
-	GameManager gm;
-	gm.run();
-
-	return 0;
+int main()
+{
+    SetConsoleOutputCP(CP_UTF8);
+    return run_game();
 }

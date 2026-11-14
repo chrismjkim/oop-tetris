@@ -1,62 +1,47 @@
 ﻿#include "InputManager.h"
 
 #include "DisplayManager.h"
+#include "StageManager.h"
 
-#include <conio.h>
-#include <iostream>
-#include <limits>
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
 
-bool InputManager::has_key() const
+int input_data()
 {
-    return _kbhit() != 0;
-}
+	int i=0;
+	SetColor(GRAY);
+	gotoxy(10,7);
+	printf("┏━━━━━━━━━<GAME KEY>━━━━━━━━━┓");
+	Sleep(10);
+	gotoxy(10,8);
+	printf("┃ UP   : Rotate Block        ┃");
+	Sleep(10);
+	gotoxy(10,9);
+	printf("┃ DOWN : Move One-Step Down  ┃");
+	Sleep(10);
+	gotoxy(10,10);
+	printf("┃ SPACE: Move Bottom Down    ┃");
+	Sleep(10);
+	gotoxy(10,11);
+	printf("┃ LEFT : Move Left           ┃");
+	Sleep(10);
+	gotoxy(10,12);
+	printf("┃ RIGHT: Move Right          ┃");
+	Sleep(10);
+	gotoxy(10,13);
+	printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 
-void InputManager::wait_for_key() const
-{
-    const int key = _getch();
-    if (key == 0 || key == 224) {
-        _getch();
-    }
-}
 
-Key InputManager::read_key() const
-{
-    if (!has_key()) {
-        return Key::None;
-    }
+	while(i<1 || i>8)
+	{
+		gotoxy(10,3);
+		printf("Select Start level[1-8]:       \b\b\b\b\b\b\b");
+		scanf_s("%d",&i);
+	}
 
-    const int key = _getch();
-    if (key == ' ') {
-        return Key::Space;
-    }
-    if (key != 0 && key != 224) {
-        return Key::None;
-    }
-    switch (_getch()) {
-    case 0x4b: return Key::Left;
-    case 0x4d: return Key::Right;
-    case 0x48: return Key::Up;
-    case 0x50: return Key::Down;
-    default: return Key::None;
-    }
-}
 
-int InputManager::choose_start_level(const DisplayManager& display) const
-{
-    while (true) {
-        display.show_level_prompt();
-        int level = 0;
-        if (std::cin >> level) {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            if (level >= 1 && level <= 8) {
-                return level - 1;
-            }
-        } else {
-            if (std::cin.eof() || std::cin.bad()) {
-                return -1;
-            }
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-    }
+	level = i-1;
+	system("cls");
+	return 0;
 }

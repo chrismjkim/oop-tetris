@@ -1,95 +1,135 @@
 ﻿#include "BlockManager.h"
 
-#include <cstdlib>
+#include "Block.h"
+#include "DisplayManager.h"
+#include "StageManager.h"
 
-void BlockManager::reset()
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
+
+char total_block[21][14];		//화면에 표시되는 블럭들
+
+int make_new_block()
 {
-    for (int row = 0; row < rows; ++row) {
-        for (int column = 0; column < columns; ++column) {
-            total_block[row][column] = row == rows - 1 || column == 0 || column == columns - 1;
-        }
-    }
+	int shape;
+	int i;
+	i=rand()%100;
+	if(i<=stage_data[level].stick_rate)		//막대기 나올확률 계산
+		return 0;							//막대기 모양으로 리턴
+
+	shape = (rand()%6)+1;		//shape에는 1~6의 값이 들어감
+	show_next_block(shape);
+	return shape;
 }
 
-int BlockManager::make_new_block(int stick_rate) const
+int strike_check(int shape,int angle,int x,int y)
 {
-    if (std::rand() % 100 <= stick_rate) {
-        return 0;
-    }
-    return std::rand() % (Block::shape_count - 1) + 1;
+	int i,j;
+	int block_dat;
+
+	for(i=0;i<4;i++)
+	{
+		for(j=0;j<4;j++)
+		{
+			if(  ((x+j) == 0)  || ((x+j) == 13) )
+				block_dat = 1;
+			else
+				block_dat = total_block[y+i][x+j];
+
+
+			if((block_dat == 1) && (block[shape][angle][i][j] == 1))																							//좌측벽의 좌표를 빼기위함
+			{
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
-bool BlockManager::occupied(int row, int column) const
+int merge_block(int shape,int angle,int x,int y)
 {
-    return total_block[row][column] == 1;
+	int i,j;
+	for(i=0;i<4;i++)
+	{
+		for(j=0;j<4;j++)
+		{
+			total_block[y+i][x+j] |=  block[shape][angle][i][j];
+		}
+	}
+	check_full_line();
+	show_total_block();
+
+	return 0;
 }
 
-bool BlockManager::strike_check(const Block& piece) const
+int move_block(int* shape,int* angle,int* x,int* y,int* next_shape)
 {
-    for (int row = 0; row < Block::size; ++row) {
-        for (int column = 0; column < Block::size; ++column) {
-            if (!piece.occupied(row, column)) {
-                continue;
-            }
+	erase_cur_block(*shape,*angle,*x,*y);
 
-            const int board_x = piece.x + column;
-            const int board_y = piece.y + row;
-            if (board_x <= 0 || board_x >= columns - 1 || board_y >= rows - 1) {
-                return true;
-            }
+	(*y)++;	//블럭을 한칸 아래로 내림
+	if(strike_check(*shape,*angle,*x,*y) == 1)
+	{
+		if(*y<0)	//게임오버
+		{
 
-            // 블록은 화면 위에서 등장하므로 음수 행은 빈 공간이다.
-            if (board_y >= 0 && occupied(board_y, board_x)) {
-                return true;
-            }
-        }
-    }
-    return false;
+			return 1;
+		}
+		(*y)--;
+		merge_block(*shape,*angle,*x,*y);
+		*shape = *next_shape;
+		*next_shape = make_new_block();
+
+		block_start(*shape,angle,x,y);	//angle,x,y는 포인터임
+		show_next_block(*next_shape);
+		return 2;
+	}
+	return 0;
 }
 
-bool BlockManager::merge_block(const Block& piece)
+int rotate_block(int shape,int* angle,int* x,int* y)
 {
-    if (strike_check(piece)) {
-        return false;
-    }
-
-    // 화면 위에 남은 칸이 있으면 게임판을 변경하기 전에 게임 오버를 알린다.
-    for (int row = 0; row < Block::size && piece.y + row < 0; ++row) {
-        for (int column = 0; column < Block::size; ++column) {
-            if (piece.occupied(row, column)) {
-                return false;
-            }
-        }
-    }
-
-    for (int row = 0; row < Block::size; ++row) {
-        for (int column = 0; column < Block::size; ++column) {
-            if (piece.occupied(row, column)) {
-                total_block[piece.y + row][piece.x + column] = 1;
-            }
-        }
-    }
-    return true;
+	return 0;
 }
 
-bool BlockManager::check_full_line(int row) const
+int check_full_line()
 {
-    for (int column = 1; column < columns - 1; ++column) {
-        if (!occupied(row, column)) {
-            return false;
-        }
-    }
-    return true;
-}
+	int i,j,k;
+	for(i=0;i<20;i++)
+	{
+		for(j=1;j<13;j++)
+		{
+			if(total_block[i][j] == 0)
+				break;
+		}
+		if(j == 13)	//한줄이 다 채워졌음
+		{
+			lines++;
+			show_total_block();
+			SetColor(BLUE);
+			gotoxy(1*2+ab_x,i+ab_y);
+			for(j=1;j<13;j++)
+			{
+				printf("□");
+				Sleep(10);
+			}
+			gotoxy(1*2+ab_x,i+ab_y);
+			for(j=1;j<13;j++)
+			{
+				printf("  ");
+				Sleep(10);
+			}
 
-void BlockManager::clear_line(int row)
-{
-    for (int target = row; target > 0; --target) {
-        for (int column = 1; column < columns - 1; ++column) {
-            total_block[target][column] = total_block[target - 1][column];
-        }
-    }
-    for (int column = 1; column < columns - 1; ++column) {
-        total_block[0][column] = 0;
-    }
+			for(k=i;k>0;k--)
+			{
+				for(j=1;j<13;j++)
+					total_block[k][j] = total_block[k-1][j];
+			}
+			for(j=1;j<13;j++)
+				total_block[0][j] = 0;
+			score+= 100+(level*10) + (rand()%10);
+			show_gamestat();
+		}
+	}
+	return 0;
 }

@@ -1,22 +1,10 @@
 ﻿#pragma once
 
-#include "Block.h"
+extern char total_block[21][14];
 
-// 고정된 블록과 게임판의 벽, 바닥을 관리한다.
-class BlockManager
-{
-public:
-    static constexpr int rows = 21;
-    static constexpr int columns = 14;
-
-    void reset();
-    int make_new_block(int stick_rate) const;
-    bool occupied(int row, int column) const;
-    bool strike_check(const Block& piece) const;
-    bool merge_block(const Block& piece);
-    bool check_full_line(int row) const;
-    void clear_line(int row);
-
-private:
-    char total_block[rows][columns] = {};
-};
+int make_new_block();	//return값으로 block의 모양번호를 알려줌
+int strike_check(int shape,int angle,int x,int y);	//블럭이 화면 맨 아래에 부닥쳤는지 검사 부닥치면 1을리턴 아니면 0리턴
+int merge_block(int shape,int angle,int x,int y);	//블럭이 바닥에 닿았을때 진행중인 블럭과 쌓아진 블럭을 합침
+int move_block(int* shape,int* angle,int* x,int* y,int* next_shape);	//게임오버는 1을리턴 바닥에 블럭이 닿으면 2를 리턴
+int rotate_block(int shape,int* angle,int* x,int* y);
+int check_full_line();

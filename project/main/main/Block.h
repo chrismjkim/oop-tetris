@@ -1,15 +1,5 @@
 ﻿#pragma once
 
-class Block
-{
-public:
-    int shape = 0;
-    int angle = 0;
-    int x = 5;
-    int y = -3;
+extern char block[7][4][4][4];
 
-    static constexpr int size = 4;
-    static constexpr int shape_count = 7;
-
-    bool occupied(int row, int column) const;
-};
+int block_start(int shape,int* angle,int* x,int* y);	//블럭이 처음 나올때 위치와 모양을 알려줌

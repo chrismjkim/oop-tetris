@@ -1,227 +1,251 @@
 ﻿#include "DisplayManager.h"
 
+#include "Block.h"
 #include "BlockManager.h"
 #include "StageManager.h"
 
+#include <conio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <Windows.h>
-#include <cstdio>
-#include <cstdlib>
 
-namespace {
+int ab_x,ab_y;	//화면중 블럭이 나타나는 좌표의 절대위치
 
-constexpr int offset_x = 5;
-constexpr int offset_y = 1;
-constexpr int black = 0;
-constexpr int blue = 9;
-constexpr int gray = 7;
-constexpr int dark_gray = 8;
-constexpr int red = 12;
-constexpr int block_colors[Block::shape_count] = {red, blue, 11, 15, 14, 13, 10};
-
-void gotoxy(int x, int y)
+int gotoxy(int x,int y)
 {
-    std::fflush(stdout);
-    const COORD position = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), position);
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD pos;
+	pos.Y=y;
+	pos.X=x;
+	SetConsoleCursorPosition(hConsole, pos);
+	return 0;
 }
 
 void SetColor(int color)
 {
-    std::fflush(stdout);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), static_cast<WORD>(color));
+	static HANDLE std_output_handle=GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(std_output_handle, color);
 }
 
-void draw_block(const Block& piece, const char* cell)
+int show_cur_block(int shape,int angle,int x,int y)
 {
-    for (int column = 0; column < Block::size; ++column) {
-        for (int row = 0; row < Block::size; ++row) {
-            if (piece.y + row >= 0 && piece.occupied(row, column)) {
-                gotoxy((piece.x + column) * 2 + offset_x, piece.y + row + offset_y);
-                std::printf("%s", cell);
-            }
-        }
-    }
+	int i,j;
+
+	switch(shape)
+	{
+	case 0:
+		SetColor(RED);
+		break;
+	case 1:
+		SetColor(BLUE);
+		break;
+	case 2:
+		SetColor(SKY_BLUE);
+		break;
+	case 3:
+		SetColor(WHITE);
+		break;
+	case 4:
+		SetColor(YELLOW);
+		break;
+	case 5:
+		SetColor(VOILET);
+		break;
+	case 6:
+		SetColor(GREEN);
+		break;
+	}
+
+	for(i=0;i<4;i++)
+	{
+		for(j=0;j<4;j++)
+		{
+			if( (j+y) <0)
+				continue;
+
+			if(block[shape][angle][j][i] == 1)
+			{
+				gotoxy((i+x)*2+ab_x,j+y+ab_y);
+				printf("■");
+
+			}
+		}
+	}
+	SetColor(BLACK);
+	gotoxy(77,23);
+	return 0;
 }
 
-} // namespace
-
-void DisplayManager::initialize_console() const
+int erase_cur_block(int shape,int angle,int x,int y)
 {
-    SetConsoleOutputCP(CP_UTF8);
+	int i,j;
+	for(i=0;i<4;i++)
+	{
+		for(j=0;j<4;j++)
+		{
+			if(block[shape][angle][j][i] == 1)
+			{
+				gotoxy((i+x)*2+ab_x,j+y+ab_y);
+				printf("  ");
+				//break;
+
+			}
+		}
+	}
+	return 0;
 }
 
-void DisplayManager::show_logo() const
+int show_total_block()
 {
-    const char* title[] = {
-        "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓",
-        "┃◆◆◆  ◆◆◆  ◆◆◆   ◆◆     ◆   ◆◆◆ ┃",
-        "┃  ◆    ◆        ◆     ◆ ◆    ◆   ◆     ┃",
-        "┃  ◆    ◆◆◆    ◆     ◆◆     ◆     ◆   ┃",
-        "┃  ◆    ◆        ◆     ◆ ◆    ◆       ◆ ┃",
-        "┃  ◆    ◆◆◆    ◆     ◆  ◆   ◆   ◆◆◆ ┃",
-        "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
-    };
-    for (int row = 0; row < 7; ++row) {
-        gotoxy(13, 3 + row);
-        std::printf("%s", title[row]);
-        if (row < 6) {
-            wait(100);
-        }
-    }
-    gotoxy(28, 20);
-    std::printf("Please Press Any Key~!");
+	int i,j;
+	SetColor(DARK_GRAY);
+	for(i=0;i<21;i++)
+	{
+		for(j=0;j<14;j++)
+		{
+			if(j==0 || j==13 || i==20)		//레벨에 따라 외벽 색이 변함
+			{
+				SetColor((level %6) +1);
+
+			}else{
+				SetColor(DARK_GRAY);
+			}
+			gotoxy( (j*2)+ab_x, i+ab_y );
+			if(total_block[i][j] == 1)
+			{
+				printf("■");
+			}else{
+				printf("  ");
+			}
+
+		}
+	}
+	SetColor(BLACK);
+	gotoxy(77,23);
+	return 0;
 }
 
-void DisplayManager::animate_logo() const
+int show_gameover()
 {
-    for (int row = 0; row < 5; ++row) {
-        gotoxy(18, 14 + row);
-        std::printf("%58s", "");
-    }
-    const int positions[] = {6, 12, 19, 24};
-    for (int x : positions) {
-        Block piece;
-        piece.shape = std::rand() % Block::shape_count;
-        piece.angle = std::rand() % Block::size;
-        piece.x = x;
-        piece.y = 14;
-        show_cur_block(piece);
-    }
+	SetColor(RED);
+	gotoxy(15,8);
+	printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+	gotoxy(15,9);
+	printf("┃**************************┃");
+	gotoxy(15,10);
+	printf("┃*        GAME OVER       *┃");
+	gotoxy(15,11);
+	printf("┃**************************┃");
+	gotoxy(15,12);
+	printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+	fflush(stdin);
+	Sleep(1000);
+
+	_getche();
+	system("cls");
+
+	return 0;
 }
 
-void DisplayManager::show_controls() const
+int show_next_block(int shape)
 {
-    const char* controls[] = {
-        "┏━━━━━━━━━<GAME KEY>━━━━━━━━━┓",
-        "┃ UP   : Rotate Block        ┃",
-        "┃ DOWN : Move One-Step Down  ┃",
-        "┃ SPACE: Move Bottom Down    ┃",
-        "┃ LEFT : Move Left           ┃",
-        "┃ RIGHT: Move Right          ┃",
-        "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
-    };
-    SetColor(gray);
-    for (int row = 0; row < 7; ++row) {
-        gotoxy(10, 7 + row);
-        std::printf("%s", controls[row]);
-        if (row < 6) {
-            wait(10);
-        }
-    }
+	int i,j;
+	SetColor((level+1)%6+1);
+	for(i=1;i<7;i++)
+	{
+		gotoxy(33,i);
+		for(j=0;j<6;j++)
+		{
+			if(i==1 || i==6 || j==0 || j==5)
+			{
+				printf("■");
+			}else{
+				printf("  ");
+			}
+
+		}
+	}
+	show_cur_block(shape,0,15,1);
+	return 0;
 }
 
-void DisplayManager::show_level_prompt() const
+int show_gamestat()
 {
-    gotoxy(10, 3);
-    std::printf("Select Start level[1-8]:       \b\b\b\b\b\b");
-    std::fflush(stdout);
+	static int printed_text=0;
+	SetColor(GRAY);
+	if(printed_text == 0)
+	{
+		gotoxy(35,7);
+		printf("STAGE");
+
+		gotoxy(35,9);
+		printf("SCORE");
+
+		gotoxy(35,12);
+		printf("LINES");
+
+
+	}
+	gotoxy(41,7);
+	printf("%d",level+1);
+	gotoxy(35,10);
+	printf("%10d",score);
+	gotoxy(35,13);
+	printf("%10d",stage_data[level].clear_line - lines);
+	return 0;
 }
 
-void DisplayManager::show_cur_block(const Block& piece) const
+int show_logo()
 {
-    SetColor(block_colors[piece.shape]);
-    draw_block(piece, "■");
-    SetColor(black);
-    park_cursor();
-}
+	int i,j;
+	gotoxy(13,3);
+	printf("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+	Sleep(100);
+	gotoxy(13,4);
+	printf("┃◆◆◆  ◆◆◆  ◆◆◆   ◆◆     ◆   ◆◆◆ ┃");
+	Sleep(100);
+	gotoxy(13,5);
+	printf("┃  ◆    ◆        ◆     ◆ ◆    ◆   ◆     ┃");
+	Sleep(100);
+	gotoxy(13,6);
+	printf("┃  ◆    ◆◆◆    ◆     ◆◆     ◆     ◆   ┃");
+	Sleep(100);
+	gotoxy(13,7);
+	printf("┃  ◆    ◆        ◆     ◆ ◆    ◆       ◆ ┃");
+	Sleep(100);
+	gotoxy(13,8);
+	printf("┃  ◆    ◆◆◆    ◆     ◆  ◆   ◆   ◆◆◆ ┃");
+	Sleep(100);
+	gotoxy(13,9);
+	printf("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
 
-void DisplayManager::erase_cur_block(const Block& piece) const
-{
-    draw_block(piece, "  ");
-}
+	gotoxy(28,20);
+	printf("Please Press Any Key~!");
 
-void DisplayManager::show_total_block(const BlockManager& board, int level) const
-{
-    for (int row = 0; row < BlockManager::rows; ++row) {
-        for (int column = 0; column < BlockManager::columns; ++column) {
-            const bool border = column == 0 || column == BlockManager::columns - 1
-                || row == BlockManager::rows - 1;
-            SetColor(border ? level % 6 + 1 : dark_gray);
-            gotoxy(column * 2 + offset_x, row + offset_y);
-            std::printf("%s", board.occupied(row, column) ? "■" : "  ");
-        }
-    }
-    SetColor(black);
-    park_cursor();
-}
+	for(i=0;i>=0;i++){
+		if(i%40==0)
+		{
 
-void DisplayManager::show_next_block(int shape, int level) const
-{
-    SetColor((level + 1) % 6 + 1);
-    for (int row = 1; row < 7; ++row) {
-        gotoxy(33, row);
-        for (int column = 0; column < 6; ++column) {
-            const bool border = row == 1 || row == 6 || column == 0 || column == 5;
-            std::printf("%s", border ? "■" : "  ");
-        }
-    }
 
-    Block preview;
-    preview.shape = shape;
-    preview.x = 15;
-    preview.y = 1;
-    show_cur_block(preview);
-}
+			for(j=0;j<5;j++)
+			{
+				gotoxy(18,14+j);
+				printf("                                                          ");
 
-void DisplayManager::show_gamestat(const StageManager& stage) const
-{
-    SetColor(gray);
-    gotoxy(35, 7);
-    std::printf("STAGE %d", stage.level + 1);
-    gotoxy(35, 9);
-    std::printf("SCORE");
-    gotoxy(35, 12);
-    std::printf("LINES");
-    gotoxy(35, 10);
-    std::printf("%10d", stage.score);
-    gotoxy(35, 13);
-    std::printf("%10d", stage.clear_line() - stage.lines);
-}
 
-void DisplayManager::animate_clear_line(int row) const
-{
-    SetColor(blue);
-    const char* animation[] = {"□", "  "};
-    for (const char* cell : animation) {
-        gotoxy(2 + offset_x, row + offset_y);
-        for (int column = 1; column < BlockManager::columns - 1; ++column) {
-            std::printf("%s", cell);
-            wait(10);
-        }
-    }
-}
+			}
+			show_cur_block(rand()%7,rand()%4,6,14);
+			show_cur_block(rand()%7,rand()%4,12,14);
+			show_cur_block(rand()%7,rand()%4,19,14);
+			show_cur_block(rand()%7,rand()%4,24,14);
+		}
+		if(_kbhit())
+			break;
+		Sleep(30);
+	}
 
-void DisplayManager::show_gameover() const
-{
-    const char* message[] = {
-        "┏━━━━━━━━━━━━━━━━━━━━━━━━━━┓",
-        "┃**************************┃",
-        "┃*        GAME OVER       *┃",
-        "┃**************************┃",
-        "┗━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
-    };
-    SetColor(red);
-    for (int row = 0; row < 5; ++row) {
-        gotoxy(15, 8 + row);
-        std::printf("%s", message[row]);
-    }
-    wait(1000);
-    SetColor(gray);
-}
+	_getche();
+	system("cls");
 
-void DisplayManager::clear() const
-{
-    SetColor(gray);
-    std::system("cls");
-}
-
-void DisplayManager::wait(int milliseconds) const
-{
-    std::fflush(stdout);
-    Sleep(static_cast<DWORD>(milliseconds));
-}
-
-void DisplayManager::park_cursor() const
-{
-    gotoxy(77, 23);
+	return 0;
 }
