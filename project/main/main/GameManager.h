@@ -10,14 +10,16 @@
 class GameManager
 {
 private: 
-	int score, lines;
+	int score, lines = 0;
 	BlockManager bm;
 	DisplayManager dm;
 	InputManager im;
 	StageManager sm;
 
 public:
+	int current_stage = 0;
 	GameManager();
 	void run();
+	void init();
 };
 
