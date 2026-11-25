@@ -31,14 +31,12 @@ class DisplayManager
 {
 private:
 	static inline constexpr int ROW = 21;
-	static inline constexpr int COL = 12;
+	static inline constexpr int COL = 14;
 	const int WIDTH = 2;
 	int ab_x = 5;
 	int ab_y = 1;
-	bool cursorWasVisible = true;
 public:
 	DisplayManager();
-	~DisplayManager();
 	void gotoxy(int x, int y);
 	void showLogo();
 	int showKeys();
@@ -48,5 +46,6 @@ public:
 	void setColor(int color);
 	void resetab_xy();
 	void showNextBlockContainer(BlockType type, int level);
+	void eraseBlock(Block& block);
 };
 

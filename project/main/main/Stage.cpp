@@ -6,10 +6,6 @@ Stage::Stage(int speed, int stickRate, int clearLine)
 
 }
 
-int Stage::getSpeed() const {
-	return speed;
-}
-
-int Stage::getStickRate() const {
+int Stage::getStickRate() {
 	return stickRate;
 }

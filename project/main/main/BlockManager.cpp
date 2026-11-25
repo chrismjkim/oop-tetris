@@ -1,7 +1,14 @@
-#include "BlockManager.h"
+﻿#include "BlockManager.h"
 #include <stdlib.h>
 
-BlockManager::BlockManager() : blockList(), cellList{} {
+#include <iostream>
+#include <Windows.h>
+#include <string>
+
+using std::cout;
+using std::endl;
+
+BlockManager::BlockManager() : blockList(50), cellList{} {
 
 }
 
@@ -20,44 +27,16 @@ Block BlockManager::make_new_block(int stick_rate) {
 
 void BlockManager::appendBlock(Block& block) {
 	blockList.push_back(block);
-	const auto& arr = block.getFill();
+	const auto arr = block.getFill();
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
-			const int x = block.getX() + i;
-			const int y = block.getY() + j;
-			if (arr[i][j] == 1 && x >= 0 && x < COL && y >= 0 && y < ROW) {
-				cellList[y][x] = static_cast<int>(block.getType()) + 1;
-			}
+			cellList[defBlockX + i][defBlockY] = arr[i][j];
 		}
 	}
 }
 
-int BlockManager::clearFullRows() {
-	int clearedRows = 0;
-	for (int row = ROW - 1; row >= 0; --row) {
-		bool isFull = true;
-		for (int col = 0; col < COL; ++col) {
-			if (cellList[row][col] == 0) {
-				isFull = false;
-				break;
-			}
-		}
 
-		if (!isFull) {
-			continue;
-		}
-
-		++clearedRows;
-		for (int moveRow = row; moveRow > 0; --moveRow) {
-			cellList[moveRow] = cellList[moveRow - 1];
-		}
-		cellList[0] = {};
-		++row;
-	}
-	return clearedRows;
-}
-
-bool BlockManager::canPlace(const Block& block) const {
+bool BlockManager::canPlace(Block& block) const {
 	const auto& cells = block.getFill();
 	for (int x = 0; x < 4; ++x) {
 		for (int y = 0; y < 4; ++y) {
@@ -89,4 +68,22 @@ const array<array<int, BlockManager::COL>, BlockManager::ROW>& BlockManager::get
 
 const vector<Block>& BlockManager::getBlockList() const {
 	return blockList;
+}
+
+bool BlockManager::downBlock(Block& currentBlock) {
+	int x = currentBlock.getX();
+	int y = currentBlock.getY();
+
+	if (y == 14) {
+		return false;
+	}
+
+	for (int i = 0; i < 4; i++) {
+		
+		if (cellList[x + i][max(y + 4, 9)] && currentBlock.getFill()[i][3]) {
+			return false;
+		}
+	}
+	currentBlock.setPos(x, ++y);
+	return true;
 }

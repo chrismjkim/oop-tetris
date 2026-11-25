@@ -1,6 +1,6 @@
 ﻿#include "Block.h"
 
-Block::Block(BlockType type) : type(type), angle(Angles::NORTH), posX(3), posY(0) {
+Block::Block(BlockType type) : type(type), angle(Angles::NORTH), posX(14), posY(0) {
 	auto it = BLOCKMAP.find(type);
 	if (it != BLOCKMAP.end()) {
 		fill = it->second;
@@ -12,25 +12,17 @@ array<array<int, 4>, 4>& Block::getFill() {
 	return fill;
 }
 
-const array<array<int, 4>, 4>& Block::getFill() const {
-	return fill;
-}
-
 void Block::setPos(const int x, const int y) {
 	posX = x;
 	posY = y;
 }
 
-int Block::getX() const {
+int Block::getX() {
 	return posX;
 }
 
-int Block::getY() const {
+int Block::getY() {
 	return posY;
-}
-
-Angles Block::getAngle() const {
-	return angle;
 }
 
 
@@ -65,6 +57,5 @@ bool Block::rotateBlock(Angles newAngle) {
 	}
 
 	fill = dst;
-	angle = newAngle;
 	return true;
 }

@@ -69,12 +69,10 @@ public:
 	Block(BlockType type);
 	BlockType getType() const;
 	void setPos(const int x, const int y);
-	int getX() const;
-	int getY() const;
-	Angles getAngle() const;
+	int getX();
+	int getY();
 
 	array<array<int, 4>, 4>& getFill();
-	const array<array<int, 4>, 4>& getFill() const;
 	bool rotateBlock(Angles angle);
 
 

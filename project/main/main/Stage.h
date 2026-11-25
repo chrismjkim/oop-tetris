@@ -8,7 +8,6 @@ private:
 public:
 	Stage() = default;
 	Stage(int speed, int stickRate, int clearLine);
-	int getSpeed() const;
-	int getStickRate() const;
+	int getStickRate();
 };
 

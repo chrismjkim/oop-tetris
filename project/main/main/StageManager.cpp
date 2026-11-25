@@ -6,7 +6,6 @@ void StageManager::setLine(const int l) {
 
 void StageManager::addNewStage(Stage s) {
 	stages[stageCount] = s;
-	++stageCount;
 }
 
 Stage StageManager::getStageData(int stageNum) {

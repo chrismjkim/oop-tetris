@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 enum class GameInput
 {
@@ -6,9 +6,9 @@ enum class GameInput
 	LEFT,
 	RIGHT,
 	DOWN,
-	DROP,
 	ROTATE,
-	QUIT
+	DROP,
+	QUIT,
 };
 
 // 키 입력 및 처리 담당

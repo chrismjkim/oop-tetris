@@ -7,24 +7,7 @@
 
 using namespace std;
 
-DisplayManager::DisplayManager() {
-    HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO cursorInfo;
-    if (GetConsoleCursorInfo(outputHandle, &cursorInfo)) {
-        cursorWasVisible = cursorInfo.bVisible != FALSE;
-        cursorInfo.bVisible = FALSE;
-        SetConsoleCursorInfo(outputHandle, &cursorInfo);
-    }
-}
-
-DisplayManager::~DisplayManager() {
-    HANDLE outputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO cursorInfo;
-    if (GetConsoleCursorInfo(outputHandle, &cursorInfo)) {
-        cursorInfo.bVisible = cursorWasVisible ? TRUE : FALSE;
-        SetConsoleCursorInfo(outputHandle, &cursorInfo);
-    }
-}
+DisplayManager::DisplayManager() {}
 
 void DisplayManager::setColor(int color) {
     static HANDLE std_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -41,8 +24,8 @@ void DisplayManager::gotoxy(int x, int y) {
 }
 
 void DisplayManager::showBlock(Block& block) {
-    int x = (block.getX() + 1) * WIDTH + ab_x;
-    int y = block.getY() + ab_y;
+    int x = block.getX();
+    int y = block.getY();
     auto cells = block.getFill();
 
     setColor(static_cast<int>(block.getType()) % 6 + 1);
@@ -95,7 +78,8 @@ void DisplayManager::showLogo() {
 
 }
 
-void DisplayManager::showGameBoard(int, array<array<int, 10>, 20> cellList) {
+void DisplayManager::showGameBoard(int stage, array<array<int, 10>, 20> cellList) {
+    int i, j;
     setColor(DARK_GRAY);
 
     for (int i = 0; i < ROW; i++) {
@@ -107,19 +91,6 @@ void DisplayManager::showGameBoard(int, array<array<int, 10>, 20> cellList) {
         }
     }
 
-    for (int row = 0; row < 20; ++row) {
-        for (int col = 0; col < 10; ++col) {
-            gotoxy((col + 1) * WIDTH + ab_x, row + ab_y);
-            if (cellList[row][col] == 0) {
-                cout << "  ";
-            }
-            else {
-                setColor((cellList[row][col] - 1) % 6 + 1);
-                cout << "■";
-                setColor(DARK_GRAY);
-            }
-        }
-    }
 }
 
 int DisplayManager::showKeys() {
@@ -165,9 +136,9 @@ void DisplayManager::showGameStat(const int level, const int score, const int li
     printf("%d", level);
     gotoxy(35, 10);
     printf("%10d", score);
-    gotoxy(41, 12);
-    printf("%10d", lines);
 }
+
+
 
 void DisplayManager::showNextBlockContainer(BlockType type, int level) {
     int i, j;
@@ -185,6 +156,20 @@ void DisplayManager::showNextBlockContainer(BlockType type, int level) {
                 printf("  ");
             }
 
+        }
+    }
+}
+
+void DisplayManager::eraseBlock(Block& block) {
+    int x = block.getX();
+    int y = block.getY();
+    auto cells = block.getFill();
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            gotoxy(i + x, j + y);
+            if (cells[i][j] == 1) {
+                cout << "";
+            }
         }
     }
 }
