@@ -596,6 +596,7 @@ TheftOutcome resolve_theft(GameState& game, const GimmickRules& rules)
         game.augments.repelled = false;
         return TheftOutcome::Cancelled;
     }
+    
     if (game.warning_id != 0) {
         const int id = game.warning_id;
         game.warning_id = 0;

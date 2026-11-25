@@ -6,10 +6,9 @@
 
 ```powershell
 .\build.bat
-.\build\tetris-kingdom-1.3.exe
-.\build\tetris-kingdom-1.3.exe --debug
-.\build\tetris-kingdom-1.3.exe --two-player
-.\build.bat test
+.\build\tetris-kingdom-1.4.exe
+.\build\tetris-kingdom-1.4.exe --debug
+.\build\tetris-kingdom-1.4.exe --two-player
 ```
 
 빌드 버전은 `build.bat`의 `VERSION`으로 관리한다. 버전을 올리면 같은 출력 폴더에 버전이 다른 실행 파일을 만든다.
