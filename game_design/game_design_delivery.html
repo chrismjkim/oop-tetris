@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="선물은 막차를 타고의 스토리 진행, 증강, 방해 기믹과 화면 구성을 정리한 팀 기획 위키.">
+  <title>선물은 막차를 타고 - 기획 위키</title>
+  <style>
+    /* 기획 위키의 공통 레이아웃 */
+    :root{
+      color-scheme:light;
+      --green:#cb843a;--green-dark:#008b82;--green-pale:#d4f0e3;
+      --bg:#f5f5f5;--paper:#fff;--text:#212529;--muted:rgba(33,37,41,.749);
+      --line:#ccc;--table-line:#ddd;--soft:#f5f5f5;--link:#0275d8;--link-hover:#0263b8;
+      --amber:#8b5900;--amber-bg:#fff8e6;--blue:#0275d8;--blue-bg:#edf5ff;
+      --infobox-color:#244568;--quote-bg:#eee;--quote-edge:#71bc6d;
+      --heading-line:#ccc;--nav-background:linear-gradient(90deg,#19344f,#224970,#315778);
+      --container-width:none;--sidebar-width:280px;--layout-gutter:1rem;
+      --article-padding:1.5rem;--nav-height:3.5rem;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:1rem;-webkit-text-size-adjust:100%}
+    body{
+      margin:0;min-width:240px;background:var(--bg);color:var(--text);
+      font-family:"Pretendard JP",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","NanumBarunGothic",Roboto,"Segoe UI","Malgun Gothic","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol",sans-serif,emoji;
+      font-size:15px;font-weight:400;line-height:1.5;word-break:break-all;overflow-wrap:anywhere;
+    }
+    a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover);text-decoration:underline}
+    button,input{font:inherit}button{color:var(--text);cursor:pointer}
+    button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #e9e612;outline-offset:2px}
+    .skip{position:fixed;left:12px;top:-80px;background:var(--paper);padding:10px;z-index:10}.skip:focus{top:8px}
+    .topbar{height:var(--nav-height);position:relative;background:var(--nav-background);color:#fff;z-index:5;box-shadow:none}
+    .top-inner{width:100%;max-width:var(--container-width);height:100%;padding:.5rem 1rem;margin:0 auto;display:flex;align-items:center;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.5rem;color:#fff;font-size:1.75rem;font-weight:700;line-height:1;white-space:nowrap;letter-spacing:normal;margin-right:1rem}
+    .brand:hover{color:#fff;text-decoration:none}.brand svg{width:1.8rem;height:1.8rem;fill:currentColor}
+    .top-nav{height:100%;display:flex;align-items:stretch;gap:0;white-space:nowrap;font-size:1.05rem;font-weight:500}
+    .top-nav a{color:#fff;display:flex;align-items:center;padding:0 .75rem;border-radius:4px}
+    .top-nav a:hover{background:#ffffff1a;text-decoration:none}
+    .search{position:relative;display:flex;align-items:center;width:20rem;height:2.5rem;margin-left:auto;flex-shrink:1;min-width:150px}
+    .search input{width:100%;height:100%;border:1px solid #ced4da;border-radius:4px;padding:.25rem 2.75rem .25rem .75rem;background:#fff;color:#212529;line-height:1.5;font-size:1rem}
+    .search button{position:absolute;right:0;top:0;height:100%;width:2.25rem;padding:0;border:0;background:transparent;color:#666;font-size:1.5rem;border-radius:0 4px 4px 0}
+    .search-note{position:absolute;right:0;top:calc(100% + .75rem);width:max-content;max-width:20rem;padding:.5rem .75rem;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--text);font-size:.9rem}
+    .search-note:empty{display:none}
+    .layout{width:100%;max-width:var(--container-width);margin:0 auto 1rem;padding:0 var(--layout-gutter);display:grid;grid-template-columns:minmax(0,1fr) var(--sidebar-width);gap:1rem;align-items:start}
+    .article{min-width:0;min-height:50rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:none;padding:var(--article-padding)}
+    .article-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+    .article-header>div:first-child{flex:1;min-width:0}
+    h1{margin:0;font-size:2.25rem;font-weight:700;line-height:1;letter-spacing:normal;word-break:break-all}
+    .subtitle{font-size:.9rem;color:var(--muted);margin:.5rem 0 0}
+    .tools{display:flex;align-items:center;flex-shrink:0;gap:0}
+    .tools button{border:1px solid #dadada;background:var(--paper);padding:.25rem .75rem;font-size:.9rem;line-height:1.5;border-radius:0}
+    .tools button+button{border-left:0}.tools button:first-child{border-radius:.3rem 0 0 .3rem}.tools button:last-child{border-radius:0 .3rem .3rem 0}
+    .tools button:hover{background:#efefef;border-color:#c5c5c5}
+    .meta{font-size:.9rem;color:var(--muted);text-align:left;margin:.5rem 0 1.5rem}
+    .categories{border:1px solid var(--line);border-radius:4px;padding:.25rem .5rem;font-size:.9rem;margin:0 0 1rem}
+    .categories span{color:var(--text);margin-right:.5rem}.categories a+a:before{content:" | ";color:var(--line);padding:0 .25rem}
+    .notice{background:var(--soft);border:1px solid var(--table-line);border-left:5px solid var(--green);padding:1rem;margin:0 0 1rem;font-size:inherit}
+    .notice p{margin:0}.notice p+p{margin-top:.25rem}
+    .tag{display:inline-block;vertical-align:middle;white-space:nowrap;font-size:.85rem;line-height:1.5;font-weight:700;padding:0 .25rem;border-radius:0}
+    .tag-fixed{color:#008275;background:var(--green-pale)}.tag-test{color:var(--blue);background:var(--blue-bg)}.tag-open{color:var(--amber);background:var(--amber-bg)}
+    .intro-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,450px);gap:20px;align-items:start;margin:10px 0 20px}
+    .intro-grid>div{min-width:0}.lead{margin:0 0 1rem}
+    .toc{display:inline-block;max-width:100%;border:1px solid var(--heading-line);background:var(--paper);margin-left:5px;padding:12px 20px 12px 0}
+    .toc summary{position:relative;cursor:pointer;list-style:none;font-size:1.25em;font-weight:400;min-width:60px;margin-left:14px;padding-right:24px}
+    .toc summary::-webkit-details-marker{display:none}
+    .toc summary:after{content:"";position:absolute;right:1px;top:5px;width:9px;height:9px;border-right:2px solid #666;border-bottom:2px solid #666;transform:rotate(45deg);margin:0}
+    .toc:not([open]) summary:after{transform:rotate(135deg);top:8px}
+    .toc[open] summary{margin-bottom:12px}.toc[open]{padding-bottom:16px}
+    .toc ol{list-style:none;padding:0 0 0 20px;margin:0;font-size:inherit;line-height:1.5}
+    .toc ol ol{padding-left:20px;margin:0;font-size:inherit}.toc li{margin:0;padding:0}
+    .toc .num{display:inline;min-width:0;margin-right:.25em;color:var(--link)}
+    .toc a{color:var(--text)}.toc a:hover{color:var(--link)}
+    .toc ol ol a{color:var(--link)}
+    .infobox{width:100%;max-width:450px;border:2px solid var(--infobox-color);background:var(--paper);font-size:inherit;margin:0;grid-row:auto}
+    .info-title{background:var(--infobox-color);color:#fff;padding:5px 10px;text-align:center;font-size:1.8em;font-weight:700;line-height:1.5}
+    .info-title small{display:block;font-size:.65em;font-weight:700;line-height:1.5;margin:0;letter-spacing:normal;opacity:1}
+    .block-art{height:94px;background:var(--paper);border-bottom:1px solid var(--table-line);display:flex;align-items:center;justify-content:center}
+    .block-art svg{width:255px;max-width:100%;height:58px}
+    .infobox dl{display:grid;grid-template-columns:95px minmax(0,1fr);margin:0;line-height:1.5}
+    .infobox dt,.infobox dd{margin:0;padding:5px 10px;border-bottom:1px solid var(--table-line)}
+    .infobox dt{background:var(--infobox-color);color:#fff;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center}
+    .infobox dd{border-left:1px solid var(--table-line);color:var(--text);background:var(--paper)}
+    .infobox dt:last-of-type,.infobox dd:last-of-type{border-bottom:0}
+    .article-section{margin:0;clear:both}
+    .article-section>summary{display:flex;align-items:baseline;gap:0;list-style:none;cursor:pointer;border-bottom:1px solid var(--heading-line);font-size:1.8em;line-height:1.5;margin:1.2em 0 .8em;padding:0 0 5px}
+    .article-section>summary::-webkit-details-marker{display:none}
+    .article-section>summary:before{content:"";flex-shrink:0;width:.725em;height:.725em;margin:0 .5rem 0 .2rem;border:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23666' d='M256 294.1 383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0z'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;transform:none}
+    .article-section:not([open])>summary{opacity:.5}.article-section:not([open])>summary:before{transform:rotate(-90deg)}
+    h2{font-size:1em;line-height:1.5;font-weight:700;letter-spacing:normal;margin:0}
+    h2 .n,h3 .n{color:var(--link);margin-right:.25em}
+    h2 .n:hover,h3 .n:hover{color:var(--link-hover)}
+    #toc{scroll-margin-top:1rem}
+    h3{font-size:1.6em;font-weight:700;line-height:1.5;letter-spacing:normal;margin:1.2em 0 .8em;padding-bottom:5px;border-bottom:1px solid var(--heading-line)}
+    h4{font-size:1.4em;font-weight:700;line-height:1.5;margin:1.2em 0 .8em;padding-bottom:5px;border-bottom:1px solid var(--heading-line)}
+    p{margin:0 0 1rem}strong{font-weight:700}
+    ul,ol{margin:.4em 0 .4em 1.5em;padding-left:.5rem}li{margin:.4em 0;padding:0}
+    blockquote{display:table;max-width:100%;margin:1em 0;padding:1em;border:2px dashed var(--heading-line);border-left:5px solid var(--quote-edge);background:var(--quote-bg)}
+    blockquote p{margin:0}
+    .table-wrap{display:block;max-width:100%;overflow-x:auto;margin:10px 0}
+    table{width:100%;border-collapse:collapse;background:var(--soft);font-size:inherit;line-height:1.5}
+    th,td{border:1px solid var(--table-line);padding:5px 10px;vertical-align:middle;text-align:left}
+    thead th{background:var(--infobox-color);color:#fff;font-weight:700}
+    tbody th{background:var(--soft);font-weight:700}
+    caption{text-align:left;padding:0 0 5px;font-size:.9rem;color:var(--muted)}
+    .nowrap{white-space:nowrap}.small{font-size:.9rem;color:var(--muted)}
+    .callout{border:1px solid var(--table-line);border-left:5px solid var(--green);padding:1em;background:var(--soft);margin:1em 0}
+    .callout p{margin:0}.callout.pending{border-left-color:#bb8b24;background:var(--amber-bg)}
+    .stage-path{display:flex;border:2px solid var(--infobox-color);margin:10px 0}
+    .stage-path a{flex:1;background:var(--soft);border-right:1px solid var(--table-line);text-align:center;padding:5px 10px;font-weight:700}
+    .stage-path a:last-child{border:0}.stage-path span{display:block;color:var(--muted);font-size:.9rem;font-weight:400}
+    .stage-path a:hover{background:var(--paper)}
+    .stage-figure{width:fit-content;max-width:100%;margin:1rem 0;padding:16px;border:1px solid var(--table-line);background:var(--soft);break-inside:avoid}
+    .stage-art-frame{max-width:100%;overflow-x:auto}
+    .stage-art{width:max-content;margin:0;font:14px/1.3 Consolas,"Courier New",monospace;letter-spacing:0;white-space:pre;word-break:normal;overflow-wrap:normal;color:var(--text);background:transparent}
+    .stage-figure figcaption{text-align:center}
+    .fold{border:1px solid var(--table-line);margin:10px 0;padding:5px 10px;background:var(--soft)}
+    .fold>summary{cursor:pointer;text-align:center;font-weight:700;padding:0}
+    .fold[open]>summary{border-bottom:1px solid var(--table-line);padding-bottom:5px;margin-bottom:10px}
+    .board-figure{margin:10px 0;padding:10px;border:1px solid var(--table-line);background:var(--soft)}
+    .board-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .board-label{text-align:center;font-size:inherit;font-weight:700;margin-bottom:5px}
+    .board-pre{font-family:Consolas,"Courier New",monospace;font-size:18px;line-height:1.75;letter-spacing:4px;background:var(--quote-bg);border:1px solid var(--table-line);border-radius:3px;margin:0;padding:7px;text-align:center;white-space:pre;overflow-x:auto}
+    .hard{background:#60518c;color:white;outline:2px solid #60518c}.normal{background:#dcece8;color:#176650;outline:2px solid #dcece8}
+    figcaption{font-size:.9rem;color:var(--muted);line-height:1.5;margin-top:10px}
+    .screen-figure{margin:10px 0}
+    .screen-frame{max-width:100%;overflow-x:auto;border:1px solid var(--table-line);border-radius:4px;background:var(--soft)}
+    .screen-ascii{width:max-content;margin:0;padding:10px 12px;font:12px/1.35 Consolas,"Courier New",monospace;letter-spacing:0;white-space:pre;word-break:normal;overflow-wrap:normal;color:var(--text)}
+    .screen-card-copy{display:inline-block;width:26ch}.screen-card-selected{color:var(--amber)}
+    .reference-list{font-size:inherit}.reference-list li{margin:.4em 0}
+    .doc-footer{border-top:1px solid #777;margin-top:1.5em;padding-top:.5em;font-size:.8rem;color:var(--muted);line-height:1.75}
+    .sidebar{position:sticky;top:1rem;font-size:inherit}
+    .side-box{border:1px solid var(--line);border-radius:6px;background:var(--paper);margin-bottom:1rem;box-shadow:none;overflow:hidden}
+    .side-title{font-size:1.2rem;font-weight:700;line-height:1.5;padding:1rem 1.25rem .5rem;border:0}
+    .side-body{padding:.5rem 1.25rem 1rem}.side-body p{margin:0 0 .5rem}.side-body p:last-child{margin:0}
+    .quick-list{list-style:none;padding:0 1.25rem 1rem;margin:0}.quick-list li{margin:0}
+    .quick-list a{display:block;padding:.25rem 0;border:0;font-size:inherit}
+    .side-stat{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--table-line)}
+    .side-stat:last-child{border:0}.side-stat strong{color:var(--text)}.side-caption{font-size:.85rem;color:var(--muted);margin-top:.5rem!important}
+    .to-top{position:fixed;right:2.5rem;bottom:2rem;border:1px solid #ced4da80;border-radius:4px;background:#315778;color:#fff;padding:.5rem .75rem;box-shadow:none;font-size:.9rem}
+    .to-top:hover{color:#fff;text-decoration:none;background:#244568}
+    .search-hit{outline:3px solid #d7a800!important;outline-offset:3px;background:var(--amber-bg)!important}
+    body.dark{
+      color-scheme:dark;--green:#2e3033;--green-dark:#c0c1c2;--green-pale:#325e4a;--bg:#000;--paper:#1c1d1f;--text:#e0e0e0;--muted:hsla(0,0%,88%,.749);
+      --line:#444;--table-line:#383b40;--soft:#2d2f34;--link:#ec9f19;--link-hover:#bd7f14;
+      --amber:#f1cd80;--amber-bg:#3d3523;--blue:#91c5f1;--blue-bg:#253748;
+      --infobox-color:#283e59;--quote-bg:#2d2f34;--quote-edge:#666c75;--heading-line:#383b40;--nav-background:#2e3033;
+    }
+    .dark .search input{background:#000;color:#e0e0e0;border-color:#444}
+    .dark .tools button{border-color:#3e3e3e}.dark .tools button:hover{background:#1e1e1e;border-color:#4a4a4a}
+    .dark .tag-fixed{color:#c0c1c2}.dark .to-top{background:#2e3033;border-color:#44444480}.dark .normal{background:#31594d;color:#d2f5e8;outline-color:#31594d}
+    @media screen and (min-width:1200px){:root{--container-width:1280px;--sidebar-width:320px}}
+    @media screen and (min-width:1400px){:root{--container-width:1400px}}
+    @media screen and (max-width:1023.98px){
+      :root{--layout-gutter:0;--article-padding:1rem;--nav-height:3rem}
+      .top-inner{padding:.5rem 1rem;gap:.5rem}
+      .brand{font-size:1.6rem;margin-right:.5rem}.brand svg{width:1.6rem;height:1.6rem}
+      .topbar{margin-bottom:2.5rem}.top-nav a{padding:0 .75rem}
+      .search{position:absolute;top:100%;left:0;right:0;width:100%;height:2.5rem;margin:0;min-width:0}
+      .search input{border-radius:0}.search button{border-radius:0;width:2rem}.search-note{max-width:100%;top:100%}
+      .layout{display:block}.sidebar{display:none}.article{border:0;border-radius:0}
+      .article-header{flex-direction:column;gap:.5rem}.tools{align-self:flex-end}.meta{margin:.5rem 0 1rem}
+      h1{font-size:2rem}.to-top{right:1.5rem;bottom:1.5rem}
+    }
+    @media screen and (max-width:727.98px){
+      :root{--article-padding:.75rem}
+      .top-inner{padding:.5rem;gap:.25rem}.brand{font-size:1.45rem;gap:.35rem}
+      .top-nav{margin-left:auto;font-size:.95rem}.top-nav a{padding:0 .5rem}.top-nav a:last-child{display:none}
+      .article{min-height:35rem}.meta{margin-bottom:.75rem}
+      .intro-grid{display:flex;flex-direction:column;gap:20px}
+      .intro-grid>div{width:100%}.infobox{order:-1;max-width:450px;align-self:center}
+      .toc{max-width:calc(100% - 5px)}.tools button{padding:.4rem .75rem}
+      .board-pair{gap:8px}.board-pre{font-size:15px;letter-spacing:2px;padding:7px 3px}
+      .stage-path a{padding:5px}.stage-path span{font-size:.8rem}
+      .stage-figure{padding:10px}.stage-art{font-size:clamp(7px,1.9vw,14px)}
+    }
+    @media screen and (max-width:319.98px){
+      :root{--nav-height:2.5rem}.brand{font-size:1.2rem}.brand svg{width:1.25rem;height:1.25rem}
+      .top-inner{padding:.25rem}.top-nav{font-size:.8rem}.top-nav a{padding:0 .25rem}
+      .tools button{padding:.3rem .5rem}h1{font-size:1.75rem}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+    @media print{
+      .topbar,.sidebar,.tools,.to-top,.skip{display:none!important}
+      .layout{display:block;max-width:none;margin:0;padding:0}.article{border:0;border-radius:0;min-height:0;padding:0;box-shadow:none}
+      body,body.dark{color-scheme:light;--paper:#fff;--text:#000;--line:#ccc;--table-line:#ddd;--muted:#555;--soft:#f5f5f5;--link:#0275d8;--quote-bg:#eee;--heading-line:#ccc;--infobox-color:#244568;--amber-bg:#fff8e6;--amber:#805000;--blue-bg:#edf5ff;--blue:#0275d8;background:#fff;font-size:11pt}
+      .article-section>summary:before{display:none}.article-section>summary{break-after:avoid}
+      .table-wrap{overflow:visible}tr,.infobox,.callout,.board-figure{break-inside:avoid}
+      h1{font-size:26pt}.article-section>summary{font-size:18pt}h3{font-size:14pt}
+      .intro-grid{display:grid;grid-template-columns:minmax(0,1fr) 310px}.doc-footer{margin-top:20px}a{color:inherit}
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#document">본문으로 이동</a>
+  <header class="topbar">
+    <div class="top-inner">
+      <a href="#top" class="brand" aria-label="별밤택배 기획 위키 처음으로"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="3" width="8" height="8" rx="1"/><rect x="11" y="3" width="8" height="8" rx="1"/><rect x="21" y="3" width="8" height="8" rx="1"/><rect x="11" y="13" width="8" height="8" rx="1"/></svg>별밤택배 기획 위키</a>
+      <nav class="top-nav" aria-label="주요 항목"><a href="#progression">진행 구조</a><a href="#augments">증강</a><a href="#gimmicks">방해 기믹</a></nav>
+      <form class="search" role="search" id="search-form"><input id="search-input" aria-label="문서 내 검색" placeholder="이 문서에서 찾기" autocomplete="off" type="search"><button aria-label="검색 또는 다음 결과" title="검색 / 다음 결과" type="submit">⌕</button><output class="search-note" id="search-status" aria-live="polite"></output></form>
+    </div>
+  </header>
+  <div class="layout">
+    <main class="article" id="document">
+      <div class="article-header"><div><h1>선물은 막차를 타고</h1><p class="subtitle">게임 기획서 · 프로젝트 내부 위키</p></div><div class="tools"><button type="button" id="expand-all">모두 접기</button><button type="button" id="theme-toggle" aria-pressed="false">다크</button><button type="button" id="print-button">인쇄</button></div></div>
+      <p class="meta">기획 기준일 · 2026-11-25</p>
+      <nav class="categories" aria-label="문서 분류"><span>분류:</span><a href="#overview">게임 기획</a><a href="#basics">테트리스</a><a href="#progression">스토리 모드</a><a href="#augments">증강 시스템</a></nav>
+      <div class="notice"><p><strong>가로 한 줄이 차면 택배 트럭 한 대가 출발한다.</strong> 한 칸은 택배 한 상자다. 함께 들어오는 상자 묶음을 돌려 싣고 어린이날 첫차부터 크리스마스 막차까지 배웅한다.</p></div>
+      <div class="intro-grid">
+        <div>
+          <p class="lead">별밤택배 야간조의 신입 상차 담당에게는 네 번의 성수기가 기다린다. 적재장 왼편에는 묶음 하나를 잠시 맡길 <strong>보류대(HOLD)</strong>가, 오른편에는 다음 물량을 보여 주는 <strong>입고 예고판(NEXT)</strong>이 있다. 계절이 바뀌어도 적재장에 남은 상자와 손에 익힌 장비는 다음 근무로 이어진다.</p>
+          <details class="toc" id="toc" open><summary>목차</summary><ol>
+            <li><a href="#overview"><span class="num">1.</span>개요</a></li><li><a href="#story"><span class="num">2.</span>세계관 및 스토리</a></li><li><a href="#basics"><span class="num">3.</span>기본 플레이</a></li><li><a href="#progression"><span class="num">4.</span>스토리 진행 구조</a></li><li><a href="#stages"><span class="num">5.</span>스테이지</a><ol><li><a href="#children">5.1. 어린이날</a></li><li><a href="#chuseok">5.2. 추석</a></li><li><a href="#black-friday">5.3. 블랙프라이데이</a></li><li><a href="#christmas">5.4. 크리스마스</a></li></ol></li><li><a href="#augments"><span class="num">6.</span>증강</a></li><li><a href="#gimmicks"><span class="num">7.</span>방해 기믹</a><ol><li><a href="#thief">7.1. 택배도둑</a></li><li><a href="#reinforced">7.2. 취급주의 택배</a></li><li><a href="#giant">7.3. 대형 택배 묶음</a></li></ol></li><li><a href="#modes"><span class="num">8.</span>클리어 및 모드 해금</a></li><li><a href="#ui"><span class="num">9.</span>화면 구성</a></li><li><a href="#references"><span class="num">10.</span>관련 자료</a></li>
+          </ol></details>
+        </div>
+        <aside class="infobox" aria-label="게임 핵심 정보">
+          <div class="info-title">선물은 막차를 타고<small>별밤택배 야간 출고반</small></div>
+          <div class="block-art" aria-hidden="true"><svg viewBox="0 0 255 58"><g fill="#e0ab39" stroke="#fff" stroke-width="2"><rect x="4" y="14" width="16" height="16"/><path d="M12 15v5 M7 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="20" y="14" width="16" height="16"/><path d="M28 15v5 M23 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="4" y="30" width="16" height="16"/><path d="M12 31v5 M7 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="20" y="30" width="16" height="16"/><path d="M28 31v5 M23 42h4" fill="none" stroke="#fff" stroke-width="1.5"/></g><g fill="#6f66a3" stroke="#fff" stroke-width="2"><rect x="52" y="14" width="16" height="16"/><path d="M60 15v5 M55 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="68" y="14" width="16" height="16"/><path d="M76 15v5 M71 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="84" y="14" width="16" height="16"/><path d="M92 15v5 M87 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="68" y="30" width="16" height="16"/><path d="M76 31v5 M71 42h4" fill="none" stroke="#fff" stroke-width="1.5"/></g><g fill="#498da1" stroke="#fff" stroke-width="2"><rect x="116" y="30" width="16" height="16"/><path d="M124 31v5 M119 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="132" y="30" width="16" height="16"/><path d="M140 31v5 M135 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="148" y="30" width="16" height="16"/><path d="M156 31v5 M151 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="164" y="30" width="16" height="16"/><path d="M172 31v5 M167 42h4" fill="none" stroke="#fff" stroke-width="1.5"/></g><g fill="#cf7656" stroke="#fff" stroke-width="2"><rect x="228" y="14" width="16" height="16"/><path d="M236 15v5 M231 26h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="196" y="30" width="16" height="16"/><path d="M204 31v5 M199 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="212" y="30" width="16" height="16"/><path d="M220 31v5 M215 42h4" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="228" y="30" width="16" height="16"/><path d="M236 31v5 M231 42h4" fill="none" stroke="#fff" stroke-width="1.5"/></g></svg></div>
+          <dl><dt>장르</dt><dd>테트리스 · 물류 퍼즐</dd><dt>환경</dt><dd>Windows 콘솔</dd><dt>배경</dt><dd>선물 성수기의 별밤택배 물류센터</dd><dt>기본 보드</dt><dd>가로 10칸 × 세로 20줄</dd><dt>스토리</dt><dd>한 판에서 4개 스테이지 진행</dd><dt>진행 순서</dt><dd>어린이날 → 추석 → 블랙프라이데이 → 크리스마스</dd><dt>구간 목표</dt><dd>일반 트럭 20대 · 디버깅 10대</dd><dt>증강 선택</dt><dd>스테이지 진입과 중간에 후보 3개 중 1개 선택<br>스테이지당 2회 · 총 8회</dd><dt>클리어</dt><dd>일반 누적 80대 · 디버깅 누적 40대</dd><dt>해금 보상</dt><dd>1인 무한 출고 · 2인 무한 협동</dd></dl>
+        </aside>
+      </div>
+
+
+
+<details class="article-section" id="overview" open>
+  <summary><h2><a class="n" href="#toc" aria-label="1. 상단 목차로 이동" title="상단 목차로 이동">1.</a>개요</h2></summary>
+<p>플레이어는 별밤택배 물류센터의 야간 상차 담당이다. 위에서 들어오는 택배 묶음을 움직여 적재장의 가로 10칸을 채운다. 한 줄이 완성되면 그 줄을 맡은 기사가 트럭을 몰고 나간다. 두 줄을 함께 완성하면 두 대, 테트리스로 네 줄을 완성하면 네 대가 한꺼번에 출발한다.</p>
+<p>스토리 한 판은 어린이날, 추석, 블랙프라이데이, 크리스마스의 네 근무로 이어진다. 트럭을 보낼수록 화면 오른쪽에 그날의 출고장 풍경이 아래부터 드러난다. 어려운 묶음을 보류해 둘지, 지금 한 줄을 보내 적재 공간을 넓힐지가 매번의 선택이다.</p>
+</details>
+
+<details class="article-section" id="story" open>
+  <summary><h2><a class="n" href="#toc" aria-label="2. 상단 목차로 이동" title="상단 목차로 이동">2.</a>세계관 및 스토리</h2></summary>
+<blockquote><p>“이거 타면 어린이날 아침에 도착해요?”<br>삐뚤빼뚤한 별 하나가 그려진 장난감 상자. 신입이 처음 맡은 택배다.</p></blockquote>
+<p>첫 출근은 어린이날 전날 밤이다. 동네 문구점에서 올라온 장난감들이 벨트에 늘어서 있다. 기사는 출고장 바닥의 노란 선을 가리키며 신입에게 첫차를 맡긴다. “여기까지 한 줄 채우면 불러 줘요. 바로 출발할게요.” 첫 줄이 사라지자 빈자리가 생기고, 셔터 너머로 빨간 후미등 두 개가 멀어진다.</p>
+<p>추석에는 과일 상자를 나르느라 문이 오래 열린다. 누군가 그 틈에 손수레를 밀고 들어와 맨 위에 쌓인 선물에 손을 댄다. 블랙프라이데이에는 깨지기 쉬운 가전이 몰린다. 이제는 줄을 다 채워 차를 보내도 검수대에 남는 상자가 있다. 신입은 매번 다른 이유로 막히는 적재장을 한 줄씩 비운다.</p>
+<p>크리스마스이브에는 단체 선물이 통째로 묶여 들어온다. 올해 배운 일을 다 써서 막차를 보내고 나면 데스크 위에 봉투 하나가 남는다. 수취인은 ‘별밤택배 야간조’. 첫날 보았던 별 아래에 “동생이 아침에 열어 봤어요. 고맙습니다!”라고 적혀 있다. 그제야 신입도 장갑을 벗는다.</p>
+</details>
+
+<details class="article-section" id="basics" open>
+  <summary><h2><a class="n" href="#toc" aria-label="3. 상단 목차로 이동" title="상단 목차로 이동">3.</a>기본 플레이</h2></summary>
+<p>적재장은 <strong>가로 10칸 × 세로 20줄</strong>이다. 택배 묶음을 좌우로 옮기고 90도씩 회전하거나 소프트 드롭·하드 드롭으로 내린다. HOLD에는 일반 묶음을 보류할 수 있고 NEXT에는 다음 묶음이 보인다. 일반 묶음 안에 <a href="#reinforced">취급주의 상자</a>가 있어도 보류할 수 있다. <a href="#giant">대형 묶음</a>은 취급주의 표시 유무와 관계없이 보류할 수 없다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">용어</th><th scope="col">플레이에서의 의미</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">상자와 칸</th><td>적재장 한 칸에 택배 한 상자가 들어간다. 상자를 놓기 전에는 빈칸이다.</td></tr>
+    <tr><th scope="row">택배 묶음</th><td>한 번에 입고되어 함께 움직이는 조각. 일반 묶음은 네 상자로 이루어지며, 한 줄을 출고하면 같은 묶음의 일부 상자만 남을 수 있다.</td></tr>
+    <tr><th scope="row">적재 틈</th><td>같은 세로열에서 위와 아래에 각각 상자가 하나 이상 있는 빈칸. 맨 아래 줄은 바로 위 칸에 상자가 있으면 적재 틈으로 센다.</td></tr>
+    <tr><th scope="row">출차</th><td>가로 10칸이 차면 줄 제거 판정이 일어나 트럭 한 대가 출발한다. 일반 상자가 실려 나가고 위쪽 상자는 내려온다. 취급주의 상자의 첫 검수에는 별도 규칙을 적용한다.</td></tr>
+    <tr><th scope="row">누적 출차 대수</th><td>이번 판에 제거 판정을 받은 줄 수. 스테이지 전환과 클리어에 쓰는 실적이다.</td></tr>
+    <tr><th scope="row">현장 증강</th><td>입고·검수·보안을 돕는 장비와 작업 요령. 지금 후보로 나올 수 있는 증강들의 목록을 증강 풀이라고 한다.</td></tr>
+    <tr><th scope="row">입고 목록(7-bag)</th><td>다음 묶음들의 모양과 순서를 정하는 일곱 자리 목록.</td></tr>
+  </tbody>
+</table></div>
+<div class="callout"><p><strong>트럭은 완성한 줄당 한 대씩 출발한다.</strong> 취급주의 상자가 첫 검수 때문에 자리에 남더라도 해당 줄의 출차 실적은 1대다.</p></div>
+<h3 id="locking">낙하와 고정 지연</h3>
+<p>자동 낙하와 고정 타이머는 별도로 작동한다. 묶음이 바닥이나 이미 쌓인 상자에 처음 닿으면 <strong>0.5초</strong>의 고정 지연이 시작된다. 첫 접촉 뒤 성공한 좌우 이동과 회전은 <strong>합산 15회</strong>까지 허용한다. 접촉 중 이동이나 회전에 성공하면 타이머를 0.5초로 되돌린다. 실패한 입력은 세지 않는다. 허용 횟수를 소진한 상태에서 바닥이나 상자에 닿으면 즉시 고정한다. 하드 드롭도 즉시 고정한다.</p>
+<p>묶음이 이전 최저 위치보다 한 줄 이상 더 내려가면 허용 횟수는 15회로 돌아온다. 공중에서는 자동 낙하를 계속하고 고정 타이머를 멈춘다. 뜨기 직전과 같거나 더 높은 곳에 다시 닿으면 남은 시간부터, 더 낮은 곳에 닿으면 0.5초부터 센다.</p>
+</details>
+
+<details class="article-section" id="progression" open>
+  <summary><h2><a class="n" href="#toc" aria-label="4. 상단 목차로 이동" title="상단 목차로 이동">4.</a>스토리 진행 구조</h2></summary>
+<p>각 성수기의 배차 목표는 일반 20대, 디버깅 10대다. 네 번의 근무를 합쳐 각각 80대와 40대를 보내면 클리어한다. 다음 근무는 직전 보드와 획득한 증강을 이어받는다. 이미 발동한 일회성 효과는 다시 발동하지 않는다. 새 성수기의 증강을 풀에 추가한 뒤 진입 증강을 고른다.</p>
+<h3>증강 선택 시점</h3>
+<p>각 스테이지의 진입과 중간 지점에 한 번씩, 후보 3개 중 1개를 고른다. 총 8번이며 마지막 트럭을 보내면 바로 결말로 이어진다. 무한 모드에서는 플레이어가 자기 트럭을 20대 보낼 때마다 자신의 증강을 고른다. 표의 대수는 누적 출차 실적이다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">성수기</th><th scope="col">일반 선택 시점</th><th scope="col">디버깅 선택 시점</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">어린이날</th><td>0 · 10대</td><td>0 · 5대</td></tr>
+    <tr><th scope="row">추석</th><td>20 · 30대</td><td>10 · 15대</td></tr>
+    <tr><th scope="row">블랙프라이데이</th><td>40 · 50대</td><td>20 · 25대</td></tr>
+    <tr><th scope="row">크리스마스</th><td>60 · 70대</td><td>30 · 35대</td></tr>
+  </tbody>
+</table></div>
+<h3 id="difficulty">난이도 단계와 수치</h3>
+<p>난이도 상승 횟수 k는 0에서 시작한다. 스토리에서는 다음 성수기에 진입할 때마다 한 단계 오른다. 1인 무한 출고는 본인 20대마다, 2인 무한 협동은 두 사람이 합쳐 40대마다 한 단계 오른다. 협동의 난이도는 공유한다. 실적은 각 보드에서 가로줄을 완성해 출차시킨 트럭으로 계산한다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">단계</th><th scope="col">자동 낙하 속도</th><th scope="col">택배도둑 출현 확률</th><th scope="col">묶음당 취급주의 확률 계산값</th><th scope="col">7-bag당 대형 묶음 포함 확률</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1단계 · 어린이날</th><td>1칸/초</td><td>0%</td><td>−10%</td><td>0%</td></tr>
+    <tr><th scope="row">2단계 · 추석</th><td>2칸/초</td><td>5%</td><td>0%</td><td>0%</td></tr>
+    <tr><th scope="row">3단계 · 블랙프라이데이</th><td>3칸/초</td><td>10%</td><td>10%</td><td>0%</td></tr>
+    <tr><th scope="row">4단계 · 크리스마스</th><td>4칸/초</td><td>15%</td><td>20%</td><td>14%</td></tr>
+    <tr><th scope="row">5단계 · 무한 모드</th><td>5칸/초</td><td>20%</td><td>30%</td><td>14%</td></tr>
+  </tbody>
+</table></div>
+<p>표는 증강 적용 전 수치다. 1인·2인 무한 모드 모두 1칸/초에서 시작하며 기본 낙하 속도 상한은 5칸/초다. 이후에도 택배도둑과 취급주의 확률은 각자의 상한까지 오른다. 취급주의 계산값이 음수이면 실제 입고 추첨에는 0%를 쓴다.</p>
+</details>
+
+
+<details class="article-section" id="stages" open>
+  <summary><h2><a class="n" href="#toc" aria-label="5. 상단 목차로 이동" title="상단 목차로 이동">5.</a>스테이지</h2></summary>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">성수기</th><th scope="col">일반 누적 출차</th><th scope="col">디버깅 누적 출차</th><th scope="col">누적 방해 기믹</th><th scope="col">증강 풀</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">어린이날</th><td>0~19대</td><td>0~9대</td><td>없음</td><td>공통 증강</td></tr>
+    <tr><th scope="row">추석</th><td>20~39대</td><td>10~19대</td><td>택배도둑</td><td>공통 + 추석 증강</td></tr>
+    <tr><th scope="row">블랙프라이데이</th><td>40~59대</td><td>20~29대</td><td>택배도둑 + 취급주의 택배</td><td>이전 풀 + 블랙프라이데이 증강</td></tr>
+    <tr><th scope="row">크리스마스</th><td>60~79대</td><td>30~39대</td><td>택배도둑 + 취급주의 택배 + 대형 택배 묶음</td><td>이전 풀 + 크리스마스 증강</td></tr>
+  </tbody>
+</table></div>
+<h3 id="children"><a class="n" href="#toc" aria-label="5.1. 상단 목차로 이동" title="상단 목차로 이동">5.1.</a>어린이날 · 장난감 첫차</h3>
+<p>문구점에서 실어 온 장난감 상자들이 처음으로 벨트를 가득 메운다. 짧은 묶음 하나를 보류대에 맡기고 NEXT를 보면서 첫 줄을 채우면, 로봇 얼굴이 그려진 트럭이 셔터 밖으로 나선다.</p>
+<figure class="stage-figure" aria-labelledby="children-art-caption"><div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="장난감 로봇 그림을 붙인 어린이날 배송 트럭이 깃발 아래 도로로 나온다.">+--------------------------------------------------+
+|                                                  |
+|   \   /\   /\   /\   /\   /\   /                 |
+|    \_/  \_/  \_/  \_/  \_/  \_/                  |
+|                                                  |
+|                                                  |
+|    .--------------------------.                  |
+|    |           __             |                  |
+|    |        .-[__]-.          |                  |
+|    |        | o  o |   TOYS   |                  |
+|    |        |  --  |          | _________        |
+|    |        '-.__.-'          ||  ____  |\       |
+|    |         /|__|\           || |____| | \__    |
+|    |__________________________||        |    |   |
+|                                |________|____|   |
+|    \____( O )______________________( O )____/    |
+|                                                  |
+| ------------------------------------------------ |
+|    -----          -----          -----           |
+|                                                  |
++--------------------------------------------------+</pre></div><figcaption id="children-art-caption">장난감 첫차 · 출고 완료 장면 · 52문자 × 21줄</figcaption></figure>
+<p>방해 기믹 없이 시작한다. 첫 선택은 전역 증강 후보 3개 중 1개다. 묶음 배치, 보류, 입고 예고, 출차를 익힌다. 일반 20대, 디버깅 10대를 보내면 추석으로 이어진다.</p>
+<h3 id="chuseok"><a class="n" href="#toc" aria-label="5.2. 상단 목차로 이동" title="상단 목차로 이동">5.2.</a>추석 · 보름달 아래 열린 셔터</h3>
+<p>과일 선물 세트가 밀려드는 동안 셔터가 열린 채로 남는다. 한 손수레가 입고 물량을 거슬러 밖으로 향한다. 상단의 선물 묶음에 <code>##</code>가 깜빡이면 다음 묶음을 놓기 전, 표시가 걸친 줄부터 살핀다.</p>
+<figure class="stage-figure" aria-labelledby="chuseok-art-caption"><div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="보름달 아래에서 리본 묶은 배 선물 세트가 출고 벨트를 지난다.">+--------------------------------------------------+
+|                                                  |
+|         _..._                                    |
+|       .'     '.            .--.      .--.        |
+|      /         \         -(    )----(    )-      |
+|     |           |                                |
+|      \         /                                 |
+|       '.     .'                                  |
+|         '---'                                    |
+|                              _.--.  _.--.        |
+|                              \   /\/   /         |
+|                          .----\__/\__ /----.     |
+|       ____     ____      |=======||========|     |
+|      / __ \   / __ \     |       ||        |     |
+|     ( (__) ) ( (__) )    | PEARS ||        |     |
+|      \____/   \____/     |_______||________|     |
+|     [===============]                            |
+| ================================================ |
+|   o    o    o    o    o    o    o    o    o      |
+|                                                  |
++--------------------------------------------------+</pre></div><figcaption id="chuseok-art-caption">보름달 아래 열린 셔터 · 출고 완료 장면 · 52문자 × 21줄</figcaption></figure>
+<p>택배도둑이 처음 등장하고 보안 증강이 풀에 추가된다. 쌓인 상자의 상단 4줄에 한 칸이라도 걸친 온전한 일반 묶음이 표적이다. 일반 누적 40대, 디버깅 누적 20대에서 블랙프라이데이로 넘어간다.</p>
+<h3 id="black-friday"><a class="n" href="#toc" aria-label="5.3. 상단 목차로 이동" title="상단 목차로 이동">5.3.</a>블랙프라이데이 · 검수대에 남은 한 상자</h3>
+<p>스피커에서 스캐너의 짧은 이중음이 울린다. 선물용 커피잔과 소형 가전이 들어왔다는 신호다. 차 한 대가 떠난 자리에 취급주의 상자 한 개가 그대로 남고, 직원이 깨짐 없이 검수했다는 도장을 찍는다. 다음번 그 줄이 차면 이번에는 트럭에 실린다.</p>
+<figure class="stage-figure" aria-labelledby="black-friday-art-caption"><div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="세일 현수막 아래 스캐너가 취급주의 표시가 붙은 택배 두 상자를 읽는다.">+--------------------------------------------------+
+|                                                  |
+|          .----------------------------.          |
+|          |       BLACK FRIDAY         |          |
+|          |____________________________|          |
+|                                                  |
+|      .-----------------------------------.       |
+|      |  SCAN     || | ||| || | ||     OK |       |
+|      | .-------------------------------. |       |
+|      | |                               | |       |
+|      | |     .---|---.    .---|---.    | |       |
+|      | |     |   |   |    |   |   |    | |       |
+|      | |     |  [!]  |    |  [!]  |    | |       |
+|      |_|     |_______|    |_______|    |_|       |
+|                                                  |
+|  .--------------------------------------------.  |
+|  | o   o   o   o   o   o   o   o   o   o   o  |  |
+|  '--------------------------------------------'  |
+|      ||                                  ||      |
+|                                                  |
++--------------------------------------------------+</pre></div><figcaption id="black-friday-art-caption">검수대에 남은 한 상자 · 출고 완료 장면 · 52문자 × 21줄</figcaption></figure>
+<p>택배도둑이 계속 나타나고 검수 관련 증강이 추가된다. 취급주의 추첨은 묶음당 10%에서 시작해 이후 단계마다 10%p 오른다. 당첨된 묶음은 한 상자만 취급주의이며, 첫 출차 때 그 위의 같은 세로열은 내려오지 않는다. 일반 누적 60대, 디버깅 누적 30대에서 크리스마스로 넘어간다.</p>
+<h3 id="christmas"><a class="n" href="#toc" aria-label="5.4. 상단 목차로 이동" title="상단 목차로 이동">5.4.</a>크리스마스 · 올해의 막차</h3>
+<p>지역 아동센터로 가는 단체 선물은 열여섯 상자를 한꺼번에 묶었다. 보류대에 들어가지 않아 벨트에서 내리기 전에 자리를 봐 두어야 한다. 마지막 줄이 차면 트리 옆에 서 있던 막차가 떠나고, 조용해진 출고장에서 야간조 앞으로 온 편지를 읽는다.</p>
+<figure class="stage-figure" aria-labelledby="christmas-art-caption"><div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="트리 옆에 대형 묶음을 실은 트럭이 서 있고 눈이 내리기 시작한다.">+--------------------------------------------------+
+|                                                  |
+|        .          *             .         +      |
+|           *                                      |
+|          /\                                      |
+|         /o \                                     |
+|        /_  _\                                    |
+|         /o \       .---------------.             |
+|        /  o \      | []  []  []  []|             |
+|       /__ __ \     | []  []  []  []|             |
+|         /o  \      | []  []  []  []| ______      |
+|        /   o \     | []  []  []  []||   _  \     |
+|       /_______\    |_______________||  |_|  \_   |
+|           ||                        |_________|  |
+|                    \___(O)___________(O)____/    |
+|  .---|---. .--|--.                               |
+|  |___|___| |__|__|                               |
+|                                                  |
+| ------------------------------------------------ |
+|                                                  |
++--------------------------------------------------+</pre></div><figcaption id="christmas-art-caption">올해의 막차 · 출고 완료 장면 · 52문자 × 21줄</figcaption></figure>
+<p>택배도둑과 취급주의 택배에 대형 묶음이 더해진다. 새 7-bag마다 대형 묶음 포함 여부를 추첨하고 대형 화물용 증강을 풀에 추가한다. 일반 20대 또는 디버깅 10대를 더 보내 누적 80대 또는 40대를 채우면 스토리를 클리어한다.</p>
+</details>
+
+
+<details class="article-section" id="augments" open>
+  <summary><h2><a class="n" href="#toc" aria-label="6. 상단 목차로 이동" title="상단 목차로 이동">6.</a>현장 증강</h2></summary>
+<p>증강 초안은 <strong>전역 11종과 묶음 전용 7종</strong>이다. 전역 증강은 묶음의 모양을 지정하지 않는다. 묶음 전용 증강은 후보에 표시된 모양에만 적용한다. 아래 수치는 초기 플레이테스트 기준이다.</p>
+<h3 id="augment-choice"><a class="n" href="#toc" aria-label="6.1. 상단 목차로 이동" title="상단 목차로 이동">6.1.</a>선택 방식</h3>
+<p>스토리에서는 근무 시작과 중간에, 무한 모드에서는 개인 출차 20대마다 후보 3개를 세로로 보여 준다. 하나를 고르면 플레이를 이어간다. 1인 모드는 선택하는 동안 일시정지한다. 어린이날 첫 선택에는 전역 증강이 나온다. 공통 증강은 모든 성수기에 쓰는 전역 증강이며, 각 성수기에서 새로 해금한 풀은 이후에도 유지된다.</p>
+<h3 id="global-augments"><a class="n" href="#toc" aria-label="6.2. 상단 목차로 이동" title="상단 목차로 이동">6.2.</a>전역 증강</h3>
+<div class="table-wrap"><table id="global-augment-list">
+  <thead><tr><th scope="col">증강</th><th scope="col">효과</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">반품 카트 증차</th><td><a href="#global-ability-list">반품 재투입</a>이 발동할 때마다 적재 틈을 1칸 더 채운다.</td></tr>
+    <tr><th scope="row">네 대 동시 출차</th><td>한 번에 4줄을 완성해 트럭 네 대를 동시에 보내면 반품 재투입이 발동한다.</td></tr>
+    <tr><th scope="row">벨트 감속기</th><td>묶음의 자동 낙하 속도가 20% 감소한다.</td></tr>
+    <tr><th scope="row">급행 하역</th><td>대형 묶음이 아래쪽 칸을 1칸 더 부수며 내려간다. 묶음의 자동 낙하 속도는 20% 증가한다.</td></tr>
+    <tr><th scope="row">분실 보상 출고</th><td>택배도둑이 실제로 묶음을 훔치면 반품 재투입이 1회 발동한다.</td></tr>
+    <tr><th scope="row">보안 봉인</th><td>절도 표적에 취급주의 상자가 있으면 그 상자가 일반 상자로 바뀌고 절도가 취소된다.</td></tr>
+    <tr><th scope="row">도크 감시 카메라</th><td>택배도둑 출현 확률이 30% 감소한다(곱연산).</td></tr>
+    <tr><th scope="row">도둑의 지게차</th><td>택배도둑이 대형 묶음까지 훔칠 수 있다.</td></tr>
+    <tr><th scope="row">대형 화물 사전 검수</th><td>대형 묶음은 취급주의 상자 없이 입고된다.</td></tr>
+    <tr><th scope="row">소포장 전환</th><td>대형 묶음이 일정 확률로 일반 묶음으로 바뀐다. 그때 묶음에 있던 취급주의 표시도 사라진다.</td></tr>
+    <tr><th scope="row">혼잡 시 서행</th><td>적재장의 70% 이상이 차 있으면 묶음의 자동 낙하 속도가 30% 감소한다.</td></tr>
+  </tbody>
+</table></div>
+<h3 id="augment-types"><a class="n" href="#toc" aria-label="6.3. 상단 목차로 이동" title="상단 목차로 이동">6.3.</a>묶음 전용 증강</h3>
+<p id="augment-components">후보 하나에는 <strong>묶음 모양 하나와 증강 하나</strong>가 함께 표시된다. 예를 들어 ‘T형 · 옆 상자 검수’를 고르면 T형 묶음을 놓을 때마다 줄을 판정하기 전에 인접한 묶음의 취급주의 표시를 해제한다. 각 증강의 발동 시점과 효과는 한 쌍으로 정해져 있다.</p>
+<div class="table-wrap"><table id="block-augment-list">
+  <thead><tr><th scope="col">증강</th><th scope="col">발동 시점</th><th scope="col">효과</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">반품 호출벨</th><td>지정 묶음 보류</td><td>지정 모양을 연속으로 보류한 횟수만큼 반품 재투입이 발동한다.</td></tr>
+    <tr><th scope="row">입고 간격 조절</th><td>지정 묶음 출고 완료</td><td>다음 묶음의 자동 낙하 속도가 10% 감소한다(곱연산).</td></tr>
+    <tr><th scope="row">옆 상자 검수</th><td>지정 묶음 고정</td><td>출차 판정 전에 인접한 묶음의 취급주의 상자가 일반 상자로 바뀐다.</td></tr>
+    <tr><th scope="row">도크 경보벨</th><td>지정 묶음 보류</td><td>택배도둑을 쫓아내 예고된 절도를 취소한다.</td></tr>
+    <tr><th scope="row">추가 발주</th><td>지정 묶음 고정</td><td>10% 확률로 같은 모양의 묶음이 바로 다음에 한 번 더 들어온다.</td></tr>
+    <tr><th scope="row">표준 규격 계약</th><td>대형 묶음 입고 결정</td><td>지정 모양은 이후 일반 크기로만 들어온다.</td></tr>
+    <tr><th scope="row">출고 후 검수</th><td>지정 묶음 출고 완료</td><td>인접한 묶음의 취급주의 상자가 일반 상자로 바뀐다.</td></tr>
+  </tbody>
+</table></div>
+<p><strong>‘묶음 출고 완료’는 줄 제거로 그 묶음의 마지막 상자가 사라지는 순간이다.</strong> 여러 상자가 동시에 실려도 묶음당 한 번만 발동한다. 택배도둑이나 다른 증강이 마지막 상자를 직접 없앤 경우에는 발동하지 않는다. 같은 줄 제거로 증강 여러 개가 발동하면 먼저 획득한 증강부터 처리한다.</p>
+<h3 id="global-ability-list"><a class="n" href="#toc" aria-label="6.4. 상단 목차로 이동" title="상단 목차로 이동">6.4.</a>반품 재투입</h3>
+<p>반품 검수대에는 포장을 마쳐 다시 보낼 수 있는 낱상자가 있다. 반품 재투입이 발동하면 이 상자로 <a href="#basics">적재 틈</a>을 메운다. 가장 아래 줄부터, 같은 줄에서는 왼쪽부터 넣는다. 기본은 <strong>발동당 1칸</strong>이다. ‘반품 카트 증차’를 획득할 때마다 발동당 1칸씩 늘며, 남은 틈이 더 적으면 그 틈만 채운다.</p>
+<p>상자는 250ms 간격으로 한 칸씩 들어간다. 한 칸 이상 채웠으면 마지막 상자를 넣은 뒤 완성 줄을 한 번 더 확인한다. 완성된 줄은 마지막 상자가 들어간 시점부터 500ms 동안 표시한 뒤 출차 처리한다. 이렇게 보낸 트럭도 정상 실적이며, 조건을 충족한 증강은 이어서 발동한다.</p>
+<h3 id="augment-pool"><a class="n" href="#toc" aria-label="6.5. 상단 목차로 이동" title="상단 목차로 이동">6.5.</a>성수기별 추가 풀</h3>
+<p>새 방해 기믹이 처음 등장하는 시점에 그 기믹에 대응하는 증강을 풀에 더한다. 이전 성수기에서 해금한 증강도 계속 후보로 나올 수 있다.</p>
+<div class="table-wrap"><table id="additional-augment-list">
+  <thead><tr><th scope="col">해금 성수기</th><th scope="col">대응 기믹</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">추석</th><td>택배도둑</td></tr>
+    <tr><th scope="row">블랙프라이데이</th><td>취급주의 택배</td></tr>
+    <tr><th scope="row">크리스마스</th><td>대형 택배 묶음</td></tr>
+  </tbody>
+</table></div>
+</details>
+
+
+<details class="article-section" id="gimmicks" open>
+  <summary><h2><a class="n" href="#toc" aria-label="7. 상단 목차로 이동" title="상단 목차로 이동">7.</a>방해 기믹</h2></summary>
+<p>추석부터 택배도둑, 블랙프라이데이부터 취급주의 택배, 크리스마스부터 대형 묶음이 등장한다. 먼저 열린 기믹은 다음 성수기에도 남는다.</p>
+<h3 id="thief"><a class="n" href="#toc" aria-label="7.1. 상단 목차로 이동" title="상단 목차로 이동">7.1.</a>택배도둑</h3>
+<p>적재된 상자가 있는 가장 높은 줄부터 아래로 4줄을 살핀다. 처음 놓았을 때의 상자가 모두 남은 일반 묶음 중 이 범위에 한 칸이라도 걸친 묶음이 표적 후보가 된다. 한 묶음은 몇 칸이 걸쳐도 후보 하나로 세고 각 후보를 같은 확률로 뽑는다. <a href="#global-augment-list">도둑의 지게차</a>가 있으면 대형 묶음도 같은 조건으로 후보가 된다.</p>
+<p><strong>출현 확률은 0%에서 시작해 단계마다 5%p씩 오르며 상한은 50%다.</strong> 예고가 없는 턴에 묶음 고정과 줄 제거를 마친 뒤 독립적으로 추첨한다. 추석의 5%는 유효 추첨 20회에 평균 한 번이다.</p>
+<p><strong>절도 예고는 1턴이다.</strong> 표적의 모든 상자에 묶음의 원래 색으로 <code>##</code>를 표시한다. 다음 묶음 고정과 출차 판정을 마친 뒤 절도를 처리한다. 협동에서는 그 턴의 도크 간 이송까지 먼저 마친다. 그사이 표적 상자가 하나라도 파괴되거나 다른 보드로 넘어갔다면 절도를 취소한다.</p>
+<p>상단 4줄 조건은 표적을 뽑을 때만 본다. 같은 보드에 온전히 남아 있으면 범위 아래로 움직였어도 묶음 전체를 손수레에 싣고 사라지는 짧은 연출을 보여 준다. 예고를 처리한 턴에는 새 출현을 추첨하지 않는다. 그다음 묶음 고정부터 다시 추첨한다.</p>
+<h3 id="reinforced"><a class="n" href="#toc" aria-label="7.2. 상단 목차로 이동" title="상단 목차로 이동">7.2.</a>취급주의 택배</h3>
+<p>깨지기 쉬운 선물에는 취급주의 표지가 붙는다. 첫 출차 판정에서는 검수만 끝나므로 상자가 제자리에 남고 일반 상자로 바뀐다. 두 번째 판정 때 트럭에 실린다. <strong>취급주의 2 → 일반 1 → 출고 0</strong>의 두 단계다.</p>
+<p>묶음당 확률 계산값은 −10%에서 시작해 난이도 단계마다 10%p 오른다. 실제 추첨 범위는 0~100%다. 블랙프라이데이는 10%, 크리스마스는 20%다. 일반·대형 묶음에 같은 단계별 확률을 적용하며, 대형 묶음 추첨과는 독립적이다. 당첨되면 묶음 안의 <strong>딱 한 상자</strong>가 취급주의가 된다. 100%라면 모든 묶음에 그런 상자가 하나씩 있다.</p>
+<p>예를 들어 블랙프라이데이에 일반 묶음 100개(400칸)가 들어오면 취급주의 상자는 평균 10개다. 표지는 NEXT와 조작 중인 묶음에 모두 보인다. 일반 묶음은 표지가 있어도 보류할 수 있다. 대형 묶음 안의 표지에도 같은 검수·출고 규칙을 적용한다.</p>
+<p>가득 찬 줄에서 일반 상자는 출고되고, 취급주의 상자는 그 자리를 받친다. 따라서 그 상자 위의 같은 세로열은 그대로 있고 나머지 세로열만 한 칸씩 내려온다. 아래처럼 맨 왼쪽 한 상자만 취급주의라면 오른쪽 아홉 열이 내려온다. 트럭은 한 대 출발한다.</p>
+<figure class="board-figure"><div class="board-pair"><div><div class="board-label">출차 전</div><pre class="board-pre" aria-label="왼쪽 열의 A, B 아래 취급주의 상자 R이 있다.">A.........
+BCDEFGHIJK
+<span class="hard">R</span>#########</pre></div><div><div class="board-label">첫 출차 직후</div><pre class="board-pre" aria-label="A와 B는 그대로이고 R은 일반 상자 r이 된다. C부터 K는 한 줄 내려온다.">A.........
+B.........
+<span class="normal">r</span>CDEFGHIJK</pre></div></div><figcaption>R은 취급주의, r은 검수를 마친 일반 상자, #은 이번 트럭에 실린 상자, .은 빈칸이다. A와 B는 제자리에 있고 C~K가 한 줄 내려온다.</figcaption></figure>
+<div class="callout pending"><p><strong>검토 중인 대안</strong>　블랙프라이데이부터 일정 시간마다 이미 쌓인 묶음 일부를 무작위로 골라 취급주의로 바꾸는 방식이다. 입고 시점 추첨을 대체하는 안이다.</p></div>
+<h3 id="giant"><a class="n" href="#toc" aria-label="7.3. 상단 목차로 이동" title="상단 목차로 이동">7.3.</a>대형 택배 묶음</h3>
+<p>단체 주문은 일반 묶음과 같은 윤곽을 가진 대형 묶음으로 내려온다. 일반 모양의 한 칸 자리에 2×2상자를 묶어 가로와 세로가 각각 두 배, 모두 <strong>16칸</strong>이다. 보류대에는 들어가지 않는다. 이동·회전·낙하·출차는 기본 규칙을 따른다. 취급주의를 독립 추첨해 당첨되면 열여섯 상자 중 하나에만 표지가 붙는다.</p>
+<h4>입고 목록(7-bag)</h4>
+<ol><li>새 7-bag을 만들 때 대형 묶음을 넣을지 한 번 추첨한다. 크리스마스에 해당하는 난이도 4단계부터 무한 모드까지 기본 포함 확률은 <strong>7-bag당 14%</strong>다. 묶음 50개에 평균 1개다.</li><li>일반 묶음의 일곱 모양을 한 번씩 섞는다. 대형 입고에 당첨되면 무작위 한 자리의 일반 묶음을 같은 모양의 대형 묶음으로 교체한다. 목록 하나에는 대형 묶음이 최대 1개 들어간다.</li><li>묶음을 목록 순서대로 꺼낸다. 각 묶음의 취급주의 여부는 대형 입고와 별도로 추첨한다.</li><li>일곱 묶음을 모두 꺼내면 다음 7-bag을 만든다.</li></ol>
+</details>
+
+
+<details class="article-section" id="modes" open>
+  <summary><h2><a class="n" href="#toc" aria-label="8. 상단 목차로 이동" title="상단 목차로 이동">8.</a>클리어 및 모드 해금</h2></summary>
+<p>크리스마스 막차가 출발하면 야간조의 첫해가 끝난다. 일반 누적 80대, 디버깅 누적 40대에서 스토리를 클리어하고, 1인 무한 출고와 2인 무한 협동을 해금한다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">모드</th><th scope="col">증강 선택</th><th scope="col">난이도</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1인 스토리</th><td>성수기 진입·중간, 총 8회</td><td>다음 성수기 진입마다 상승</td></tr>
+    <tr><th scope="row">1인 무한 출고</th><td>본인 출차 20대마다</td><td>본인 출차 20대마다 상승</td></tr>
+    <tr><th scope="row">2인 무한 협동</th><td>각자 20대마다 본인 증강 선택</td><td>공유 난이도, 합산 40대마다 상승</td></tr>
+  </tbody>
+</table></div>
+<p>협동에서는 두 사람이 나란한 도크를 하나씩 맡는다. 한쪽에 상자가 높이 쌓이면 다른 쪽이 그 도크의 맨 아래 줄을 자기 쪽으로 가져와 공간을 내준다. 어느 한쪽이라도 패배하면 두 사람의 근무가 함께 종료된다.</p>
+<h3 id="coop-transfer">도크 간 이송 · 줄 가져오기</h3>
+<p>이송은 기본 협동 기능이다. 이송하는 줄은 빈칸과 취급주의 상태까지 그대로 옮긴다. 도크를 바꾼 물량은 출차 실적에 더하지 않는다.</p>
+<div class="table-wrap"><table>
+  <thead><tr><th scope="col">항목</th><th scope="col">규칙</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">충전</th><td>본인이 4줄을 완성해 트럭 4대를 보낼 때마다 이송권 1회를 얻는다. 여러 줄 동시 출차도 줄마다 센다.</td></tr>
+    <tr><th scope="row">초기 지급과 보유 한도</th><td>각자 이송권 1회로 시작하고 최대 3회분을 보유한다. 한도에서는 충전 진행도를 0으로 유지한다. 이송권을 쓴 뒤 4줄을 새로 센다.</td></tr>
+    <tr><th scope="row">요청</th><td>이송 버튼을 눌러 이송권 1회를 쓰면 상대의 맨 아래 줄 1개를 예약한다. 보유량에 따라 한 번에 최대 3줄까지 요청할 수 있다.</td></tr>
+    <tr><th scope="row">보내는 쪽</th><td>자기 묶음 고정 → 완성 줄 판정과 출차 → 자기 맨 밑줄 반출. 반출한 줄을 받는 쪽의 대기열에 전달한다.</td></tr>
+    <tr><th scope="row">받는 쪽</th><td>전달 이후 자기 묶음 고정 → 완성 줄 판정과 출차 → 대기 중인 줄을 맨 아래에 반입. 원래 있던 칸은 위로 올라간다.</td></tr>
+    <tr><th scope="row">반출 우선</th><td>상대가 반출한 줄만 받을 수 있다. 받는 사람이 먼저 묶음을 고정해 아직 전달된 줄이 없으면 그 차례의 반입을 건너뛴다.</td></tr>
+    <tr><th scope="row">여러 줄의 순서</th><td>상대 보드 아래에서 1·2·3번째 줄을 가져오면 자기 보드에서도 아래에서 같은 순서가 된다.</td></tr>
+    <tr><th scope="row">빈 보드와 부분 전달</th><td>보낼 줄이 없으면 요청을 종료하고 사용권을 소모한다. 일부만 전달한 경우에도 나머지 이송권을 돌려주지 않는다.</td></tr>
+    <tr><th scope="row">동시에 고정한 경우</th><td>양쪽 출차 판정과 줄 제거 → 양쪽 반출 → 양쪽 반입 순서다. 방금 받은 줄은 같은 처리에서 다시 내보내지 않는다.</td></tr>
+    <tr><th scope="row">게임오버</th><td>반입으로 상자가 보드 위로 넘쳐도 두 사람 모두 게임오버다.</td></tr>
+    <tr><th scope="row">실적과 절도 판정</th><td>본인이 완성한 줄만 증강과 난이도 실적에 반영한다. 그 턴의 이송을 모두 마친 뒤 예고된 절도를 판정한다.</td></tr>
+  </tbody>
+</table></div>
+</details>
+
+
+<details class="article-section" id="ui" open><summary><h2><a class="n" href="#toc" aria-label="9. 상단 목차로 이동" title="상단 목차로 이동">9.</a>화면 구성</h2></summary>
+        <p>상단에는 점수, 누적 출차 대수(완성한 줄 수), 현재 성수기, 해당 성수기의 배차 진행률을 표시한다. 적재장 첫 줄 높이에 맞춰 왼쪽에 보류대(HOLD), 오른쪽에 입고 예고판(NEXT)을 둔다. 각 상자의 내부는 5×5칸이다. 4×4 조각 표시 영역 앞에 왼쪽 2문자, 위쪽 1줄의 여백을 둔다.</p>
+        <h3 id="single-ui"><a class="n" href="#toc" aria-label="9.1. 상단 목차로 이동" title="상단 목차로 이동">9.1.</a>1인 플레이</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="1인 스토리 플레이 화면">
+            <pre class="screen-ascii" role="img" aria-label="1인 스토리 플레이 화면"> SCORE 1200     TRUCKS 10/80     SEASON 1/4 CHILDREN'S DAY     DISPATCH 10/20 50%
+                                                       STARLIGHT PARCEL / STORY
+
+
+
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  |                                                  |
+ |          |#### . . . . . . . . . .####|          |  |                                                  |
+ |  II      |#### . . . . . . . . . .####|  JJJJ    |  |                                                  |
+ |  II      |#### . . . .TT . . . . .####|    JJ    |  |                                                  |
+ |  II      |#### . . .TTTTTT . . . .####|    JJ    |  |                                                  |
+ |  II      |#### . . . . . . . . . .####|          |  |                                                  |
+ +----------+#### . . . . . . . . . .####+----------+  |                                                  |
+             #### . . . . . . . . . .####              |                                                  |
+             #### . . . . . . . . . .####              |                                                  |
+             #### . . . . . . . . . .####              |                                                  |
+             #### . . . . . . . . . .####              |    |        |  --  |          | _________        |
+             #### . . . . . . . . . .####              |    |        '-.__.-'          ||  ____  |\       |
+             #### . . . . . . . . . .####              |    |         /|__|\           || |____| | \__    |
+             #### . . . . . . . . . .####              |    |__________________________||        |    |   |
+             #### . . . . . . . . . .####              |                                |________|____|   |
+             #### . . . . . . . . . .####              |    \____( O )______________________( O )____/    |
+             ####JJ . . . . . . . .LL####              |                                                  |
+             ####JJ . . . . . . . .LL####              | ------------------------------------------------ |
+             ####JJJJSSSS .OOOOLLLLLL####              |    -----          -----          -----           |
+             ####IIIISSSS .OOOOZZZZ .####              |                                                  |
+             ############################              +--------------------------------------------------+
+ MOVE    ROTATE    SOFT DROP    HARD DROP    HOLD
+</pre>
+          </div>
+          <figcaption>어린이날 10대 출차 장면. 왼쪽은 보류대·적재장·입고 예고판, 오른쪽은 아래쪽 절반이 드러난 장난감 트럭이다. 점은 빈칸, 영문자는 묶음의 모양이다.</figcaption>
+        </figure>
+        <p>도면에서 적재장 한 칸은 2문자, 좌우 벽은 각각 4문자다. 오른쪽 풍경은 52문자 × 21줄이다. 왼쪽의 HOLD 12문자, 적재장 28문자, NEXT 12문자를 합한 너비와 같다. 성수기 목표 대비 출차 대수에 비례해 풍경이 아래부터 드러난다. 다음 성수기 진입 증강을 고르는 동안에는 방금 완성한 풍경을 보여 준다. 한 줄이 사라질 때의 짧은 출차음과 뒤로 멀어지는 후미등이 한 대의 출발을 알린다.</p>
+        <h3 id="multi-ui"><a class="n" href="#toc" aria-label="9.2. 상단 목차로 이동" title="상단 목차로 이동">9.2.</a>2인 플레이</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="2인 무한 협동 플레이 화면">
+            <pre class="screen-ascii" role="img" aria-label="2인 무한 협동 플레이 화면"> 1P   SCORE 720   TRUCKS 6                             2P   SCORE 550   TRUCKS 5
+ 2P CO-OP / NIGHT SHIFT
+ TAKE 1/3   CHARGE 2/4   INCOMING 1                    TAKE 2/3   CHARGE 1/4   INCOMING 0
+
+ MOVE   ROTATE   SOFT DROP   HARD DROP   HOLD          MOVE   ROTATE   SOFT DROP   HARD DROP   HOLD
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  +- HOLD O -+#### . . . . . . . . . .####+- NEXT L -+
+ |          |#### . . . . . . . . . .####|          |  |          |#### . . . . . . . . . .####|          |
+ |  II      |#### . . . . . . . . . .####|  JJJJ    |  |  OOOO    |#### . . . . . . . . . .####|    LL    |
+ |  II      |#### . . . .TT . . . . .####|    JJ    |  |  OOOO    |#### . . . . .SSSS . . .####|    LL    |
+ |  II      |#### . . .TTTTTT . . . .####|    JJ    |  |          |#### . . . .SSSS . . . .####|  LLLL    |
+ |  II      |#### . . . . . . . . . .####|          |  |          |#### . . . . . . . . . .####|          |
+ +----------+#### . . . . . . . . . .####+----------+  +----------+#### . . . . . . . . . .####+----------+
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             ####JJ . . . . . . . .LL####                          #### . . . . . . . . .II####
+             ####JJ . . . . . . . .LL####                          ####OOOO . . . . . . .II####
+             ####JJJJSSSS .OOOOLLLLLL####                          ####OOOOTTTT .ZZZZ . .II####
+             ####IIIISSSS .OOOOZZZZ .####                          ####JJJJJJTT . .ZZZZ .II####
+             ############################                          ############################
+
+</pre>
+          </div>
+          <figcaption>두 보드 상단에 개인 점수와 누적 출차 대수를 표시한다. <code>TAKE</code>는 도크 간 이송권, <code>CHARGE</code>는 다음 사용권까지의 충전 진행도, <code>INCOMING</code>은 반입 대기 줄 수다.</figcaption>
+        </figure>
+        <p>두 플레이어의 보드를 같은 크기로 나란히 배치한다. 각 보드 위에 해당 플레이어의 점수와 누적 출차 대수를 표시하고, 보드 양옆에 HOLD와 NEXT를 둔다.</p>
+        <h3 id="choice-ui"><a class="n" href="#toc" aria-label="9.3. 상단 목차로 이동" title="상단 목차로 이동">9.3.</a>증강 선택</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="1인 스토리 증강 선택 화면">
+            <pre class="screen-ascii" role="img" aria-label="1인 스토리 증강 선택 화면"> SCORE 1200     TRUCKS 10/80     SEASON 1/4 CHILDREN'S DAY     DISPATCH 10/20 50%
+                                                       STARLIGHT PARCEL / STORY
+
+
+
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  |                                                  |
+ |          |<span class="screen-card-selected">+==========================+</span>|          |  |                                                  |
+ |  II      ||<span class="screen-card-copy"> 반품 카트 증차           </span>||  JJJJ    |  |                                                  |
+ |  II      ||<span class="screen-card-copy"> 반품 재투입 때마다       </span>||    JJ    |  |                                                  |
+ |  II      ||<span class="screen-card-copy"> 빈틈을 1칸 더 채움       </span>||    JJ    |  |                                                  |
+ |  II      |<span class="screen-card-selected">+==========================+</span>|          |  |                                                  |
+ +----------+#### . . . . . . . . . .####+----------+  |                                                  |
+             +--------------------------+              |                                                  |
+             |<span class="screen-card-copy"> 네 대 동시 출차          </span>|              |                                                  |
+             |<span class="screen-card-copy"> 한 번에 4대 출차 시      </span>|              |                                                  |
+             |<span class="screen-card-copy"> 반품 재투입              </span>|              |    |        |  --  |          | _________        |
+             +--------------------------+              |    |        '-.__.-'          ||  ____  |\       |
+             #### . . . . . . . . . .####              |    |         /|__|\           || |____| | \__    |
+             +--------------------------+              |    |__________________________||        |    |   |
+             |<span class="screen-card-copy"> 벨트 감속기              </span>|              |                                |________|____|   |
+             |<span class="screen-card-copy"> 자동 낙하 속도           </span>|              |    \____( O )______________________( O )____/    |
+             |<span class="screen-card-copy"> 20% 감소                 </span>|              |                                                  |
+             +--------------------------+              | ------------------------------------------------ |
+             ####JJJJSSSS .OOOOLLLLLL####              |    -----          -----          -----           |
+             ####IIIISSSS .OOOOZZZZ .####              |                                                  |
+             ############################              +--------------------------------------------------+
+ UP / DOWN: SELECT    HARD DROP: CONFIRM
+</pre>
+          </div>
+          <figcaption>어린이날 중간 지점에서 증강을 고르는 장면. <code>=</code> 테두리가 있는 ‘반품 카트 증차’가 현재 선택된 후보다.</figcaption>
+        </figure>
+        <p>플레이어의 적재장 위에 증강 후보 3개를 세로로 표시한다. 상자는 좌우 벽까지 덮고, 높이는 5줄이며 간격은 1줄이다. 가운데 3줄에 한글 이름과 설명을 표시하고, 문장에 맞춰 줄을 바꾼다.</p>
+        <p>위·아래 조작으로 후보를 이동하고 하드 드롭 키로 선택한다.</p>
+      </details>
+
+<details class="article-section" id="references" open>
+  <summary><h2><a class="n" href="#toc" aria-label="10. 상단 목차로 이동" title="상단 목차로 이동">10.</a>관련 자료</h2></summary>
+<ol class="reference-list"><li><a href="../project/프로젝트안내.pdf">기말 팀 프로젝트 안내</a> · 1~2쪽의 Windows 콘솔 환경, 이야기 전개와 특수 기믹의 연계 기준.</li><li><a href="game_design.html">전체 게임 기획서</a> · 보드, 고정 지연, 난이도, 증강, 협동 및 화면 구성의 기준 문서.</li><li><a href="../project/객지프_3주차_회의록.pdf">객지프 3주차 회의록</a> · 화면 구성, 누적 기믹과 증강 선택에 관한 팀 회의 기록.</li><li><a href="https://studylib.net/doc/27262492/2009-tetris-design-guideline">테트리스 설계 가이드 (2009)</a> · §5.7의 고정 지연과 이동·회전 한도, 부록 A1.2.3의 재접촉 규칙.</li></ol>
+</details>
+
+
+      <footer class="doc-footer">선물은 막차를 타고 · 팀 기획 위키</footer>
+    </main>
+    <aside class="sidebar" aria-label="문서 안내">
+      <div class="side-box"><div class="side-title">문서 안내</div><div class="side-body"><p><strong>선물은 막차를 타고</strong><br>스토리 모드 및 시스템 기획</p><p><span class="tag tag-fixed">규칙 정리</span></p><p class="side-caption">기준일 2026.11.25<br>각 제목을 누르면 해당 항목을 접거나 펼칠 수 있다.</p></div></div>
+      <div class="side-box"><div class="side-title">스토리 진행 기준</div><div class="side-body"><div class="side-stat"><span>전체 구간</span><strong>4구간</strong></div><div class="side-stat"><span>일반 모드</span><strong>20대씩 · 총 80대</strong></div><div class="side-stat"><span>디버깅 모드</span><strong>10대씩 · 총 40대</strong></div><div class="side-stat"><span>증강 선택</span><strong>구간당 2회 · 총 8회</strong></div><p class="side-caption">새 기믹과 관련 증강을 같은 구간에서 해금</p></div></div>
+      <div class="side-box"><div class="side-title">바로 보기</div><ul class="quick-list"><li><a href="#progression">스토리 진행표</a></li><li><a href="#augments">증강 목록과 후보 풀</a></li><li><a href="#reinforced">취급주의 상자의 검수</a></li><li><a href="#modes">클리어와 해금</a></li><li><a href="#references">관련 자료</a></li></ul></div>
+    </aside>
+  </div>
+  <a href="#top" class="to-top" aria-label="문서 맨 위로 이동">맨 위로</a>
+  <script>
+    const sections=[...document.querySelectorAll('.article-section')];
+    const expandButton=document.getElementById('expand-all');
+    function syncExpand(){expandButton.textContent=sections.every(s=>s.open)?'모두 접기':'모두 펼치기';}
+    sections.forEach(s=>s.addEventListener('toggle',syncExpand));
+    expandButton.addEventListener('click',()=>{const shouldOpen=!sections.every(s=>s.open);sections.forEach(s=>{s.open=shouldOpen});syncExpand()});
+    function reveal(target){if(!target)return;let node=target;while(node){if(node.tagName==='DETAILS')node.open=true;node=node.parentElement;}}
+    function revealHash(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const target=document.getElementById(id);if(target){reveal(target);requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));}}
+    document.addEventListener('click',event=>{
+      const link=event.target.closest('a[href^="#"]');
+      if(!link)return;
+      const target=document.getElementById(link.getAttribute('href').slice(1));
+      reveal(target);
+      if(link.matches('h2 .n,h3 .n')&&target&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){
+        event.preventDefault();
+        if(location.hash!==link.hash)location.hash=link.hash;
+        else target.scrollIntoView({block:'start'});
+      }
+    });
+    window.addEventListener('hashchange',revealHash);if(location.hash)revealHash();
+    const themeButton=document.getElementById('theme-toggle');
+    function setTheme(dark){document.body.classList.toggle('dark',dark);themeButton.textContent=dark?'라이트':'다크';themeButton.setAttribute('aria-pressed',String(dark));}
+    try{setTheme(localStorage.getItem('delivery-tetris-wiki-theme')==='dark')}catch{setTheme(false)}
+    themeButton.addEventListener('click',()=>{const dark=!document.body.classList.contains('dark');setTheme(dark);try{localStorage.setItem('factory-tetris-wiki-theme',dark?'dark':'light')}catch{}});
+    const searchForm=document.getElementById('search-form'),searchInput=document.getElementById('search-input'),searchStatus=document.getElementById('search-status');
+    let previousQuery='',matches=[],matchIndex=-1,highlighted=null;
+    function clearSearch(){if(highlighted)highlighted.classList.remove('search-hit');highlighted=null;searchStatus.textContent='';previousQuery='';matches=[];matchIndex=-1;}
+    searchInput.addEventListener('input',clearSearch);searchInput.addEventListener('keydown',event=>{if(event.key==='Escape'){searchInput.value='';clearSearch();searchInput.blur()}});
+    searchForm.addEventListener('submit',event=>{event.preventDefault();const query=searchInput.value.trim().toLocaleLowerCase('ko');if(!query){clearSearch();return;}if(query!==previousQuery){matches=[...document.querySelectorAll('.article-section h2,.article-section h3,.article-section p,.article-section td,.article-section th,.article-section li')].filter(el=>el.textContent.toLocaleLowerCase('ko').includes(query));previousQuery=query;matchIndex=-1;}if(highlighted)highlighted.classList.remove('search-hit');if(!matches.length){highlighted=null;searchStatus.textContent='일치하는 내용이 없습니다.';return;}matchIndex=(matchIndex+1)%matches.length;highlighted=matches[matchIndex];reveal(highlighted);highlighted.classList.add('search-hit');highlighted.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});searchStatus.textContent=`${matchIndex+1} / ${matches.length} · Enter로 다음 결과`;});
+    let printStates=[];window.addEventListener('beforeprint',()=>{printStates=[...document.querySelectorAll('details')].map(el=>[el,el.open]);printStates.forEach(([el])=>el.open=true)});window.addEventListener('afterprint',()=>{printStates.forEach(([el,open])=>el.open=open);printStates=[]});document.getElementById('print-button').addEventListener('click',()=>window.print());
+  </script>
+</body>
+</html>
