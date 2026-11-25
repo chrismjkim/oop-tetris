@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="블럭 왕국 재건의 스토리 진행, 증강, 방해 기믹과 화면 구성을 정리한 팀 기획 위키.">
+  <title>블럭 왕국 재건 - 기획 위키</title>
+  <style>
+    /* Visual values mapped from the supplied NamuWiki HTML and its saved stylesheet. */
+    :root{
+      color-scheme:light;
+      --green:#00a69c;--green-dark:#008b82;--green-pale:#d4f0e3;
+      --bg:#f5f5f5;--paper:#fff;--text:#212529;--muted:rgba(33,37,41,.749);
+      --line:#ccc;--table-line:#ddd;--soft:#f5f5f5;--link:#0275d8;--link-hover:#0263b8;
+      --amber:#8b5900;--amber-bg:#fff8e6;--blue:#0275d8;--blue-bg:#edf5ff;
+      --infobox-color:#00008b;--quote-bg:#eee;--quote-edge:#71bc6d;
+      --heading-line:#ccc;--nav-background:linear-gradient(90deg,#00a69c,#00a69c,#28b472);
+      --container-width:none;--sidebar-width:280px;--layout-gutter:1rem;
+      --article-padding:1.5rem;--nav-height:3.5rem;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:1rem;-webkit-text-size-adjust:100%}
+    body{
+      margin:0;min-width:240px;background:var(--bg);color:var(--text);
+      font-family:"Pretendard JP",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Noto Sans CJK KR","NanumBarunGothic",Roboto,"Segoe UI","Malgun Gothic","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol",sans-serif,emoji;
+      font-size:15px;font-weight:400;line-height:1.5;word-break:break-all;overflow-wrap:anywhere;
+    }
+    a{color:var(--link);text-decoration:none}a:hover{color:var(--link-hover);text-decoration:underline}
+    button,input{font:inherit}button{color:var(--text);cursor:pointer}
+    button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #e9e612;outline-offset:2px}
+    .skip{position:fixed;left:12px;top:-80px;background:var(--paper);padding:10px;z-index:10}.skip:focus{top:8px}
+    .topbar{height:var(--nav-height);position:relative;background:var(--nav-background);color:#fff;z-index:5;box-shadow:none}
+    .top-inner{width:100%;max-width:var(--container-width);height:100%;padding:.5rem 1rem;margin:0 auto;display:flex;align-items:center;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.5rem;color:#fff;font-size:1.75rem;font-weight:700;line-height:1;white-space:nowrap;letter-spacing:normal;margin-right:1rem}
+    .brand:hover{color:#fff;text-decoration:none}.brand svg{width:1.8rem;height:1.8rem;fill:currentColor}
+    .top-nav{height:100%;display:flex;align-items:stretch;gap:0;white-space:nowrap;font-size:1.05rem;font-weight:500}
+    .top-nav a{color:#fff;display:flex;align-items:center;padding:0 .75rem;border-radius:4px}
+    .top-nav a:hover{background:#ffffff1a;text-decoration:none}
+    .search{position:relative;display:flex;align-items:center;width:20rem;height:2.5rem;margin-left:auto;flex-shrink:1;min-width:150px}
+    .search input{width:100%;height:100%;border:1px solid #ced4da;border-radius:4px;padding:.25rem 2.75rem .25rem .75rem;background:#fff;color:#212529;line-height:1.5;font-size:1rem}
+    .search button{position:absolute;right:0;top:0;height:100%;width:2.25rem;padding:0;border:0;background:transparent;color:#666;font-size:1.5rem;border-radius:0 4px 4px 0}
+    .search-note{position:absolute;right:0;top:calc(100% + .75rem);width:max-content;max-width:20rem;padding:.5rem .75rem;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--text);font-size:.9rem}
+    .search-note:empty{display:none}
+    .layout{width:100%;max-width:var(--container-width);margin:0 auto 1rem;padding:0 var(--layout-gutter);display:grid;grid-template-columns:minmax(0,1fr) var(--sidebar-width);gap:1rem;align-items:start}
+    .article{min-width:0;min-height:50rem;background:var(--paper);border:1px solid var(--line);border-radius:6px;box-shadow:none;padding:var(--article-padding)}
+    .article-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem}
+    .article-header>div:first-child{flex:1;min-width:0}
+    h1{margin:0;font-size:2.25rem;font-weight:700;line-height:1;letter-spacing:normal;word-break:break-all}
+    .subtitle{font-size:.9rem;color:var(--muted);margin:.5rem 0 0}
+    .tools{display:flex;align-items:center;flex-shrink:0;gap:0}
+    .tools button{border:1px solid #dadada;background:var(--paper);padding:.25rem .75rem;font-size:.9rem;line-height:1.5;border-radius:0}
+    .tools button+button{border-left:0}.tools button:first-child{border-radius:.3rem 0 0 .3rem}.tools button:last-child{border-radius:0 .3rem .3rem 0}
+    .tools button:hover{background:#efefef;border-color:#c5c5c5}
+    .meta{font-size:.9rem;color:var(--muted);text-align:left;margin:.5rem 0 1.5rem}
+    .categories{border:1px solid var(--line);border-radius:4px;padding:.25rem .5rem;font-size:.9rem;margin:0 0 1rem}
+    .categories span{color:var(--text);margin-right:.5rem}.categories a+a:before{content:" | ";color:var(--line);padding:0 .25rem}
+    .notice{background:var(--soft);border:1px solid var(--table-line);border-left:5px solid var(--green);padding:1rem;margin:0 0 1rem;font-size:inherit}
+    .notice p{margin:0}.notice p+p{margin-top:.25rem}
+    .tag{display:inline-block;vertical-align:middle;white-space:nowrap;font-size:.85rem;line-height:1.5;font-weight:700;padding:0 .25rem;border-radius:0}
+    .tag-fixed{color:#008275;background:var(--green-pale)}.tag-test{color:var(--blue);background:var(--blue-bg)}.tag-open{color:var(--amber);background:var(--amber-bg)}
+    .intro-grid{display:grid;grid-template-columns:minmax(180px,1fr) minmax(0,450px);gap:20px;align-items:start;margin:10px 0 20px}
+    .intro-grid>div{min-width:0}.lead{margin:0 0 1rem}
+    .toc{display:inline-block;max-width:100%;border:1px solid var(--heading-line);background:var(--paper);margin-left:5px;padding:12px 20px 12px 0}
+    .toc summary{position:relative;cursor:pointer;list-style:none;font-size:1.25em;font-weight:400;min-width:60px;margin-left:14px;padding-right:24px}
+    .toc summary::-webkit-details-marker{display:none}
+    .toc summary:after{content:"";position:absolute;right:1px;top:5px;width:9px;height:9px;border-right:2px solid #666;border-bottom:2px solid #666;transform:rotate(45deg);margin:0}
+    .toc:not([open]) summary:after{transform:rotate(135deg);top:8px}
+    .toc[open] summary{margin-bottom:12px}.toc[open]{padding-bottom:16px}
+    .toc ol{list-style:none;padding:0 0 0 20px;margin:0;font-size:inherit;line-height:1.5}
+    .toc ol ol{padding-left:20px;margin:0;font-size:inherit}.toc li{margin:0;padding:0}
+    .toc .num{display:inline;min-width:0;margin-right:.25em;color:var(--link)}
+    .toc a{color:var(--text)}.toc a:hover{color:var(--link)}
+    .toc ol ol a{color:var(--link)}
+    .infobox{width:100%;max-width:450px;border:2px solid var(--infobox-color);background:var(--paper);font-size:inherit;margin:0;grid-row:auto}
+    .info-title{background:var(--infobox-color);color:#fff;padding:5px 10px;text-align:center;font-size:1.8em;font-weight:700;line-height:1.5}
+    .info-title small{display:block;font-size:.65em;font-weight:700;line-height:1.5;margin:0;letter-spacing:normal;opacity:1}
+    .block-art{height:94px;background:var(--paper);border-bottom:1px solid var(--table-line);display:flex;align-items:center;justify-content:center}
+    .block-art svg{width:255px;max-width:100%;height:58px}
+    .infobox dl{display:grid;grid-template-columns:95px minmax(0,1fr);margin:0;line-height:1.5}
+    .infobox dt,.infobox dd{margin:0;padding:5px 10px;border-bottom:1px solid var(--table-line)}
+    .infobox dt{background:var(--infobox-color);color:#fff;font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center}
+    .infobox dd{border-left:1px solid var(--table-line);color:var(--text);background:var(--paper)}
+    .infobox dt:last-of-type,.infobox dd:last-of-type{border-bottom:0}
+    .article-section{margin:0;clear:both}
+    .article-section>summary{display:flex;align-items:baseline;gap:0;list-style:none;cursor:pointer;border-bottom:1px solid var(--heading-line);font-size:1.8em;line-height:1.5;margin:1.2em 0 .8em;padding:0 0 5px}
+    .article-section>summary::-webkit-details-marker{display:none}
+    .article-section>summary:before{content:"";flex-shrink:0;width:.725em;height:.725em;margin:0 .5rem 0 .2rem;border:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23666' d='M256 294.1 383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0z'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;transform:none}
+    .article-section:not([open])>summary{opacity:.5}.article-section:not([open])>summary:before{transform:rotate(-90deg)}
+    h2{font-size:1em;line-height:1.5;font-weight:700;letter-spacing:normal;margin:0}
+    h2 .n,h3 .n{color:var(--link);margin-right:.25em}
+    h2 .n:hover,h3 .n:hover{color:var(--link-hover)}
+    #toc{scroll-margin-top:1rem}
+    h3{font-size:1.6em;font-weight:700;line-height:1.5;letter-spacing:normal;margin:1.2em 0 .8em;padding-bottom:5px;border-bottom:1px solid var(--heading-line)}
+    h4{font-size:1.4em;font-weight:700;line-height:1.5;margin:1.2em 0 .8em;padding-bottom:5px;border-bottom:1px solid var(--heading-line)}
+    p{margin:0 0 1rem}strong{font-weight:700}
+    ul,ol{margin:.4em 0 .4em 1.5em;padding-left:.5rem}li{margin:.4em 0;padding:0}
+    blockquote{display:table;max-width:100%;margin:1em 0;padding:1em;border:2px dashed var(--heading-line);border-left:5px solid var(--quote-edge);background:var(--quote-bg)}
+    blockquote p{margin:0}
+    .table-wrap{display:block;max-width:100%;overflow-x:auto;margin:10px 0}
+    table{width:100%;border-collapse:collapse;background:var(--soft);font-size:inherit;line-height:1.5}
+    th,td{border:1px solid var(--table-line);padding:5px 10px;vertical-align:middle;text-align:left}
+    thead th{background:var(--infobox-color);color:#fff;font-weight:700}
+    tbody th{background:var(--soft);font-weight:700}
+    caption{text-align:left;padding:0 0 5px;font-size:.9rem;color:var(--muted)}
+    .nowrap{white-space:nowrap}.small{font-size:.9rem;color:var(--muted)}
+    .callout{border:1px solid var(--table-line);border-left:5px solid var(--green);padding:1em;background:var(--soft);margin:1em 0}
+    .callout p{margin:0}.callout.pending{border-left-color:#bb8b24;background:var(--amber-bg)}
+    .stage-path{display:flex;border:2px solid var(--infobox-color);margin:10px 0}
+    .stage-path a{flex:1;background:var(--soft);border-right:1px solid var(--table-line);text-align:center;padding:5px 10px;font-weight:700}
+    .stage-path a:last-child{border:0}.stage-path span{display:block;color:var(--muted);font-size:.9rem;font-weight:400}
+    .stage-path a:hover{background:var(--paper)}
+    .stage-figure{width:fit-content;max-width:100%;margin:1rem 0;padding:16px;border:1px solid var(--table-line);background:var(--soft);break-inside:avoid}
+    .stage-art-frame{max-width:100%;overflow-x:auto}
+    .stage-art{width:max-content;margin:0;font:14px/1.3 Consolas,"Courier New",monospace;letter-spacing:0;white-space:pre;word-break:normal;overflow-wrap:normal;color:var(--text);background:transparent}
+    .stage-figure figcaption{text-align:center}
+    .fold{border:1px solid var(--table-line);margin:10px 0;padding:5px 10px;background:var(--soft)}
+    .fold>summary{cursor:pointer;text-align:center;font-weight:700;padding:0}
+    .fold[open]>summary{border-bottom:1px solid var(--table-line);padding-bottom:5px;margin-bottom:10px}
+    .board-figure{margin:10px 0;padding:10px;border:1px solid var(--table-line);background:var(--soft)}
+    .board-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .board-label{text-align:center;font-size:inherit;font-weight:700;margin-bottom:5px}
+    .board-pre{font-family:Consolas,"Courier New",monospace;font-size:18px;line-height:1.75;letter-spacing:4px;background:var(--quote-bg);border:1px solid var(--table-line);border-radius:3px;margin:0;padding:7px;text-align:center;white-space:pre;overflow-x:auto}
+    .hard{background:#60518c;color:white;outline:2px solid #60518c}.normal{background:#dcece8;color:#176650;outline:2px solid #dcece8}
+    figcaption{font-size:.9rem;color:var(--muted);line-height:1.5;margin-top:10px}
+    .screen-figure{margin:10px 0}
+    .screen-frame{max-width:100%;overflow-x:auto;border:1px solid var(--table-line);border-radius:4px;background:var(--soft)}
+    .screen-ascii{width:max-content;margin:0;padding:10px 12px;font:12px/1.35 Consolas,"Courier New",monospace;letter-spacing:0;white-space:pre;word-break:normal;overflow-wrap:normal;color:var(--text)}
+    .screen-card-copy{display:inline-block;width:26ch}.screen-card-selected{color:var(--amber)}
+    .reference-list{font-size:inherit}.reference-list li{margin:.4em 0}
+    .doc-footer{border-top:1px solid #777;margin-top:1.5em;padding-top:.5em;font-size:.8rem;color:var(--muted);line-height:1.75}
+    .sidebar{position:sticky;top:1rem;font-size:inherit}
+    .side-box{border:1px solid var(--line);border-radius:6px;background:var(--paper);margin-bottom:1rem;box-shadow:none;overflow:hidden}
+    .side-title{font-size:1.2rem;font-weight:700;line-height:1.5;padding:1rem 1.25rem .5rem;border:0}
+    .side-body{padding:.5rem 1.25rem 1rem}.side-body p{margin:0 0 .5rem}.side-body p:last-child{margin:0}
+    .quick-list{list-style:none;padding:0 1.25rem 1rem;margin:0}.quick-list li{margin:0}
+    .quick-list a{display:block;padding:.25rem 0;border:0;font-size:inherit}
+    .side-stat{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--table-line)}
+    .side-stat:last-child{border:0}.side-stat strong{color:var(--text)}.side-caption{font-size:.85rem;color:var(--muted);margin-top:.5rem!important}
+    .to-top{position:fixed;right:2.5rem;bottom:2rem;border:1px solid #ced4da80;border-radius:4px;background:#1aafa6;color:#fff;padding:.5rem .75rem;box-shadow:none;font-size:.9rem}
+    .to-top:hover{color:#fff;text-decoration:none;background:#00a69c}
+    .search-hit{outline:3px solid #d7a800!important;outline-offset:3px;background:var(--amber-bg)!important}
+    body.dark{
+      color-scheme:dark;--green:#2e3033;--green-dark:#c0c1c2;--green-pale:#325e4a;--bg:#000;--paper:#1c1d1f;--text:#e0e0e0;--muted:hsla(0,0%,88%,.749);
+      --line:#444;--table-line:#383b40;--soft:#2d2f34;--link:#ec9f19;--link-hover:#bd7f14;
+      --amber:#f1cd80;--amber-bg:#3d3523;--blue:#91c5f1;--blue-bg:#253748;
+      --infobox-color:#00006f;--quote-bg:#2d2f34;--quote-edge:#666c75;--heading-line:#383b40;--nav-background:#2e3033;
+    }
+    .dark .search input{background:#000;color:#e0e0e0;border-color:#444}
+    .dark .tools button{border-color:#3e3e3e}.dark .tools button:hover{background:#1e1e1e;border-color:#4a4a4a}
+    .dark .tag-fixed{color:#c0c1c2}.dark .to-top{background:#2e3033;border-color:#44444480}.dark .normal{background:#31594d;color:#d2f5e8;outline-color:#31594d}
+    @media screen and (min-width:1200px){:root{--container-width:1280px;--sidebar-width:320px}}
+    @media screen and (min-width:1400px){:root{--container-width:1400px}}
+    @media screen and (max-width:1023.98px){
+      :root{--layout-gutter:0;--article-padding:1rem;--nav-height:3rem}
+      .top-inner{padding:.5rem 1rem;gap:.5rem}
+      .brand{font-size:1.6rem;margin-right:.5rem}.brand svg{width:1.6rem;height:1.6rem}
+      .topbar{margin-bottom:2.5rem}.top-nav a{padding:0 .75rem}
+      .search{position:absolute;top:100%;left:0;right:0;width:100%;height:2.5rem;margin:0;min-width:0}
+      .search input{border-radius:0}.search button{border-radius:0;width:2rem}.search-note{max-width:100%;top:100%}
+      .layout{display:block}.sidebar{display:none}.article{border:0;border-radius:0}
+      .article-header{flex-direction:column;gap:.5rem}.tools{align-self:flex-end}.meta{margin:.5rem 0 1rem}
+      h1{font-size:2rem}.to-top{right:1.5rem;bottom:1.5rem}
+    }
+    @media screen and (max-width:727.98px){
+      :root{--article-padding:.75rem}
+      .top-inner{padding:.5rem;gap:.25rem}.brand{font-size:1.45rem;gap:.35rem}
+      .top-nav{margin-left:auto;font-size:.95rem}.top-nav a{padding:0 .5rem}.top-nav a:last-child{display:none}
+      .article{min-height:35rem}.meta{margin-bottom:.75rem}
+      .intro-grid{display:flex;flex-direction:column;gap:20px}
+      .intro-grid>div{width:100%}.infobox{order:-1;max-width:450px;align-self:center}
+      .toc{max-width:calc(100% - 5px)}.tools button{padding:.4rem .75rem}
+      .board-pair{gap:8px}.board-pre{font-size:15px;letter-spacing:2px;padding:7px 3px}
+      .stage-path a{padding:5px}.stage-path span{font-size:.8rem}
+      .stage-figure{padding:10px}.stage-art{font-size:clamp(7px,1.9vw,14px)}
+    }
+    @media screen and (max-width:319.98px){
+      :root{--nav-height:2.5rem}.brand{font-size:1.2rem}.brand svg{width:1.25rem;height:1.25rem}
+      .top-inner{padding:.25rem}.top-nav{font-size:.8rem}.top-nav a{padding:0 .25rem}
+      .tools button{padding:.3rem .5rem}h1{font-size:1.75rem}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+    @media print{
+      .topbar,.sidebar,.tools,.to-top,.skip{display:none!important}
+      .layout{display:block;max-width:none;margin:0;padding:0}.article{border:0;border-radius:0;min-height:0;padding:0;box-shadow:none}
+      body,body.dark{color-scheme:light;--paper:#fff;--text:#000;--line:#ccc;--table-line:#ddd;--muted:#555;--soft:#f5f5f5;--link:#0275d8;--quote-bg:#eee;--heading-line:#ccc;--infobox-color:#00008b;--amber-bg:#fff8e6;--amber:#805000;--blue-bg:#edf5ff;--blue:#0275d8;background:#fff;font-size:11pt}
+      .article-section>summary:before{display:none}.article-section>summary{break-after:avoid}
+      .table-wrap{overflow:visible}tr,.infobox,.callout,.board-figure{break-inside:avoid}
+      h1{font-size:26pt}.article-section>summary{font-size:18pt}h3{font-size:14pt}
+      .intro-grid{display:grid;grid-template-columns:minmax(0,1fr) 310px}.doc-footer{margin-top:20px}a{color:inherit}
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip" href="#document">본문으로 이동</a>
+  <header class="topbar">
+    <div class="top-inner">
+      <a href="#top" class="brand" aria-label="테트리스 위키 처음으로"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="3" width="8" height="8" rx="1"/><rect x="11" y="3" width="8" height="8" rx="1"/><rect x="21" y="3" width="8" height="8" rx="1"/><rect x="11" y="13" width="8" height="8" rx="1"/></svg>테트리스 위키</a>
+      <nav class="top-nav" aria-label="주요 항목"><a href="#progression">진행 구조</a><a href="#augments">증강</a><a href="#gimmicks">방해 기믹</a></nav>
+      <form class="search" role="search" id="search-form"><input id="search-input" aria-label="문서 내 검색" placeholder="이 문서에서 찾기" autocomplete="off" type="search"><button aria-label="검색 또는 다음 결과" title="검색 / 다음 결과" type="submit">⌕</button><output class="search-note" id="search-status" aria-live="polite"></output></form>
+    </div>
+  </header>
+  <div class="layout">
+    <main class="article" id="document">
+      <div class="article-header"><div><h1>블럭 왕국 재건</h1><p class="subtitle">게임 기획서 · 프로젝트 내부 위키</p></div><div class="tools"><button type="button" id="expand-all">모두 접기</button><button type="button" id="theme-toggle" aria-pressed="false">다크</button><button type="button" id="print-button">인쇄</button></div></div>
+      <p class="meta">기획 기준일 · 2026-11-23</p>
+      <nav class="categories" aria-label="문서 분류"><span>분류:</span><a href="#overview">게임 기획</a><a href="#basics">테트리스</a><a href="#progression">스토리 모드</a><a href="#augments">증강 시스템</a></nav>
+      <div class="notice"><p><strong>마을에서 궁전까지 한 판으로 이어진다.</strong> 블록을 쌓아 줄을 제거하고 무너진 왕국을 재건한다.</p><p>스테이지가 바뀌어도 보드와 획득한 증강은 유지된다. 새 증강과 방해 기믹은 스테이지에 따라 추가된다.</p></div>
+      <div class="intro-grid">
+        <div>
+          <p class="lead">고양이의 냥냥펀치로 무너진 블럭 왕국을 테트리스로 복구한다. 스테이지마다 <strong>증강을 선택</strong>하고 새로 등장하는 <strong>방해 기믹</strong>에 대응한다.</p>
+          <details class="toc" id="toc" open><summary>목차</summary><ol>
+            <li><a href="#overview"><span class="num">1.</span>개요</a></li><li><a href="#story"><span class="num">2.</span>세계관 및 스토리</a></li><li><a href="#basics"><span class="num">3.</span>기본 플레이</a></li><li><a href="#progression"><span class="num">4.</span>스토리 진행 구조</a></li><li><a href="#stages"><span class="num">5.</span>스테이지</a><ol><li><a href="#village">5.1. 마을</a></li><li><a href="#plaza">5.2. 광장</a></li><li><a href="#clocktower">5.3. 시계탑</a></li><li><a href="#palace">5.4. 궁전</a></li></ol></li><li><a href="#augments"><span class="num">6.</span>증강</a></li><li><a href="#gimmicks"><span class="num">7.</span>방해 기믹</a><ol><li><a href="#thief">7.1. 도둑</a></li><li><a href="#reinforced">7.2. 강화 블록</a></li><li><a href="#giant">7.3. 거대 블록</a></li></ol></li><li><a href="#modes"><span class="num">8.</span>클리어 및 모드 해금</a></li><li><a href="#ui"><span class="num">9.</span>화면 구성</a></li><li><a href="#references"><span class="num">10.</span>관련 자료</a></li>
+          </ol></details>
+        </div>
+        <aside class="infobox" aria-label="게임 핵심 정보">
+          <div class="info-title">블럭 왕국 재건<small>BLOCK KINGDOM</small></div>
+          <div class="block-art" aria-hidden="true"><svg viewBox="0 0 255 58"><g fill="#e0ab39" stroke="#fff" stroke-width="2"><rect x="4" y="14" width="16" height="16"/><rect x="20" y="14" width="16" height="16"/><rect x="4" y="30" width="16" height="16"/><rect x="20" y="30" width="16" height="16"/></g><g fill="#6f66a3" stroke="#fff" stroke-width="2"><rect x="52" y="14" width="16" height="16"/><rect x="68" y="14" width="16" height="16"/><rect x="84" y="14" width="16" height="16"/><rect x="68" y="30" width="16" height="16"/></g><g fill="#498da1" stroke="#fff" stroke-width="2"><rect x="116" y="30" width="16" height="16"/><rect x="132" y="30" width="16" height="16"/><rect x="148" y="30" width="16" height="16"/><rect x="164" y="30" width="16" height="16"/></g><g fill="#cf7656" stroke="#fff" stroke-width="2"><rect x="228" y="14" width="16" height="16"/><rect x="196" y="30" width="16" height="16"/><rect x="212" y="30" width="16" height="16"/><rect x="228" y="30" width="16" height="16"/></g></svg></div>
+          <dl><dt>장르</dt><dd>테트리스 · 증강 기반 퍼즐</dd><dt>환경</dt><dd>콘솔 게임</dd><dt>배경</dt><dd>고양이의 냥냥펀치로 무너진 블럭 왕국</dd><dt>기본 보드</dt><dd>가로 10칸 × 세로 20줄</dd><dt>스토리</dt><dd>한 판에서 4개 스테이지 진행</dd><dt>진행 순서</dt><dd>마을 → 광장 → 시계탑 → 궁전</dd><dt>구간 목표</dt><dd>일반 20줄 · 디버깅 10줄</dd><dt>증강 선택</dt><dd>스테이지 진입과 중간에 후보 3개 중 1개 선택<br>스테이지당 2회 · 총 8회</dd><dt>클리어</dt><dd>일반 누적 80줄 · 디버깅 누적 40줄</dd><dt>해금 보상</dt><dd>2인 플레이 모드 · 무한 모드</dd></dl>
+        </aside>
+      </div>
+
+      <details class="article-section" id="overview" open><summary><h2><a class="n" href="#toc" aria-label="1. 상단 목차로 이동" title="상단 목차로 이동">1.</a>개요</h2></summary>
+        <p><strong>가로줄을 제거할 때마다 스테이지의 건물이 차츰 복구된다.</strong> 블록을 배치하고 증강을 활용해 마을에서 궁전까지 진행한다.</p>
+        <p>스토리 모드는 <strong>보드를 유지한 채 네 스테이지를 차례로 진행하는 한 판</strong>이다. 마을에서 시작해 광장, 시계탑, 궁전으로 넘어간다.</p>
+      </details>
+
+      <details class="article-section" id="story" open><summary><h2><a class="n" href="#toc" aria-label="2. 상단 목차로 이동" title="상단 목차로 이동">2.</a>세계관 및 스토리</h2></summary>
+        <blockquote><p>집에서 키우는 고양이의 냥냥펀치에 와르르 무너진 블럭 왕국.<br>마을부터 궁전까지, 무너진 왕국이 다시 세워진다.</p></blockquote>
+        <p>플레이어는 블록으로 이루어진 왕국을 재건한다. 가로줄을 제거해 다음 스테이지에 진입하면 배경과 이야기 연출이 바뀐다.</p>
+        <p>고양이의 냥냥펀치로 시작된 소동과 왕국의 복구 과정을 밝고 가벼운 분위기로 그린다.</p>
+        <ul><li>추상적인 그림, 짧은 컷신, 색감과 배경의 변화로 이야기를 전달한다.</li><li>마을·광장·시계탑은 서로 가깝다. 궁전은 멀리 떨어져 있으며 앞선 구역보다 넓게 표현한다.</li></ul>
+      </details>
+
+      <details class="article-section" id="basics" open><summary><h2><a class="n" href="#toc" aria-label="3. 상단 목차로 이동" title="상단 목차로 이동">3.</a>기본 플레이</h2></summary>
+        <p>기본 보드는 <strong>가로 10칸, 세로 20줄</strong>이다. 떨어지는 블록을 배치해 가로줄을 채운다. 기본 조작은 좌우 이동, 90도 회전, 소프트 드롭, 하드 드롭, 홀드다. 다음 블록은 NEXT에서 확인한다.</p><p><strong>홀드</strong> 일반 블록은 <a href="#reinforced">강화 칸</a>이 있어도 홀드할 수 있다. <a href="#giant">거대 블록</a>은 강화 칸의 유무와 관계없이 홀드할 수 없다.</p>
+        <div class="table-wrap"><table><thead><tr><th class="nowrap">용어</th><th>정의</th></tr></thead><tbody><tr><th>칸</th><td>보드의 최소 공간 단위.</td></tr><tr><th>블록</th><td>한 번에 등장해 조작하는 조각. 여러 칸으로 이루어지며 줄 제거 후 일부 칸만 남을 수 있다.</td></tr><tr><th>공극</th><td>같은 세로열에서 위쪽과 아래쪽에 쌓인 블록의 칸이 각각 하나 이상 있는 빈칸. 맨 아래 줄에서는 바로 위 칸에 쌓인 블록이 있는 빈칸을 공극으로 본다.</td></tr><tr><th>줄 제거</th><td>가로 10칸이 채워져 제거 판정이 발생하는 것. 일반 칸은 사라지고 위쪽 칸들이 내려온다. 강화 칸에는 별도의 규칙이 적용된다.</td></tr><tr><th>누적 제거 줄 수</th><td>한 판에서 제거 판정을 받은 줄의 누적 수. 스테이지 전환과 클리어의 기준이다.</td></tr><tr><th>증강 풀</th><td>현재 선택 후보로 나올 수 있는 증강 목록.</td></tr><tr><th>블록 바구니</th><td>다음에 등장할 블록을 뽑는 목록.</td></tr></tbody></table></div>
+        <div class="callout"><p><strong>강화 칸이 남아도 1줄로 집계된다.</strong> 가득 찬 줄이 제거 판정을 받으면 진행도는 줄당 1씩 늘어난다.</p></div>
+<h3 id="locking">낙하와 고정 지연</h3>
+<p><span class="tag tag-fixed">확정 규칙</span> 자동 낙하와 고정 타이머를 분리한다. 바닥이나 쌓인 블록에 처음 닿으면 <strong>0.5초</strong>의 고정 지연을 시작한다. 조각이 처음 닿은 뒤 성공한 좌우 이동과 회전은 <strong>합산 15회</strong>까지 허용한다. 접촉한 상태로 이동하거나 회전하면 고정 타이머가 0.5초로 돌아간다. 성공한 입력만 센다. 허용 횟수를 다 쓴 채 바닥이나 쌓인 블록에 닿으면 즉시 고정한다. 하드 드롭은 즉시 고정한다.</p>
+<p>조각이 지금까지 도달한 최저 위치보다 한 줄 이상 더 내려가면 허용 횟수가 15회로 돌아온다. 공중에서는 자동 낙하가 계속되며 고정 타이머는 멈춘다. 조각이 뜨기 직전과 같은 높이 또는 더 높은 곳에 닿으면 남은 시간을 이어서 센다. 더 낮은 곳에 닿으면 0.5초부터 다시 센다.</p>
+      </details>
+
+      <details class="article-section" id="progression" open><summary><h2><a class="n" href="#toc" aria-label="4. 상단 목차로 이동" title="상단 목차로 이동">4.</a>스토리 진행 구조</h2></summary>
+<p>스토리는 마을 → 광장 → 시계탑 → 궁전 순서로 진행한다. 일반 모드는 스테이지당 20줄로 총 80줄, 디버깅 모드는 스테이지당 10줄로 총 40줄을 제거한다. 다음 스테이지에서도 보드와 획득한 증강을 유지한다. 이미 사용한 즉시 효과는 한 번만 발동한다. 새 스테이지의 증강을 풀에 추가한 뒤 진입 선택을 진행한다.</p>
+<h3>증강 선택 시점</h3>
+<p>스테이지에 진입할 때와 중간 지점에 도달할 때 각각 증강 후보 3개 중 1개를 고른다. 최종 클리어는 증강 선택 없이 처리한다. 무한 모드에서는 플레이어마다 20줄을 제거할 때마다 자신의 증강을 선택한다.</p><div class="table-wrap"><table><thead><tr><th>구간</th><th>일반 선택 시점</th><th>디버깅 선택 시점</th></tr></thead><tbody><tr><td>마을</td><td>0 · 10줄</td><td>0 · 5줄</td></tr><tr><td>광장</td><td>20 · 30줄</td><td>10 · 15줄</td></tr><tr><td>시계탑</td><td>40 · 50줄</td><td>20 · 25줄</td></tr><tr><td>궁전</td><td>60 · 70줄</td><td>30 · 35줄</td></tr></tbody></table></div>
+<h3 id="difficulty">난이도 단계와 수치</h3>
+<p>난이도 상승 횟수 k는 0에서 시작한다. 스토리 모드에서는 다음 스테이지에 진입할 때마다 난이도가 한 단계 오른다. 1인 무한 모드에서는 20줄을 제거할 때마다, 2인 무한 협동에서는 두 플레이어가 합쳐 40줄을 제거할 때마다 오른다. 2인은 난이도를 공유하며, 완성한 줄만 제거 실적으로 센다.</p>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr><th>난이도 단계</th><th>블록 낙하 속도</th><th>도둑 출현 확률</th><th>블록당 강화 확률 계산값</th><th>7-bag당 거대 블록 포함 확률</th></tr>
+      </thead>
+  <tbody>
+    <tr><td>1단계 · 마을</td><td>1칸/초</td><td>0%</td><td>-10%</td><td>0%</td></tr>
+    <tr><td>2단계 · 광장</td><td>2칸/초</td><td>5%</td><td>0%</td><td>0%</td></tr>
+    <tr><td>3단계 · 시계탑</td><td>3칸/초</td><td>10%</td><td>10%</td><td>0%</td></tr>
+    <tr><td>4단계 · 궁전</td><td>4칸/초</td><td>15%</td><td>20%</td><td>14%</td></tr>
+    <tr><td>5단계 · 무한 모드</td><td>5칸/초</td><td>20%</td><td>30%</td><td>14%</td></tr>
+  </tbody></table>
+</div>
+<p>1인 무한 모드와 2인 무한 협동 모두 1칸/초에서 시작한다. 낙하 속도의 상한은 5칸/초다. 도둑 출현 확률과 블록당 강화 확률은 그 이후에도 각 상한까지 오른다. 강화 확률 계산값이 음수일 때 실제 추첨에는 0%를 적용한다. 표는 증강 효과를 적용하기 전의 수치를 보여 준다.</p>
+</details>
+
+
+      <details class="article-section" id="stages" open><summary><h2><a class="n" href="#toc" aria-label="5. 상단 목차로 이동" title="상단 목차로 이동">5.</a>스테이지</h2></summary>
+        <div class="table-wrap"><table><thead><tr><th>구간</th><th>일반 누적 줄 수</th><th>디버깅 누적 줄 수</th><th>누적 방해 기믹</th><th>증강 풀</th></tr></thead><tbody><tr><th>마을</th><td>0~19줄</td><td>0~9줄</td><td>없음</td><td>공통 증강</td></tr><tr><th>광장</th><td>20~39줄</td><td>10~19줄</td><td>도둑</td><td>공통 + 광장 증강</td></tr><tr><th>시계탑</th><td>40~59줄</td><td>20~29줄</td><td>도둑 + 강화 블록</td><td>이전 풀 + 시계탑 증강</td></tr><tr><th>궁전</th><td>60~79줄</td><td>30~39줄</td><td>도둑 + 강화 블록 + 거대 블록</td><td>이전 풀 + 궁전 증강</td></tr></tbody></table></div>
+        <h3 id="village"><a class="n" href="#toc" aria-label="5.1. 상단 목차로 이동" title="상단 목차로 이동">5.1.</a>마을</h3>
+        <figure class="stage-figure" aria-labelledby="village-art-caption">
+          <div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="집 세 채가 나란히 배치된 마을. 재건 완료 모습.">##                                                ##
+##                                                ##
+##                                                ##
+##                                    ~  ~~~  ~   ##
+##                                                ##
+##    __.--.__                                    ##
+##       ~~~                                      ##
+##                       /\                 []    ##
+##       /\             /  \            /\  ||    ##
+##      /  \           /____\          /  \ ||    ##
+##     /____\         /______\        /____\||    ##
+##    /______\       /________\      /______\|    ##
+##   /________\    /____________\   /________\    ##
+## /____________\  | []  o  []  |  /____________\ ##
+## | []      [] |  |     __     |  |  []    []  | ##
+## |     __     |  | [] |  | [] |  |     __     | ##
+## |    |  |    |  |    |  |    |  |    |  |    | ##
+## |____|__|____|  |____|__|____|  |____|__|____| ##
+## |============|      /    \      |============| ##
+##    ..    ..        /______\        ..    ..    ##
+####################################################</pre></div>
+          <figcaption id="village-art-caption">마을 아스키아트 완성본 · 52문자 × 21줄</figcaption>
+        </figure>
+        <p><strong>기본 조작과 증강을 익히는 스테이지다.</strong> 방해 기믹 없이 시작하며 전역 증강 후보 3개 중 1개를 고른다. 일반 모드는 20줄, 디버깅 모드는 10줄을 제거하면 광장으로 넘어간다.</p><p>블록 배치, 홀드, NEXT 확인, 줄 제거와 증강 선택을 익힌다.</p>
+        <h3 id="plaza"><a class="n" href="#toc" aria-label="5.2. 상단 목차로 이동" title="상단 목차로 이동">5.2.</a>광장</h3>
+        <figure class="stage-figure" aria-labelledby="plaza-art-caption">
+          <div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="가로등 사이에 분수가 배치된 광장. 재건 완료 모습.">##                                                ##
+##                                                ##
+##                                                ##
+##                                                ##
+##                  .    :    .                   ##
+##                   '.  :  .'                    ##
+##     /\             \  :  /             /\      ##
+##    /==\           .-\-^-/-.           /==\     ##
+##    |oo|           ( ~~~~~ )           |oo|     ##
+##    '--'           '---+---'           '--'     ##
+##     ||               /|\               ||      ##
+##     ||              /_|_\              ||      ##
+##     ||        .------' '------.        ||      ##
+##     ||       / ~   ~   ~   ~   \       ||      ##
+##    _||_    ( ~   ~   ~   ~   ~   )    _||_     ##
+##   |____|    '-------------------'    |____|    ##
+##           [_______________________]            ##
+##          |_________________________|           ##
+##-----+-----+-----+-----+-----+-----+-----+-----+##
+##  ___|  ___|  ___|  ___|  ___|  ___|  ___|  ___|##
+####################################################</pre></div>
+          <figcaption id="plaza-art-caption">광장 아스키아트 완성본 · 52문자 × 21줄</figcaption>
+        </figure>
+        <p><strong>광장부터 도둑이 등장한다.</strong> 쌓인 블록의 상단 4줄에 한 칸이라도 걸친 온전한 조각이 절도 후보가 된다.</p><p>광장에 진입하면 도둑에 대응하는 증강을 풀에 추가한다. 일반 모드는 누적 40줄, 디버깅 모드는 누적 20줄에 도달하면 시계탑으로 넘어간다.</p>
+        <h3 id="clocktower"><a class="n" href="#toc" aria-label="5.3. 상단 목차로 이동" title="상단 목차로 이동">5.3.</a>시계탑</h3>
+        <figure class="stage-figure" aria-labelledby="clocktower-art-caption">
+          <div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="시계와 깃발이 달린 시계탑. 재건 완료 모습.">##                       |&gt;&gt;&gt;&gt;                    ##
+##                       |                        ##
+##                       /\                       ##
+##                      /  \                      ##
+##                     /____\                     ##
+##                    /______\                    ##
+##                  /__________\                  ##
+##                /______________\                ##
+##                |==============|                ##
+##                | .----------. |                ##
+##                | |    12    | |                ##
+##                | |9   o--  3| |                ##
+##                | |    6     | |                ##
+##                | '----------' |                ##
+##                |==============|                ##
+##                |  []      []  |                ##
+##     /\         |     ____     |           /\   ##
+##    /  \        |____/    \____|          /  \  ##
+##   /____\    +--------------------+      /____\ ##
+##     ||     +----------------------+       ||   ##
+####################################################</pre></div>
+          <figcaption id="clocktower-art-caption">시계탑 아스키아트 완성본 · 52문자 × 21줄</figcaption>
+        </figure>
+        <p><strong>시계탑부터 강화 블록이 등장한다.</strong> 도둑은 계속 출현하며, 강화 칸이 있는 세로열에는 별도의 줄 제거 규칙을 적용한다. 종소리로 강화 블록의 등장을 알린다.</p><p>시계탑에 진입하면 블록당 강화 확률은 10%이며, 이후 단계마다 10%p씩 오른다. 강화가 당첨되면 조각의 한 칸을 강화한다. 강화 블록에 대응하는 증강을 풀에 추가한다. 일반 모드는 누적 60줄, 디버깅 모드는 누적 30줄에 도달하면 궁전으로 넘어간다.</p>
+        <h3 id="palace"><a class="n" href="#toc" aria-label="5.4. 상단 목차로 이동" title="상단 목차로 이동">5.4.</a>궁전</h3>
+        <figure class="stage-figure" aria-labelledby="palace-art-caption">
+          <div class="stage-art-frame"><pre class="stage-art" role="img" aria-label="탑과 중앙 출입문이 배치된 궁전. 재건 완료 모습.">##                       |====&gt;                   ##
+##                       |                        ##
+##                       /\                       ##
+##    |&gt;&gt;               /  \              |&gt;&gt;     ##
+##    |                /____\             |       ##
+##     /\             /______\             /\     ##
+##    /  \           /________\           /  \    ##
+##   /____\          | []  [] |          /____\   ##
+##  /______\         |   ::   |         /______\  ##
+## /________\        |________|        /________\ ##
+## |_[]__[]_|     |[]  []  []  []|     |_[]__[]_| ##
+## |        |_[ ]_|--------------|_[ ]_|        | ##
+## |   []   |_____|   .------.   |_____|   []   | ##
+## |        |     |  /        \  |     |        | ##
+## |   []   | []  | |  |  |  | | |  [] |   []   | ##
+## |        |     | |  |  |  | | |     |        | ##
+## |        | []  | |  |  |  | | |  [] |        | ##
+## |________|_____|_|__|__|__|_|_|_____|________| ##
+##  +==========================================+  ##
+## +____________________________________________+ ##
+####################################################</pre></div>
+          <figcaption id="palace-art-caption">궁전 아스키아트 완성본 · 52문자 × 21줄</figcaption>
+        </figure>
+        <p><strong>궁전부터 거대 블록이 등장한다.</strong> 도둑과 강화 블록은 계속 출현한다. 새 7-bag을 만들 때 거대 블록 포함 여부를 뽑는다.</p><p>궁전에 진입하면 거대 블록에 대응하는 증강을 풀에 추가한다. 일반 모드는 궁전에서 20줄을 더 제거해 누적 80줄에, 디버깅 모드는 10줄을 더 제거해 누적 40줄에 도달하면 스토리를 클리어하고 후속 모드를 해금한다.</p>
+      </details>
+
+      <details class="article-section" id="augments" open><summary><h2><a class="n" href="#toc" aria-label="6. 상단 목차로 이동" title="상단 목차로 이동">6.</a>증강</h2></summary>
+        <p>증강 초안은 <strong>전역 증강 11종과 블록 전용 증강 7종</strong>으로 구성된다. 전역 증강은 지정된 블록 형태 없이 효과가 적용된다. 블록 전용 증강은 후보에 표시된 형태에만 적용된다. 표의 수치는 초기 플레이테스트 기준이다.</p>
+        <h3 id="augment-choice"><a class="n" href="#toc" aria-label="6.1. 상단 목차로 이동" title="상단 목차로 이동">6.1.</a>선택 방식</h3>
+        <ol>
+          <li>스토리 모드에서는 스테이지에 진입할 때와 중간 지점에 도달할 때 증강을 선택한다. 무한 모드에서는 플레이어마다 20줄을 제거할 때마다 증강을 선택한다.</li>
+          <li>1인 모드에서는 증강을 고르는 동안 플레이가 일시정지된다.</li>
+          <li>세로로 표시된 후보 3개 중 1개를 획득하면 플레이가 재개된다.</li>
+        </ol>
+        <p>마을의 첫 선택에는 전역 증강 후보가 제시된다. 공통 증강은 모든 스테이지에서 사용하는 전역 증강을 뜻한다. 스테이지별 추가 풀은 해당 스테이지에 진입하면 해금되며 이후 스테이지에서도 유지된다.</p>
+
+        <h3 id="global-augments"><a class="n" href="#toc" aria-label="6.2. 상단 목차로 이동" title="상단 목차로 이동">6.2.</a>전역 증강</h3>
+        <div class="table-wrap"><table id="global-augment-list">
+          <thead><tr><th scope="col">증강</th><th scope="col">효과</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">충전재 증량</th><td><a href="#global-ability-list">충전재</a>가 발동할 때마다 공극을 1칸 더 채운다.</td></tr>
+            <tr><th scope="row">보너스 지급</th><td>한 번에 4줄을 제거해 테트리스에 성공할 때마다 충전재가 발동한다.</td></tr>
+            <tr><th scope="row">냉각제</th><td>블록의 자동 낙하 속도가 20% 감소한다.</td></tr>
+            <tr><th scope="row">내리꽂기</th><td>거대 블록이 아래쪽 칸을 1칸 더 부수며 내려간다. 블록의 자동 낙하 속도가 20% 증가한다.</td></tr>
+            <tr><th scope="row">손해보험</th><td>도둑이 블록을 훔치면 충전재가 1회 발동한다.</td></tr>
+            <tr><th scope="row">도난 방지 태그</th><td>도둑의 절도 대상에 강화 칸이 있으면 그 칸이 일반 칸으로 바뀌고 절도가 취소된다.</td></tr>
+            <tr><th scope="row">CCTV 설치</th><td>도둑 출현 확률이 30% 감소한다(곱연산).</td></tr>
+            <tr><th scope="row">힘 센 도둑</th><td>도둑이 거대 블록도 훔칠 수 있다.</td></tr>
+            <tr><th scope="row">물렁물렁</th><td>거대 블록이 강화 칸 없이 등장한다.</td></tr>
+            <tr><th scope="row">축소 수술</th><td>거대 블록이 일정 확률로 일반 블록으로 바뀐다. 이때 기존 강화 상태가 사라진다.</td></tr>
+            <tr><th scope="row">패닉하지 않기</th><td>보드의 70% 이상이 차 있으면 블록의 자동 낙하 속도가 30% 감소한다.</td></tr>
+          </tbody>
+        </table></div>
+
+        <h3 id="augment-types"><a class="n" href="#toc" aria-label="6.3. 상단 목차로 이동" title="상단 목차로 이동">6.3.</a>블록 전용 증강</h3>
+        <p id="augment-components"><strong>블록 형태 하나와 증강 하나가 조합된다.</strong> 증강별 발동 시점과 능력은 한 묶음으로 정해져 있다. 예를 들어 T 블록과 연화제가 조합된 후보를 획득하면, T 블록을 설치할 때 연화제가 발동한다.</p>
+        <div class="table-wrap"><table id="block-augment-list">
+          <thead><tr><th scope="col">증강</th><th scope="col">발동 시점</th><th scope="col">효과</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">메트로놈</th><td>지정 블록 홀드</td><td>지정 블록을 연속으로 홀드한 횟수만큼 충전재가 발동한다.</td></tr>
+            <tr><th scope="row">천천히 꾸준히</th><td>지정 블록 완전 파괴</td><td>다음 블록의 자동 낙하 속도가 10% 감소한다(곱연산).</td></tr>
+            <tr><th scope="row">연화제</th><td>지정 블록 설치</td><td>줄 제거 전에 인접한 블록의 강화 칸이 일반 칸으로 바뀐다.</td></tr>
+            <tr><th scope="row">몽둥이를 들어라</th><td>지정 블록 홀드</td><td>도둑을 쫓아내 예고된 절도를 취소한다.</td></tr>
+            <tr><th scope="row">앵콜</th><td>지정 블록 설치</td><td>10% 확률로 같은 형태의 블록이 바로 다음에 한 번 더 등장한다.</td></tr>
+            <tr><th scope="row">도토리 키재기</th><td>거대 블록 등장 결정</td><td>지정된 형태의 블록은 이후 일반 크기로만 등장한다.</td></tr>
+            <tr><th scope="row">갈 때도 예술로</th><td>지정 블록 완전 파괴</td><td>인접한 블록의 강화 칸이 일반 칸으로 바뀐다.</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>완전 파괴 증강은 줄 제거로 해당 조각의 마지막 칸이 사라질 때 조각당 한 번 발동한다.</strong> 여러 칸이 동시에 사라져도 한 번으로 센다. 도둑이나 다른 증강이 마지막 칸을 직접 없애면 발동하지 않는다. 같은 줄 제거로 여러 증강이 발동하면 먼저 획득한 증강부터 실행된다.</p>
+
+        <h3 id="global-ability-list"><a class="n" href="#toc" aria-label="6.4. 상단 목차로 이동" title="상단 목차로 이동">6.4.</a>충전재</h3>
+        <p>충전재가 발동하면 아래 줄부터 공극을 채우며, 같은 줄에서는 왼쪽을 우선한다. 기본 효과는 <strong>발동당 1칸</strong>이다. 충전재 증량을 획득할 때마다 발동당 채우는 칸 수가 1칸 늘어난다. 현재 공극 수가 충전량보다 적으면 남은 공극만 채운다.</p>
+        <p>공극은 정해진 순서대로 250ms 간격을 두고 한 칸씩 채워진다. 한 칸 이상 채웠으면 마지막 칸을 채운 뒤 줄 제거 여부를 한 번 더 확인한다. 완성된 줄은 마지막 칸이 채워진 시점부터 500ms 동안 표시된 뒤 기존 줄 제거 규칙에 따라 처리된다. 제거한 줄은 일반 줄 제거와 같이 실적에 집계되며, 이때 발동 조건을 충족한 증강은 이어서 발동한다.</p>
+
+        <h3 id="augment-pool"><a class="n" href="#toc" aria-label="6.5. 상단 목차로 이동" title="상단 목차로 이동">6.5.</a>스테이지별 추가 풀</h3>
+        <p>새 방해 기믹이 나오는 스테이지에서 해당 기믹에 대응하는 증강이 추가된다.</p>
+        <div class="table-wrap"><table id="additional-augment-list">
+          <thead><tr><th scope="col">해금 스테이지</th><th scope="col">대응 기믹</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">광장</th><td>도둑</td></tr>
+            <tr><th scope="row">시계탑</th><td>강화 블록</td></tr>
+            <tr><th scope="row">궁전</th><td>거대 블록</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <details class="article-section" id="gimmicks" open><summary><h2><a class="n" href="#toc" aria-label="7. 상단 목차로 이동" title="상단 목차로 이동">7.</a>방해 기믹</h2></summary>
+<p>방해 기믹은 도둑 → 강화 블록 → 거대 블록 순서로 등장하며 이후에도 유지된다.</p>
+<h3 id="thief">7.1. 도둑</h3>
+<p>쌓인 블록이 있는 가장 높은 줄부터 아래로 4줄을 살핀다. 설치 당시의 칸이 모두 남은 일반 블록 가운데 이 범위에 한 칸이라도 걸친 조각을 후보에 한 번씩 넣는다. <a href="#global-augment-list">힘 센 도둑</a>이 적용되면 거대 블록도 같은 조건으로 절도 후보에 포함된다. 후보에서 조각 하나를 무작위로 뽑는다. 절도할 때는 범위 밖에 걸친 칸까지 조각 전체를 제거하고 짧은 애니메이션을 표시한다.</p>
+<p><strong>시작 0%, 단계당 +5%p, 상한 50%.</strong> 예고된 절도가 없는 턴에서 블록 고정과 줄 제거를 마친 뒤 도둑 출현을 독립적으로 추첨한다. 광장의 출현 확률 5%는 유효 추첨 20회당 평균 1회에 해당한다.</p>
+<p><strong>예고는 1턴이다.</strong> 도둑이 출현하면 대상 조각의 원래 색을 글자색으로 써 각 칸에 <code>##</code>를 표시한다. 다음 블록을 고정하고 줄을 제거한 뒤 절도를 처리한다. 2인 모드에서는 그 턴의 줄 가져오기까지 마친 뒤 절도를 판정한다. 그 사이 대상 조각의 칸이 하나라도 파괴되거나 다른 보드로 넘어갔다면 절도를 취소한다. 상단 4줄 조건은 대상을 뽑을 때만 적용한다. 같은 보드에 온전히 남아 있는 조각은 범위 밖으로 이동해도 훔친다. 예고를 처리한 턴의 추첨은 건너뛰고, 그다음 블록을 고정할 때부터 다시 추첨한다.</p>
+<h3 id="reinforced">7.2. 강화 블록</h3>
+<p><strong>기본 계산값은 −10%에서 시작해 단계마다 10%p 오른다. 실제 확률 범위는 0~100%다.</strong> 시계탑에서는 10%, 궁전에서는 20%다. 각 조각의 강화 여부는 7-bag에 거대 블록을 넣는 추첨과 독립적으로 결정한다. 일반 블록과 거대 블록에 같은 단계별 강화 확률을 적용한다. 당첨되면 조각의 한 칸만 강화한다. 확률이 100%이면 모든 조각이 강화 칸을 하나씩 가진다.</p>
+<p>시계탑에서 일반 블록 100개(400칸)를 생성하면 강화 칸은 평균 10개다. 강화 칸은 첫 제거 판정에서 일반 칸으로 바뀌고, 두 번째 판정에서 사라진다. 강화 칸이 남아도 제거 판정을 받은 줄은 진행도에 1줄로 더한다.</p>
+        <p>강화 칸은 NEXT와 조작 중인 블록에 표시한다. 일반 블록은 강화 칸이 있어도 홀드할 수 있다. <a href="#giant">거대 블록</a>의 강화 칸에도 같은 제거 규칙을 적용한다.</p>
+        <p>강화 블록이 포함된 가로줄이 가득 차면, <strong>일반 칸은 지워지고 강화 칸은 그 자리에 남아 일반 칸으로 바뀐다.</strong> 강화 칸 위쪽의 같은 세로열은 제자리에 남는다. 다른 세로열은 일반적인 줄 제거 때처럼 내려온다.</p>
+        <p>가로 10칸 중 맨 왼쪽에만 강화 칸이 있으면, 그 세로열의 위쪽 칸은 제자리에 남고 나머지 아홉 세로열은 한 칸씩 내려온다.</p>
+        <figure class="board-figure"><div class="board-pair"><div><div class="board-label">제거 전</div><pre class="board-pre" aria-label="제거 전: A와 B 아래 강화 칸 R이 있고, 그 오른쪽으로 가득 찬 줄이 있다.">A.........
+BCDEFGHIJK
+<span class="hard">R</span>#########</pre></div><div><div class="board-label">한 번 제거한 직후</div><pre class="board-pre" aria-label="제거 후: A와 B는 유지되고 강화 칸은 일반 칸 r이 된다. C부터 K까지는 한 줄 내려온다.">A.........
+B.........
+<span class="normal">r</span>CDEFGHIJK</pre></div></div><figcaption>R은 강화 칸, r은 일반 칸으로 바뀐 자리, #은 이번에 사라지는 칸, .은 빈칸이다. A와 B는 제자리에 남고 C~K는 한 줄 내려온다. 진행도는 1줄 늘어난다.</figcaption></figure>
+        <p>제거 판정에 따른 내구도 변화는 <strong>강화 2 → 일반 1 → 제거 0</strong>이다.</p>
+        <p>시계탑 스테이지부터 일정 시간마다 보드에 설치된 블록 중 일부를 무작위로 골라 강화 블록으로 바꾸는 방식을 생성 시점 강화의 대안으로 검토 중이다.</p>
+<h3 id="giant">7.3. 거대 블록</h3>
+<p><strong>거대 블록은 일반 블록의 가로와 세로를 각각 2배로 늘린 16칸 조각이다.</strong> 일반 블록의 한 칸이 거대 블록에서는 2×2칸을 차지한다. 거대 블록은 홀드할 수 없다. 이동·회전·낙하·줄 제거는 기본 규칙을 따른다. 강화 여부를 별도로 뽑아 당첨되면 <strong>한 칸만 강화</strong>한다.</p>
+<h4>7-bag 구성</h4>
+<ol><li>새 7-bag을 만들 때 거대 블록을 넣을지 한 번 추첨한다. 기본 포함 확률은 궁전에 해당하는 난이도 4단계부터 무한 모드까지 <strong>7-bag당 14%</strong>다. 조각 50개당 거대 블록이 평균 1개 등장한다.</li><li>기본 블록 7종을 한 번씩 섞어 바구니를 구성한다. 거대 블록이 당첨되면 7자리 중 한 자리를 무작위로 골라 해당 모양의 일반 조각을 거대 조각으로 바꾼다. 바구니 하나에는 거대 조각이 최대 1개 들어간다.</li><li>바구니의 조각을 순서대로 꺼낸다. 각 조각의 강화 여부는 거대 블록 추첨과 독립적으로 결정한다.</li><li>조각 7개를 모두 꺼내면 다음 7-bag을 만든다.</li></ol>
+</details>
+
+
+      <details class="article-section" id="modes" open><summary><h2><a class="n" href="#toc" aria-label="8. 상단 목차로 이동" title="상단 목차로 이동">8.</a>클리어 및 모드 해금</h2></summary>
+<p>일반 모드에서 누적 80줄, 디버깅 모드에서 누적 40줄을 제거하면 스토리를 클리어한다. 클리어하면 1인 무한 모드와 2인 무한 협동 모드를 해금한다.</p>
+<div class="table-wrap"><table><thead><tr><th>모드</th><th>증강 선택</th><th>난이도</th></tr></thead><tbody><tr><td>1인 스토리</td><td>구간 진입·중간, 총 8회</td><td>구간 진입마다 상승</td></tr><tr><td>1인 무한</td><td>본인 20줄마다</td><td>본인 20줄마다 상승</td></tr><tr><td>2인 무한 협동</td><td>각자 20줄마다 본인 증강 선택</td><td>공유 난이도, 합산 40줄마다 상승</td></tr></tbody></table></div>
+<p>2인 무한 협동에서는 각자의 보드에서 줄을 완성한다. 상대의 맨 아래 줄을 가져와 상대 보드의 부담을 줄일 수 있다. 한 명이라도 패배하면 두 사람 모두 게임오버다.</p>
+<h3 id="coop-transfer">줄 가져오기</h3>
+<div class="table-wrap"><table><thead><tr><th>항목</th><th>확정 규칙</th></tr></thead><tbody><tr><td>충전</td><td>자신이 4줄을 완성해 제거할 때마다 사용권 1회를 얻는다. 여러 줄을 한꺼번에 제거해도 줄마다 센다.</td></tr><tr><td>초기 지급 / 보유 한도</td><td>각자 사용권 1회를 갖고 시작하며, 최대 3회분을 보유할 수 있다.</td></tr><tr><td>최대 보유 중</td><td>한도에 도달하면 충전 진행도를 0으로 유지한다. 사용권을 쓴 뒤 4줄을 다시 센다.</td></tr><tr><td>요청</td><td>버튼을 눌러 사용권 1회를 쓸 때마다 상대 보드의 줄 1개를 예약한다. 현재 보유한 사용권만큼 한 번에 최대 3줄을 요청할 수 있다.</td></tr><tr><td>주는 쪽</td><td>상대 블록 설치 → 완성 판정·줄 제거 → 상대 맨 밑줄 반출. 수신 대기열에 전달.</td></tr><tr><td>받는 쪽</td><td>전달 이후 자신의 블록 설치 → 완성 판정·줄 제거 → 수신 대기 줄을 맨 아래에 추가. 기존 칸은 위로 올라간다.</td></tr><tr><td>반출 우선</td><td>주는 쪽에서 반출한 줄만 받을 수 있다. 받는 쪽이 먼저 블록을 설치해 전달받은 줄이 없으면 그 차례의 반입을 건너뛴다.</td></tr><tr><td>줄 순서</td><td>상대 보드의 아래에서 1·2·3번째 줄을 가져오면 받는 보드에서도 같은 순서로 쌓는다.</td></tr><tr><td>빈 보드 / 부분 전달</td><td>반출할 줄이 없으면 요청을 종료하고 사용권은 소모한다. 일부만 전달해도 나머지를 환불하지 않는다.</td></tr><tr><td>동시 설치</td><td>같은 업데이트에서 양쪽 설치 시 양쪽 완성 판정·줄 제거 → 양쪽 반출 → 양쪽 반입. 방금 받은 줄을 같은 처리에서 다시 반출하지 않는다.</td></tr><tr><td>게임오버</td><td>줄을 반입해 블록이 보드 위로 넘치는 경우에도 두 사람 모두 게임오버다.</td></tr><tr><td>실적</td><td>가져오기로 반출된 줄은 완성 줄 제거 실적에 포함하지 않는다. 증강은 개인 20줄, 난이도는 합산 40줄 기준.</td></tr></tbody></table></div>
+<p>줄을 옮길 때 빈칸과 강화 상태를 유지한다. 줄 가져오기는 기본 협동 기능이다.</p>
+<p>그 턴의 줄 가져오기를 처리한 뒤 도둑의 절도를 판정한다.</p>
+</details>
+
+
+      <details class="article-section" id="ui" open><summary><h2><a class="n" href="#toc" aria-label="9. 상단 목차로 이동" title="상단 목차로 이동">9.</a>화면 구성</h2></summary>
+        <p>상단에 점수, 누적 제거 줄 수, 스테이지, 재건 진행률을 표시한다. 보드 첫 줄 높이에 맞춰 왼쪽에 HOLD, 오른쪽에 NEXT 상자를 둔다. 각 상자의 내부는 5×5칸이다. 4×4 조각 영역 앞에 왼쪽 2문자, 위쪽 1줄의 여백을 둔다.</p>
+        <h3 id="single-ui"><a class="n" href="#toc" aria-label="9.1. 상단 목차로 이동" title="상단 목차로 이동">9.1.</a>1인 플레이</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="1인 스토리 플레이 화면">
+            <pre class="screen-ascii" role="img" aria-label="1인 스토리 플레이 화면"> SCORE 1200      LINES 10/80     STAGE 1/4 Village           BUILD 10/20 50%
+                                                       BLOCK KINGDOM / STORY
+
+
+
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  ##                                                ##
+ |          |#### . . . . . . . . . .####|          |  ##                                                ##
+ |  II      |#### . . . . . . . . . .####|  JJJJ    |  ##                                                ##
+ |  II      |#### . . . .TT . . . . .####|    JJ    |  ##                                                ##
+ |  II      |#### . . .TTTTTT . . . .####|    JJ    |  ##                                                ##
+ |  II      |#### . . . . . . . . . .####|          |  ##                                                ##
+ +----------+#### . . . . . . . . . .####+----------+  ##                                                ##
+             #### . . . . . . . . . .####              ##                                                ##
+             #### . . . . . . . . . .####              ##                                                ##
+             #### . . . . . . . . . .####              ##                                                ##
+             #### . . . . . . . . . .####              ##     /____\         /______\        /____\||    ##
+             #### . . . . . . . . . .####              ##    /______\       /________\      /______\|    ##
+             #### . . . . . . . . . .####              ##   /________\    /____________\   /________\    ##
+             #### . . . . . . . . . .####              ## /____________\  | []  o  []  |  /____________\ ##
+             #### . . . . . . . . . .####              ## | []      [] |  |     __     |  |  []    []  | ##
+             #### . . . . . . . . . .####              ## |     __     |  | [] |  | [] |  |     __     | ##
+             ####JJ . . . . . . . .LL####              ## |    |  |    |  |    |  |    |  |    |  |    | ##
+             ####JJ . . . . . . . .LL####              ## |____|__|____|  |____|__|____|  |____|__|____| ##
+             ####JJJJSSSS .OOOOLLLLLL####              ## |============|      /    \      |============| ##
+             ####IIIISSSS .OOOOZZZZ .####              ##    ..    ..        /______\        ..    ..    ##
+             ############################              ####################################################
+ MOVE    ROTATE    SOFT DROP    HARD DROP    HOLD
+</pre>
+          </div>
+          <figcaption>마을 재건 50% 예시. 왼쪽은 HOLD·게임 보드·NEXT, 오른쪽은 아래부터 드러나는 마을이다. 보드의 점은 빈칸이고 영문자는 블록 형태를 나타낸다.</figcaption>
+        </figure>
+        <p>보드 내부는 10칸 × 20줄이다. 도면은 한 칸을 2문자, 좌우 벽을 각각 4문자로 표시한다. 오른쪽 재건 영역의 폭은 왼쪽의 HOLD 12문자, 보드 28문자, NEXT 12문자를 합한 52문자와 같다. 스테이지의 목표 줄 수에 비례해 건물이 아래부터 드러난다. 다음 스테이지의 증강을 고르는 동안에는 방금 완성한 건물을 표시한다.</p>
+        <h3 id="multi-ui"><a class="n" href="#toc" aria-label="9.2. 상단 목차로 이동" title="상단 목차로 이동">9.2.</a>2인 플레이</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="2인 무한 협동 플레이 화면">
+            <pre class="screen-ascii" role="img" aria-label="2인 무한 협동 플레이 화면"> 1P   SCORE 720   LINES 6                              2P   SCORE 550   LINES 5
+ 2P CO-OP ENDLESS
+ TAKE 1/3   CHARGE 2/4   INCOMING 1                    TAKE 2/3   CHARGE 1/4   INCOMING 0
+
+ MOVE   ROTATE   SOFT DROP   HARD DROP   HOLD          MOVE   ROTATE   SOFT DROP   HARD DROP   HOLD
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  +- HOLD O -+#### . . . . . . . . . .####+- NEXT L -+
+ |          |#### . . . . . . . . . .####|          |  |          |#### . . . . . . . . . .####|          |
+ |  II      |#### . . . . . . . . . .####|  JJJJ    |  |  OOOO    |#### . . . . . . . . . .####|    LL    |
+ |  II      |#### . . . .TT . . . . .####|    JJ    |  |  OOOO    |#### . . . . .SSSS . . .####|    LL    |
+ |  II      |#### . . .TTTTTT . . . .####|    JJ    |  |          |#### . . . .SSSS . . . .####|  LLLL    |
+ |  II      |#### . . . . . . . . . .####|          |  |          |#### . . . . . . . . . .####|          |
+ +----------+#### . . . . . . . . . .####+----------+  +----------+#### . . . . . . . . . .####+----------+
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             #### . . . . . . . . . .####                          #### . . . . . . . . . .####
+             ####JJ . . . . . . . .LL####                          #### . . . . . . . . .II####
+             ####JJ . . . . . . . .LL####                          ####OOOO . . . . . . .II####
+             ####JJJJSSSS .OOOOLLLLLL####                          ####OOOOTTTT .ZZZZ . .II####
+             ####IIIISSSS .OOOOZZZZ .####                          ####JJJJJJTT . .ZZZZ .II####
+             ############################                          ############################
+
+</pre>
+          </div>
+          <figcaption>두 보드 상단에 개인 점수와 제거 줄 수를 표시한다. <code>TAKE</code>는 줄 가져오기 사용권, <code>CHARGE</code>는 다음 사용권까지의 충전 진행도, <code>INCOMING</code>은 반입 대기 줄 수다.</figcaption>
+        </figure>
+        <p>두 플레이어의 보드를 같은 크기로 나란히 배치한다. 각 보드 위에 해당 플레이어의 점수와 제거 줄 수를 표시하고, 보드 양옆에 HOLD와 NEXT를 둔다.</p>
+        <h3 id="choice-ui"><a class="n" href="#toc" aria-label="9.3. 상단 목차로 이동" title="상단 목차로 이동">9.3.</a>증강 선택</h3>
+        <figure class="screen-figure">
+          <div class="screen-frame" tabindex="0" role="region" aria-label="1인 스토리 증강 선택 화면">
+            <pre class="screen-ascii" role="img" aria-label="1인 스토리 증강 선택 화면"> SCORE 1200      LINES 10/80     STAGE 1/4 Village           BUILD 10/20 50%
+                                                       BLOCK KINGDOM / STORY
+
+
+
+
+
+ +- HOLD I -+#### . . . . . . . . . .####+- NEXT J -+  ##                                                ##
+ |          |<span class="screen-card-selected">+==========================+</span>|          |  ##                                                ##
+ |  II      ||<span class="screen-card-copy"> 충전재 증량              </span>||  JJJJ    |  ##                                                ##
+ |  II      ||<span class="screen-card-copy"> 충전재 발동마다          </span>||    JJ    |  ##                                                ##
+ |  II      ||<span class="screen-card-copy"> 공극을 1칸 더 채움       </span>||    JJ    |  ##                                                ##
+ |  II      |<span class="screen-card-selected">+==========================+</span>|          |  ##                                                ##
+ +----------+#### . . . . . . . . . .####+----------+  ##                                                ##
+             +--------------------------+              ##                                                ##
+             |<span class="screen-card-copy"> 보너스 지급              </span>|              ##                                                ##
+             |<span class="screen-card-copy"> 한 번에 4줄 제거 시      </span>|              ##                                                ##
+             |<span class="screen-card-copy"> 충전재 발동              </span>|              ##     /____\         /______\        /____\||    ##
+             +--------------------------+              ##    /______\       /________\      /______\|    ##
+             #### . . . . . . . . . .####              ##   /________\    /____________\   /________\    ##
+             +--------------------------+              ## /____________\  | []  o  []  |  /____________\ ##
+             |<span class="screen-card-copy"> 냉각제                   </span>|              ## | []      [] |  |     __     |  |  []    []  | ##
+             |<span class="screen-card-copy"> 자동 낙하 속도           </span>|              ## |     __     |  | [] |  | [] |  |     __     | ##
+             |<span class="screen-card-copy"> 20% 감소                 </span>|              ## |    |  |    |  |    |  |    |  |    |  |    | ##
+             +--------------------------+              ## |____|__|____|  |____|__|____|  |____|__|____| ##
+             ####JJJJSSSS .OOOOLLLLLL####              ## |============|      /    \      |============| ##
+             ####IIIISSSS .OOOOZZZZ .####              ##    ..    ..        /______\        ..    ..    ##
+             ############################              ####################################################
+ UP / DOWN: SELECT    HARD DROP: CONFIRM
+</pre>
+          </div>
+          <figcaption>마을 중간 지점의 증강 선택 예시. <code>=</code> 테두리가 있는 충전재 증량에 선택 표시가 놓여 있다.</figcaption>
+        </figure>
+        <p>플레이어의 보드 위에 증강 후보 3개를 세로로 표시한다. 상자는 좌우 벽까지 덮고, 높이는 5줄이며 간격은 1줄이다. 가운데 3줄에 한글 이름과 설명을 표시하고, 문장에 맞춰 줄을 바꾼다.</p>
+        <p>위·아래 조작으로 후보를 이동하고 하드 드롭 키로 선택한다.</p>
+      </details>
+
+
+
+      <details class="article-section" id="references" open><summary><h2><a class="n" href="#toc" aria-label="10. 상단 목차로 이동" title="상단 목차로 이동">10.</a>관련 자료</h2></summary>
+        <ol class="reference-list"><li><a href="../project/객지프_3주차_회의록.pdf">객지프 3주차 회의록</a> · 2026-11-18. 화면과 스테이지 구성(1쪽), 스토리 연출·증강·누적 기믹(2쪽), 화면 배치와 추가 논의(3쪽).</li><li><a href="https://studylib.net/doc/27262492/2009-tetris-design-guideline">테트리스 설계 가이드 (2009)</a> · §5.7의 고정 지연과 이동·회전 한도, 부록 A1.2.3의 재접촉 규칙을 참고했다.</li></ol>
+      </details>
+      <footer class="doc-footer">블럭 왕국 재건 · 팀 기획 위키</footer>
+    </main>
+    <aside class="sidebar" aria-label="문서 안내">
+      <div class="side-box"><div class="side-title">문서 안내</div><div class="side-body"><p><strong>블럭 왕국 재건</strong><br>스토리 모드 및 시스템 기획</p><p><span class="tag tag-fixed">규칙 정리</span></p><p class="side-caption">기준일 2026.11.23<br>각 제목을 누르면 해당 항목을 접거나 펼칠 수 있다.</p></div></div>
+      <div class="side-box"><div class="side-title">스토리 진행 기준</div><div class="side-body"><div class="side-stat"><span>전체 구간</span><strong>4구간</strong></div><div class="side-stat"><span>일반 모드</span><strong>20줄씩 · 총 80줄</strong></div><div class="side-stat"><span>디버깅 모드</span><strong>10줄씩 · 총 40줄</strong></div><div class="side-stat"><span>증강 선택</span><strong>구간당 2회 · 총 8회</strong></div><p class="side-caption">새 기믹과 관련 증강을 같은 구간에서 해금</p></div></div>
+      <div class="side-box"><div class="side-title">바로 보기</div><ul class="quick-list"><li><a href="#progression">스토리 진행표</a></li><li><a href="#augments">증강 목록과 후보 풀</a></li><li><a href="#reinforced">강화 블록의 줄 제거</a></li><li><a href="#modes">클리어와 해금</a></li><li><a href="#references">관련 자료</a></li></ul></div>
+    </aside>
+  </div>
+  <a href="#top" class="to-top" aria-label="문서 맨 위로 이동">맨 위로</a>
+  <script>
+    const sections=[...document.querySelectorAll('.article-section')];
+    const expandButton=document.getElementById('expand-all');
+    function syncExpand(){expandButton.textContent=sections.every(s=>s.open)?'모두 접기':'모두 펼치기';}
+    sections.forEach(s=>s.addEventListener('toggle',syncExpand));
+    expandButton.addEventListener('click',()=>{const shouldOpen=!sections.every(s=>s.open);sections.forEach(s=>{s.open=shouldOpen});syncExpand()});
+    function reveal(target){if(!target)return;let node=target;while(node){if(node.tagName==='DETAILS')node.open=true;node=node.parentElement;}}
+    function revealHash(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const target=document.getElementById(id);if(target){reveal(target);requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));}}
+    document.addEventListener('click',event=>{
+      const link=event.target.closest('a[href^="#"]');
+      if(!link)return;
+      const target=document.getElementById(link.getAttribute('href').slice(1));
+      reveal(target);
+      if(link.matches('h2 .n,h3 .n')&&target&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){
+        event.preventDefault();
+        if(location.hash!==link.hash)location.hash=link.hash;
+        else target.scrollIntoView({block:'start'});
+      }
+    });
+    window.addEventListener('hashchange',revealHash);if(location.hash)revealHash();
+    const themeButton=document.getElementById('theme-toggle');
+    function setTheme(dark){document.body.classList.toggle('dark',dark);themeButton.textContent=dark?'라이트':'다크';themeButton.setAttribute('aria-pressed',String(dark));}
+    try{setTheme(localStorage.getItem('factory-tetris-wiki-theme')==='dark')}catch{setTheme(false)}
+    themeButton.addEventListener('click',()=>{const dark=!document.body.classList.contains('dark');setTheme(dark);try{localStorage.setItem('factory-tetris-wiki-theme',dark?'dark':'light')}catch{}});
+    const searchForm=document.getElementById('search-form'),searchInput=document.getElementById('search-input'),searchStatus=document.getElementById('search-status');
+    let previousQuery='',matches=[],matchIndex=-1,highlighted=null;
+    function clearSearch(){if(highlighted)highlighted.classList.remove('search-hit');highlighted=null;searchStatus.textContent='';previousQuery='';matches=[];matchIndex=-1;}
+    searchInput.addEventListener('input',clearSearch);searchInput.addEventListener('keydown',event=>{if(event.key==='Escape'){searchInput.value='';clearSearch();searchInput.blur()}});
+    searchForm.addEventListener('submit',event=>{event.preventDefault();const query=searchInput.value.trim().toLocaleLowerCase('ko');if(!query){clearSearch();return;}if(query!==previousQuery){matches=[...document.querySelectorAll('.article-section h2,.article-section h3,.article-section p,.article-section td,.article-section th,.article-section li')].filter(el=>el.textContent.toLocaleLowerCase('ko').includes(query));previousQuery=query;matchIndex=-1;}if(highlighted)highlighted.classList.remove('search-hit');if(!matches.length){highlighted=null;searchStatus.textContent='일치하는 내용이 없습니다.';return;}matchIndex=(matchIndex+1)%matches.length;highlighted=matches[matchIndex];reveal(highlighted);highlighted.classList.add('search-hit');highlighted.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});searchStatus.textContent=`${matchIndex+1} / ${matches.length} · Enter로 다음 결과`;});
+    let printStates=[];window.addEventListener('beforeprint',()=>{printStates=[...document.querySelectorAll('details')].map(el=>[el,el.open]);printStates.forEach(([el])=>el.open=true)});window.addEventListener('afterprint',()=>{printStates.forEach(([el,open])=>el.open=open);printStates=[]});document.getElementById('print-button').addEventListener('click',()=>window.print());
+  </script>
+</body>
+</html>
