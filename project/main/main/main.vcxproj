@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Angles.h" />
     <ClInclude Include="Augment.h" />
     <ClInclude Include="AugmentManager.h" />
     <ClInclude Include="Block.h" />

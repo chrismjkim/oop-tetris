@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include "Cell.h"
 #include "BlockType.h"
-#include "Angles.h"
 
 
 using std::array;
@@ -14,7 +13,6 @@ class Block
 {
 private:
 	BlockType type;
-	Angles angle;
 	int blockid;
 	int row, col; // Cells 20 by 10 기준 상대위치
 	array<array<Cell*, 4>, 4> cells = {};

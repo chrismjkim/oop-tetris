@@ -5,7 +5,7 @@
 #include "DisplayManager.h"
 #include "InputManager.h"
 #include "StageManager.h"
-#include "Event.h"
+#include "Events.h"
 using std::queue;
 
 // 전체 게임 데이터 관리 및 진행(루프)

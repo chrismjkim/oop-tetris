@@ -2,7 +2,7 @@
 
 Block::Block() : blockid(0) {}
 
-Block::Block(BlockType type, int blockid) : type(type), angle(Angles::NORTH), row(0), col(5), blockid(blockid) {
+Block::Block(BlockType type, int blockid) : type(type), row(0), col(5), blockid(blockid) {
 	auto it = BLOCKMAP.find(type);
 
 	int color = 1;
