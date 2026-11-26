@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -129,6 +129,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Angles.h" />
+    <ClInclude Include="Augment.h" />
+    <ClInclude Include="AugmentManager.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockManager.h" />
     <ClInclude Include="BlockType.h" />
@@ -138,17 +140,20 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="ITrigger.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AugmentManager.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BlockManager.cpp" />
     <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Event.h" />
+    <ClCompile Include="Events.h" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="DisplayManager.cpp" />
+    <ClCompile Include="IEffect.h" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Inputs.h" />
     <ClCompile Include="main.cpp" />

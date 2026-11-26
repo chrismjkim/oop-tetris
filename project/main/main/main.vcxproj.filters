@@ -31,6 +31,18 @@
     <Filter Include="헤더 파일\Utilities">
       <UniqueIdentifier>{6cbee50c-1972-4ec4-a72b-eb285dba34bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Augments">
+      <UniqueIdentifier>{314fa766-d240-46e8-9160-d37e58b9000e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Augments\Triggers">
+      <UniqueIdentifier>{0276f5d3-a57d-47b0-a90f-c658ec83901d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Augments\Effects">
+      <UniqueIdentifier>{d1610191-30b3-40c5-bd2a-128e8205d910}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Augments">
+      <UniqueIdentifier>{f1e24fc5-c5cf-4903-858f-ca0354812c7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -72,6 +84,15 @@
     <ClInclude Include="Util.h">
       <Filter>헤더 파일\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="AugmentManager.h">
+      <Filter>헤더 파일\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Augment.h">
+      <Filter>헤더 파일\Augments</Filter>
+    </ClInclude>
+    <ClInclude Include="ITrigger.h">
+      <Filter>헤더 파일\Augments\Triggers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,11 +122,17 @@
     <ClCompile Include="Cell.cpp">
       <Filter>소스 파일\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Event.h">
+    <ClCompile Include="Events.h">
       <Filter>헤더 파일\Contants</Filter>
     </ClCompile>
     <ClCompile Include="Inputs.h">
       <Filter>헤더 파일\Contants</Filter>
+    </ClCompile>
+    <ClCompile Include="AugmentManager.cpp">
+      <Filter>소스 파일\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="IEffect.h">
+      <Filter>헤더 파일\Augments\Effects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
