@@ -2,6 +2,7 @@
 
 #include <array>
 #include <unordered_map>
+#include "Cell.h"
 #include "BlockType.h"
 #include "Angles.h"
 
@@ -14,9 +15,9 @@ class Block
 private:
 	BlockType type;
 	Angles angle;
-	int posX, posY;
-	array<array<int, 4>, 4> fill;
-	array<array<int, 4>, 4> rotate90(const array<array<int,4>, 4>& src);
+	int blockid;
+	int row, col; // Cells 20 by 10 기준 상대위치
+	array<array<Cell*, 4>, 4> cells = {};
 
 
 	static inline const std::unordered_map<BlockType, array<array<int, 4>, 4>> BLOCKMAP = {
@@ -33,8 +34,8 @@ private:
 		{0, 0, 0, 0},
 	}}},
 	{BlockType::T, {{
-		{1, 1, 1, 0},
 		{0, 1, 0, 0},
+		{1, 1, 1, 0},
 		{0, 0, 0, 0},
 		{0, 0, 0, 0},
 	}}},
@@ -65,15 +66,17 @@ private:
 	};
 
 public:
-	Block() = default;
-	Block(BlockType type);
+	Block();
+	Block(BlockType type, int blockid);
 	BlockType getType() const;
-	void setPos(const int x, const int y);
-	int getX();
-	int getY();
+	void setPos(const int row, const int col);
+	int getRow();
+	int getCol();
+	int getBlockid() const;
+	
 
-	array<array<int, 4>, 4>& getFill();
-	bool rotateBlock(Angles angle);
+	array<array<Cell*, 4>, 4>& getCells();
+	array<array<Cell*, 4>, 4> rotate90(const array<array<Cell*, 4>, 4>& src) const;
 
 
 };

@@ -132,18 +132,25 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="BlockManager.h" />
     <ClInclude Include="BlockType.h" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="CellType.h" />
+    <ClInclude Include="Colors.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageManager.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="BlockManager.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Event.h" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="DisplayManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Inputs.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageManager.cpp" />

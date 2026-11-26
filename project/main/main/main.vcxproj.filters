@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\Managers">
       <UniqueIdentifier>{08b5d8a8-da39-43cc-9aa3-79f5f1a9df69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Utilities">
+      <UniqueIdentifier>{6cbee50c-1972-4ec4-a72b-eb285dba34bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -57,6 +60,18 @@
     <ClInclude Include="Angles.h">
       <Filter>헤더 파일\Contants</Filter>
     </ClInclude>
+    <ClInclude Include="Colors.h">
+      <Filter>헤더 파일\Contants</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>헤더 파일\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="CellType.h">
+      <Filter>헤더 파일\Contants</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>헤더 파일\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,6 +97,15 @@
     </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>소스 파일\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>소스 파일\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.h">
+      <Filter>헤더 파일\Contants</Filter>
+    </ClCompile>
+    <ClCompile Include="Inputs.h">
+      <Filter>헤더 파일\Contants</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,61 +1,90 @@
 ﻿#include "Block.h"
 
-Block::Block(BlockType type) : type(type), angle(Angles::NORTH), posX(14), posY(0) {
+Block::Block() : blockid(0) {}
+
+Block::Block(BlockType type, int blockid) : type(type), angle(Angles::NORTH), row(0), col(5), blockid(blockid) {
 	auto it = BLOCKMAP.find(type);
+
+	int color = 1;
+		// TODO: type 받아서 컬러 반환하는 함수 추가 필요
 	if (it != BLOCKMAP.end()) {
-		fill = it->second;
+		auto arr = it->second;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++)
+			{
+				cells[i][j] = arr[i][j] ? new Cell(blockid, color) : nullptr; 
+			}
+		}
 	}
 
 }
 
-array<array<int, 4>, 4>& Block::getFill() {
-	return fill;
+
+
+array<array<Cell*, 4>, 4>& Block::getCells() {
+	return cells;
 }
 
-void Block::setPos(const int x, const int y) {
-	posX = x;
-	posY = y;
+void Block::setPos(const int row, const int col) {
+	if (row > 20 || col > 10) {
+		throw;
+	}
+	this->row = row;
+	this->col = col;
 }
 
-int Block::getX() {
-	return posX;
+int Block::getRow() {
+	return row;
 }
 
-int Block::getY() {
-	return posY;
+int Block::getCol() {
+	return col;
 }
 
+int Block::getBlockid() const {
+	return blockid;
+}
 
 
 BlockType Block::getType() const {
 	return type;
 }
 
-// 행렬 90도 회전
-array<array<int, 4>, 4> Block::rotate90(const array<array<int, 4>, 4>& src) {
-	array<array<int, 4>, 4> dst{};
 
-	for (int r = 0; r < 4; ++r) {
-		for (int c = 0; c < 4; ++c) {
-			dst[c][3 - r] = src[r][c];
+array<array<Cell*, 4>, 4> Block::rotate90(const array<array<Cell*, 4>, 4>& src) const {
+	if (type == BlockType::T) {
+		array<array<Cell*, 4>, 4> res{};
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				res[j][2 - i] = src[i][j];
+			}
+		}
+		return res;
+	}
+
+	array<array<Cell*, 4>, 4> temp{};
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			temp[j][3 - i] = src[i][j];
 		}
 	}
-	return dst;
 
-}
-
-
-bool Block::rotateBlock(Angles newAngle) {
-	int angleDiff = static_cast<int>(newAngle) - static_cast<int>(angle);
-	if (angleDiff < 0) angleDiff += 360;
-	if (angleDiff % 90 != 0) return false;
-
-	array<array<int, 4>, 4> dst = fill;
-
-	for (int i = 0; i < angleDiff / 90; i++) {
-		dst = rotate90(dst);
+	int minR = 4, minC = 4;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (temp[i][j] != nullptr) {
+				if (i < minR) minR = i;
+				if (j < minC) minC = j;
+			}
+		}
 	}
 
-	fill = dst;
-	return true;
+	array<array<Cell*, 4>, 4> res{};
+	for (int i = minR; i < 4; i++) {
+		for (int j = minC; j < 4; j++) {
+			res[i - minR][j - minC] = temp[i][j];
+		}
+	}
+
+	return res;
 }

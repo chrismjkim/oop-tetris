@@ -9,5 +9,6 @@ public:
 	Stage() = default;
 	Stage(int speed, int stickRate, int clearLine);
 	int getStickRate();
+	int getClearLine();
 };
 

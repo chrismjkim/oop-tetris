@@ -1,21 +1,17 @@
 ﻿#pragma once
+#include "BlockManager.h"
+#include "Event.h"
+#include "Inputs.h"
+#include <queue>
+#include <conio.h>
 
-enum class GameInput
-{
-	NONE,
-	LEFT,
-	RIGHT,
-	DOWN,
-	ROTATE,
-	DROP,
-	QUIT,
-};
 
 // 키 입력 및 처리 담당
 class InputManager
 {
 public:
 	InputManager();
-	GameInput checkInput();
+	Inputs checkInput();
+	Inputs processInput(BlockManager& bm, Block& currentBlock, std::queue<Events>& eventQueue);
 };
 

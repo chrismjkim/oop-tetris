@@ -1,4 +1,4 @@
-#include "Stage.h"
+﻿#include "Stage.h"
 
 
 Stage::Stage(int speed, int stickRate, int clearLine)
@@ -8,4 +8,8 @@ Stage::Stage(int speed, int stickRate, int clearLine)
 
 int Stage::getStickRate() {
 	return stickRate;
+}
+
+int Stage::getClearLine() {
+	return clearLine;
 }

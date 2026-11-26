@@ -1,4 +1,4 @@
-#include "StageManager.h"
+﻿#include "StageManager.h"
 
 void StageManager::setLine(const int l) {
 	lines = l;
