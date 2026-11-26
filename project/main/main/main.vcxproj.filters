@@ -16,9 +16,6 @@
     <Filter Include="헤더 파일\Managers">
       <UniqueIdentifier>{8f02a313-1a54-4786-be7e-ff83758a79a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Contants">
-      <UniqueIdentifier>{0f7b38b8-6138-4111-8c87-714091f3fb77}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Objects">
       <UniqueIdentifier>{95f47d68-e1c6-4bfd-a02c-d8a48869cb2e}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,9 @@
     <Filter Include="소스 파일\Augments">
       <UniqueIdentifier>{f1e24fc5-c5cf-4903-858f-ca0354812c7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Constants">
+      <UniqueIdentifier>{0f7b38b8-6138-4111-8c87-714091f3fb77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h">
@@ -64,22 +64,22 @@
       <Filter>헤더 파일\Managers</Filter>
     </ClInclude>
     <ClInclude Include="BlockType.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>헤더 파일\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Angles.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Colors.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Cell.h">
       <Filter>헤더 파일\Objects</Filter>
     </ClInclude>
     <ClInclude Include="CellType.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>헤더 파일\Utilities</Filter>
@@ -123,10 +123,10 @@
       <Filter>소스 파일\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Events.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClCompile>
     <ClCompile Include="Inputs.h">
-      <Filter>헤더 파일\Contants</Filter>
+      <Filter>헤더 파일\Constants</Filter>
     </ClCompile>
     <ClCompile Include="AugmentManager.cpp">
       <Filter>소스 파일\Managers</Filter>
