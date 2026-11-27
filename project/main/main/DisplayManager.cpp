@@ -127,6 +127,66 @@ void DisplayManager::showGameBoard() {
 		drawCell(Colors::DARK_GRAY);
 	}
 }
+
+void DisplayManager::showLayout() {
+	showHold();
+	showGameBoard();
+	showNext();
+	showStageArt();
+	showControls();
+}
+
+void DisplayManager::showHUD(int level, int score, int lines) {
+	setTextColor(Colors::WHITE);
+	gotoxy(1, 0);
+	writeConsoleText(L"SCORE " + to_wstring(score) + L"          ");
+	gotoxy(22, 0);
+	writeConsoleText(L"LINES " + to_wstring(lines) + L"          ");
+	gotoxy(42, 0);
+	writeConsoleText(L"STAGE " + to_wstring(level) + L" ");
+}
+
+void DisplayManager::showPreviewFrame(int x, const wchar_t* title) {
+	setTextColor(Colors::GRAY);
+	gotoxy(x, ab_y);
+	writeConsoleText(wstring(L"+- ") + title + L" - -+");
+	for (int row = 1; row <= 5; ++row) {
+		gotoxy(x, ab_y + row);
+		writeConsoleText(L"|          |");
+	}
+	gotoxy(x, ab_y + 6);
+	writeConsoleText(L"+----------+");
+}
+
+void DisplayManager::showHold() {
+	showPreviewFrame(ab_x - previewWidth, L"HOLD");
+}
+
+void DisplayManager::showNext() {
+	showPreviewFrame(ab_x + (COL + 2) * WIDTH, L"NEXT");
+}
+
+void DisplayManager::showStageArt() {
+	const int x = ab_x + (COL + 2) * WIDTH + previewWidth + 6;
+	const int artWidth = 52;
+	for (int row = 0; row < ROW; ++row) {
+		gotoxy(x, ab_y + row);
+		drawCell(Colors::DARK_GRAY);
+		gotoxy(x + artWidth - WIDTH, ab_y + row);
+		drawCell(Colors::DARK_GRAY);
+	}
+	for (int col = 0; col < artWidth; col += WIDTH) {
+		gotoxy(x + col, ab_y + ROW);
+		drawCell(Colors::DARK_GRAY);
+	}
+}
+
+void DisplayManager::showControls() {
+	setTextColor(Colors::GRAY);
+	gotoxy(ab_x - previewWidth, ab_y + ROW + 1);
+	writeConsoleText(L"Arrows: move/rotate/drop  SPACE: hard drop  ESC: quit");
+}
+
 int DisplayManager::showKeys() {
 	int in = 0;
 	setTextColor(Colors::GRAY);
@@ -155,21 +215,7 @@ int DisplayManager::showKeys() {
 }
 
 void DisplayManager::showGameStat(const int level, const int score, const int lines) {
-	static int printed_text = 0;
-	setTextColor(Colors::GRAY);
-	if (printed_text == 0)
-	{
-		gotoxy(35, 7);
-		printf("STAGE");
-		gotoxy(35, 9);
-		printf("SCORE");
-		gotoxy(35, 12);
-		printf("LINES");
-	}
-	gotoxy(41, 7);
-	printf("%d", level);
-	gotoxy(35, 10);
-	printf("%10d", score);
+	showHUD(level, score, lines);
 }
 
 

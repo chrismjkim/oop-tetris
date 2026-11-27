@@ -16,8 +16,8 @@ void GameManager::run() {
 		while (!eventQueue.empty()) eventQueue.pop();
 
 		current_stage = dm.showKeys();
-		dm.showGameBoard(); // 외벽 출력
-		dm.showGameStat(current_stage, score, lines); // 스탯 출력
+		dm.showLayout();
+		dm.showHUD(current_stage, score, lines);
 
 		int stick_rate = sm.getStageData(current_stage).getStickRate();
 		int tick = 0;
@@ -99,7 +99,7 @@ void GameManager::processEvents(Block& currentBlock) {
 				}
 			}
 			// 변경된 스탯(스테이지, 점수, 라인 수) 화면에 반영
-			dm.showGameStat(current_stage, score, lines);
+			dm.showHUD(current_stage, score, lines);
 			break;
 		}
 

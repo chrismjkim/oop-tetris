@@ -2,8 +2,8 @@
 
 class Util {
 private:
-	static inline int displayX = 5;
-	static inline int displayY = 1;
+	static inline int displayX = 13;
+	static inline int displayY = 7;
 
 public:
 	static const inline int MAXBOARDROW = 20;

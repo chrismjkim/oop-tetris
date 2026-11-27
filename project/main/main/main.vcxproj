@@ -140,7 +140,9 @@
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ITrigger.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageArt.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
@@ -158,6 +160,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="main.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,6 +19,8 @@ private:
 	const int WIDTH = 2;
 	int ab_x = Util::getDisplayX();
 	int ab_y = Util::getDisplayY();
+	static constexpr int previewWidth = 12;
+	void showPreviewFrame(int x, const wchar_t* title);
 public:
 	DisplayManager();
 	void gotoxy(int x, int y);
@@ -27,6 +29,12 @@ public:
 	int showKeys();
 	void showBlock(Block& block);
 	void showGameBoard();
+	void showLayout();
+	void showHUD(int level, int score, int lines);
+	void showHold();
+	void showNext();
+	void showStageArt();
+	void showControls();
 	void showGameStat(const int level, const int score, const int lines);
 	void setTextColor(Colors color);
 	void resetab_xy();
