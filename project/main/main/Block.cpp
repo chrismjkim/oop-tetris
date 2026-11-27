@@ -1,9 +1,9 @@
 ﻿#include "Block.h"
 #include "Colors.h"
 
-Block::Block() : blockid(0) {}
+Block::Block() = default;
 
-Block::Block(BlockType type, int blockid) : type(type), row(0), col(5), blockid(blockid) {
+Block::Block(BlockType type, int blockid) : type(type), blockid(blockid) {
 	auto it = BLOCKMAP.find(type);
 
 	if (it != BLOCKMAP.end()) {
@@ -22,13 +22,23 @@ Block::Block(BlockType type, int blockid) : type(type), row(0), col(5), blockid(
 			}
 		}
 	}
-
+	spawnCells = cells;
 }
 
 
 
 array<array<Cell*, 4>, 4>& Block::getCells() {
 	return cells;
+}
+
+const array<array<Cell*, 4>, 4>& Block::getCells() const {
+	return cells;
+}
+
+void Block::resetForSpawn() {
+	row = spawnRow;
+	col = spawnCol;
+	cells = spawnCells;
 }
 
 void Block::setPos(const int row, const int col) {

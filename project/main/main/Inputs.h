@@ -8,5 +8,6 @@ enum class Inputs
 	DOWN,
 	ROTATE,
 	DROP,
+	HOLD,
 	QUIT,
 };

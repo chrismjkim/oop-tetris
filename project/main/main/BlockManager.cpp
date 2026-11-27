@@ -5,13 +5,29 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
+#include <utility>
 
 using std::cout;
 using std::endl;
 
+static void releaseOffBoardCells(Block& block) {
+	for (const auto& row : block.getCells()) {
+		for (Cell* cell : row) {
+			delete cell;
+		}
+	}
+	block = Block{};
+}
+
 BlockManager::BlockManager() : cellList{} {
 
 }
+
+BlockManager::~BlockManager() {
+	releaseOffBoardCells(heldBlock);
+	releaseOffBoardCells(pendingSpawn);
+}
+
 bool BlockManager::isInside(const int row, const int col, const int i, const int j) const {
 	// 좌표가 보드 범위 내에 있으면 true 리턴, OOB이면 false 리턴
 	return row + i >= 0 && row + i < ROW && col + j >= 0 && col + j < COL;
@@ -19,6 +35,9 @@ bool BlockManager::isInside(const int row, const int col, const int i, const int
 
 void BlockManager::resetBlocks() {
 	cellList = {};
+	releaseOffBoardCells(heldBlock);
+	releaseOffBoardCells(pendingSpawn);
+	holdLockedBlockId = 0;
 }
 
 int BlockManager::clearFullLines() {
@@ -59,7 +78,12 @@ const array<array<Cell*, BlockManager::COL>, BlockManager::ROW>& BlockManager::g
 	return cellList;
 }
 
-Block BlockManager::make_new_block(int stick_rate) {
+Block BlockManager::make_new_block() {
+	
+	if (pendingSpawn.getBlockid() != 0) {
+		return std::exchange(pendingSpawn, emptyBlock);
+	}
+	/*
 	int shape;
 	int i;
 	i = rand() % 100;
@@ -69,7 +93,8 @@ Block BlockManager::make_new_block(int stick_rate) {
 		type = static_cast<BlockType>(shape);
 	}
 	Block bl(type, ++blocks);
-	return bl;
+	*/
+	return sevenBag.pop();
 }
 
 void BlockManager::appendBlock(Block& block) {
@@ -105,18 +130,15 @@ void BlockManager::removeBlock(Block& block) {
 
 bool BlockManager::canPlace(Block& block) const {
 	const auto& cells = block.getCells();
-	for (int x = 0; x < 4; ++x) {
-		for (int y = 0; y < 4; ++y) {
-			if (cells[x][y] == 0) {
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			if (cells[i][j] == nullptr) {
 				continue;
 			}
 
-			const int boardX = block.getRow() + x;
-			const int boardY = block.getCol() + y;
-			if (boardX < 0 || boardX >= COL || boardY < 0 || boardY >= ROW) {
-				return false;
-			}
-			if (cellList[boardY][boardX] != nullptr) {
+			const int row = block.getRow() + i;
+			const int col = block.getCol() + j;
+			if (!isInside(row, col, 0, 0) || cellList[row][col] != nullptr) {
 				return false;
 			}
 		}
@@ -149,6 +171,41 @@ bool BlockManager::moveBlock(Block& currentBlock, int dr, int dc) {
 	currentBlock.setPos(r + dr, c + dc);
 	appendBlock(currentBlock);
 	return true;
+}
+
+bool BlockManager::holdBlock(Block& currentBlock) {
+	if (currentBlock.getBlockid() == holdLockedBlockId) {
+		return false;
+	}
+
+	const bool firstHold = heldBlock.getBlockid() == 0;
+	if (firstHold && pendingSpawn.getBlockid() == 0) {
+		pendingSpawn = make_new_block();
+	}
+	Block incoming = firstHold ? pendingSpawn : heldBlock;
+	removeBlock(currentBlock);
+	if (!canPlace(incoming)) {
+		appendBlock(currentBlock);
+		return false;
+	}
+
+	heldBlock = currentBlock;
+	heldBlock.resetForSpawn();
+	currentBlock = incoming;
+	if (firstHold) {
+		pendingSpawn = emptyBlock;
+	}
+	appendBlock(currentBlock);
+	holdLockedBlockId = currentBlock.getBlockid();
+	return true;
+}
+
+const Block& BlockManager::getHeldBlock() const {
+	return heldBlock;
+}
+
+const Block& BlockManager::getNextBlock() {
+	return pendingSpawn.getBlockid() != 0 ? pendingSpawn : sevenBag.top();
 }
 
 // 기존 함수들은 한 줄로 연결

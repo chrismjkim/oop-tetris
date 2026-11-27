@@ -129,9 +129,9 @@ void DisplayManager::showGameBoard() {
 }
 
 void DisplayManager::showLayout() {
-	showHold();
+	showPreviewFrame(ab_x - previewWidth, L"HOLD");
 	showGameBoard();
-	showNext();
+	showPreviewFrame(ab_x + (COL + 2) * WIDTH, L"NEXT");
 	showStageArt();
 	showControls();
 }
@@ -149,21 +149,45 @@ void DisplayManager::showHUD(int level, int score, int lines) {
 void DisplayManager::showPreviewFrame(int x, const wchar_t* title) {
 	setTextColor(Colors::GRAY);
 	gotoxy(x, ab_y);
-	writeConsoleText(wstring(L"+- ") + title + L" - -+");
+	writeConsoleText(wstring(L"┏━━━") + title + L"━━━┓");
 	for (int row = 1; row <= 5; ++row) {
 		gotoxy(x, ab_y + row);
-		writeConsoleText(L"|          |");
+		writeConsoleText(L"┃          ┃");
 	}
 	gotoxy(x, ab_y + 6);
-	writeConsoleText(L"+----------+");
+	writeConsoleText(L"┗━━━━━━━━━━┛");
 }
 
-void DisplayManager::showHold() {
-	showPreviewFrame(ab_x - previewWidth, L"HOLD");
+void DisplayManager::showHold(const Block& block) {
+	const auto& cells = block.getCells();
+	const int x = ab_x - previewWidth + 1 + WIDTH;
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			gotoxy(x + col * WIDTH, ab_y + 2 + row);
+			if (cells[row][col]) {
+				drawCell(cells[row][col]->getColor());
+			}
+			else {
+				writeConsoleText(L"  ");
+			}
+		}
+	}
 }
 
-void DisplayManager::showNext() {
-	showPreviewFrame(ab_x + (COL + 2) * WIDTH, L"NEXT");
+void DisplayManager::showNext(const Block& block) {
+	const auto& cells = block.getCells();
+	const int x = ab_x + (COL + 2) * WIDTH + 1 + WIDTH;
+	for (int row = 0; row < 4; ++row) {
+		for (int col = 0; col < 4; ++col) {
+			gotoxy(x + col * WIDTH, ab_y + 2 + row);
+			if (cells[row][col]) {
+				drawCell(cells[row][col]->getColor());
+			}
+			else {
+				writeConsoleText(L"  ");
+			}
+		}
+	}
 }
 
 void DisplayManager::showStageArt() {
@@ -184,7 +208,7 @@ void DisplayManager::showStageArt() {
 void DisplayManager::showControls() {
 	setTextColor(Colors::GRAY);
 	gotoxy(ab_x - previewWidth, ab_y + ROW + 1);
-	writeConsoleText(L"Arrows: move/rotate/drop  SPACE: hard drop  ESC: quit");
+	writeConsoleText(L"Arrows: move/rotate/drop  SPACE: hard drop  C: hold  ESC: quit");
 }
 
 int DisplayManager::showKeys() {
@@ -197,12 +221,14 @@ int DisplayManager::showKeys() {
 		"┃ SPACE: Move Bottom Down    ┃",
 		"┃ LEFT : Move Left           ┃",
 		"┃ RIGHT: Move Right          ┃",
+		"┃ C    : Hold Block          ┃",
 		"┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 	};
 
-	for (int i = 0; i < 7; i++) {
-		gotoxy(10, 7 + i);
-		cout << ip[i] << endl;
+	int row = 7;
+	for (const auto& line : ip) {
+		gotoxy(10, row++);
+		cout << line << endl;
 		Sleep(10);
 	}
 	while (in < 1 || in>8) {

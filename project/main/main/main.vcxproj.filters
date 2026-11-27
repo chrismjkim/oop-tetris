@@ -96,6 +96,12 @@
     <ClInclude Include="StageArt.h">
       <Filter>헤더 파일\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="KeyCode.h">
+      <Filter>헤더 파일\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenBag.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -136,6 +142,9 @@
     </ClCompile>
     <ClCompile Include="IEffect.h">
       <Filter>헤더 파일\Augments\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="SevenBag.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

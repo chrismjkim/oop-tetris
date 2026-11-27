@@ -140,7 +140,9 @@
     <ClInclude Include="DisplayManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ITrigger.h" />
+    <ClInclude Include="KeyCode.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SevenBag.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageArt.h" />
     <ClInclude Include="StageManager.h" />
@@ -158,6 +160,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Inputs.h" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SevenBag.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageManager.cpp" />
   </ItemGroup>

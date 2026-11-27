@@ -12,10 +12,13 @@ using std::unordered_map;
 class Block
 {
 private:
-	BlockType type;
-	int blockid;
-	int row, col; // Cells 20 by 10 기준 상대위치
+	static constexpr int spawnRow = 0;
+	static constexpr int spawnCol = 5;
+	BlockType type = BlockType::I;
+	int blockid = 0;
+	int row = spawnRow, col = spawnCol;
 	array<array<Cell*, 4>, 4> cells = {};
+	array<array<Cell*, 4>, 4> spawnCells = {};
 
 
 	static inline const std::unordered_map<BlockType, array<array<int, 4>, 4>> BLOCKMAP = {
@@ -67,6 +70,7 @@ public:
 	Block();
 	Block(BlockType type, int blockid);
 	BlockType getType() const;
+	void resetForSpawn();
 	void setPos(const int row, const int col);
 	int getRow();
 	int getCol();
@@ -74,6 +78,7 @@ public:
 	
 
 	array<array<Cell*, 4>, 4>& getCells();
+	const array<array<Cell*, 4>, 4>& getCells() const;
 	array<array<Cell*, 4>, 4> rotate90(const array<array<Cell*, 4>, 4>& src) const;
 
 

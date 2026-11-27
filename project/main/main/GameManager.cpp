@@ -22,8 +22,9 @@ void GameManager::run() {
 		int stick_rate = sm.getStageData(current_stage).getStickRate();
 		int tick = 0;
 
-		Block currentBlock = bm.make_new_block(stick_rate);
+		Block currentBlock = bm.make_new_block();
 		bm.appendBlock(currentBlock);
+		dm.showNext(bm.getNextBlock());
 		dm.showCells(bm.getCellList());
 
 		while (true) {
@@ -36,6 +37,17 @@ void GameManager::run() {
 			}
 			if (input == Inputs::DOWN) {
 				tick = 0;
+			}
+			if (input == Inputs::HOLD) {
+				const bool firstHold = bm.getHeldBlock().getBlockid() == 0;
+				if (bm.holdBlock(currentBlock)) {
+					tick = 0;
+					dm.showHold(bm.getHeldBlock());
+					if (firstHold) {
+						dm.showNext(bm.getNextBlock());
+					}
+					dm.showCells(bm.getCellList());
+				}
 			}
 			if (input == Inputs::DROP) {
 				isPlaced = true;
@@ -84,8 +96,10 @@ void GameManager::processEvents(Block& currentBlock) {
 			}
 
 			// 2. 새 블록 생성 및 화면 갱신
-			currentBlock = bm.make_new_block(sm.getStageData(current_stage).getStickRate());
+			// currentBlock = bm.make_new_block(sm.getStageData(current_stage).getStickRate());
+			currentBlock = bm.make_new_block();
 			bm.appendBlock(currentBlock);
+			dm.showNext(bm.getNextBlock());
 			dm.showCells(bm.getCellList());
 			break;
 		}

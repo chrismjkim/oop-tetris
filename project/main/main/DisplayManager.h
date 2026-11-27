@@ -31,8 +31,8 @@ public:
 	void showGameBoard();
 	void showLayout();
 	void showHUD(int level, int score, int lines);
-	void showHold();
-	void showNext();
+	void showHold(const Block& block);
+	void showNext(const Block& block);
 	void showStageArt();
 	void showControls();
 	void showGameStat(const int level, const int score, const int lines);
