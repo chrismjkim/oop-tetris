@@ -4,8 +4,36 @@
 #include <Windows.h>
 #include <conio.h>
 
+using std::cin;
+using std::cout;
+using std::endl;
+using std::string;
+using std::wstring;
+using std::to_wstring;
 
-using namespace std;
+static constexpr Colors blockColors[] = {
+	Colors::DARK_BLUE, Colors::DARK_GREEN, Colors::DARK_SKY_BLUE,
+	Colors::DARK_RED, Colors::DARK_VOILET, Colors::DARK_YELLOW
+};
+
+static wstring rgbToWstring(int color) {
+	// int를 rgb string으로 변환
+	const int red = (color >> 16) & 0xFF;
+	const int green = (color >> 8) & 0xFF;
+	const int blue = color & 0xFF;
+	return to_wstring(red) + L";" + to_wstring(green) + L";" + to_wstring(blue);
+}
+
+static void writeConsoleText(const wstring& text) {
+	DWORD written;
+	WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE), text.c_str(),
+		static_cast<DWORD>(text.size()), &written, nullptr);
+}
+
+static void writeCell(const wstring& background) {
+	// 검정 글자색, 셀 배경색, 윗줄과 오른쪽 구분선
+	writeConsoleText(L"\x1b[0;30;" + background + L";53m \u2595\x1b[0m");
+}
 
 DisplayManager::DisplayManager() {
 
@@ -14,18 +42,20 @@ DisplayManager::DisplayManager() {
 	GetConsoleCursorInfo(hConsole, &cursorInfo);
 	cursorInfo.bVisible = FALSE; 
 	SetConsoleCursorInfo(hConsole, &cursorInfo);
+
+	// 블록 구분선을 그리기 위한 설정
+	DWORD mode; //unsigned long
+	if (GetConsoleMode(hConsole, &mode)) {
+		SetConsoleMode(hConsole, mode | ENABLE_PROCESSED_OUTPUT | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+	}
 }
 
-void DisplayManager::setColor(int color) {
-	static HANDLE std_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(std_output_handle, color);
+void DisplayManager::setTextColor(Colors color) {
+
+	const int icolor = static_cast<int>(color);
+	writeConsoleText(L"\x1b[38;2;" + rgbToWstring(icolor) + L"m");
 }
 
-void DisplayManager::setColor(Colors color) {
-	int icolor = static_cast<int>(color);
-	static HANDLE std_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(std_output_handle, icolor);
-}
 
 void DisplayManager::gotoxy(int x, int y) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -84,24 +114,22 @@ void DisplayManager::showLogo() {
 }
 
 void DisplayManager::showGameBoard() {
-	setColor(Colors::DARK_GRAY);
-
 	for (int r = 0; r <= ROW; r++) {
 		gotoxy((-1 * WIDTH) + ab_x + 2, r + ab_y);
-		cout << "■";
+		drawCell(Colors::DARK_GRAY);
 
 		gotoxy((COL * WIDTH) + ab_x + 2, r + ab_y);
-		cout << "■";
+		drawCell(Colors::DARK_GRAY);
 	}
 
 	for (int c = -1; c <= COL; c++) {
 		gotoxy((c * WIDTH) + ab_x + 2, ROW + ab_y);
-		cout << "■";
+		drawCell(Colors::DARK_GRAY);
 	}
 }
 int DisplayManager::showKeys() {
 	int in = 0;
-	setColor(Colors::GRAY);
+	setTextColor(Colors::GRAY);
 	const string ip[] = {
 		"┏━━━━━━━━━<GAME KEY>━━━━━━━━━┓",
 		"┃ UP   : Rotate Block        ┃",
@@ -128,7 +156,7 @@ int DisplayManager::showKeys() {
 
 void DisplayManager::showGameStat(const int level, const int score, const int lines) {
 	static int printed_text = 0;
-	setColor(Colors::GRAY);
+	setTextColor(Colors::GRAY);
 	if (printed_text == 0)
 	{
 		gotoxy(35, 7);
@@ -148,7 +176,7 @@ void DisplayManager::showGameStat(const int level, const int score, const int li
 
 void DisplayManager::showNextBlockContainer(BlockType type, int level) {
 	int i, j;
-	setColor((level + 1) % 6 + 1);
+	const Colors color = blockColors[(static_cast<unsigned>(level) + 1) % 6];
 	for (i = 1;i < 7;i++)
 	{
 		gotoxy(33, i);
@@ -156,10 +184,10 @@ void DisplayManager::showNextBlockContainer(BlockType type, int level) {
 		{
 			if (i == 1 || i == 6 || j == 0 || j == 5)
 			{
-				printf("■");
+				drawCell(color);
 			}
 			else {
-				printf("  ");
+				writeConsoleText(L"  ");
 			}
 
 		}
@@ -187,13 +215,11 @@ void DisplayManager::showBlock(Block& block) {
 	int c = block.getCol();
 	auto cells = block.getCells();
 
-	setColor(static_cast<int>(block.getType()) % 6 + 1);
-
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			gotoxyFromRC(r + i, c + j);
 			if (cells[i][j] != nullptr) {
-				cout << "■";
+				drawCell(cells[i][j]->getColor());
 			}
 		}
 	}
@@ -206,17 +232,24 @@ void DisplayManager::showCells(array<array<Cell*,Util::MAXBOARDCOL>, Util::MAXBO
 			auto cell = cellList[r][c];
 			if (cell != nullptr) {
 				gotoxyFromRC(r, c); 
-				setColor(cell->getColor());
-				cout << "■";
 
+				drawCell(cell->getColor());
 			}
 			else {
 				gotoxyFromRC(r, c);
-				setColor(0);
-				cout << "  ";
+
+				setTextColor(Colors::DARK_GRAY);
+				cout << " .";
 			}
 		}
 	}
+}
 
-	
+void DisplayManager::drawCell(int color) {
+	// cell의 경우 배경색을 변경
+	writeConsoleText(L"\x1b[0;30;48;2;" + rgbToWstring(color) + L";53m \u2595\x1b[0m");
+}
+
+void DisplayManager::drawCell(Colors color) {
+	drawCell(static_cast<int>(color));
 }

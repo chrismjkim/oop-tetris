@@ -1,13 +1,19 @@
 ﻿#include "Block.h"
+#include "Colors.h"
 
 Block::Block() : blockid(0) {}
 
 Block::Block(BlockType type, int blockid) : type(type), row(0), col(5), blockid(blockid) {
 	auto it = BLOCKMAP.find(type);
 
-	int color = 1;
-		// TODO: type 받아서 컬러 반환하는 함수 추가 필요
 	if (it != BLOCKMAP.end()) {
+
+		static constexpr Colors colors[] = {
+			Colors::BLOCK_I, Colors::BLOCK_O, Colors::BLOCK_T, Colors::BLOCK_J,
+			Colors::BLOCK_L, Colors::BLOCK_S, Colors::BLOCK_Z
+		};
+		const int color = static_cast<int>(colors[static_cast<int>(type)]);
+
 		auto arr = it->second;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++)

@@ -28,11 +28,12 @@ public:
 	void showBlock(Block& block);
 	void showGameBoard();
 	void showGameStat(const int level, const int score, const int lines);
-	void setColor(int color);
-	void setColor(Colors color);
+	void setTextColor(Colors color);
 	void resetab_xy();
 	void showNextBlockContainer(BlockType type, int level);
 	void eraseBlock(Block& block);
 	void showCells(array<array<Cell*, Util::MAXBOARDCOL>, Util::MAXBOARDROW> cellList);
+	void drawCell(int color);
+	void drawCell(Colors color);
 };
 
